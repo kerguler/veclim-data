@@ -1,5 +1,4 @@
-# veclim-server
- Data and model server for VEClim
+# VEClim's data server
 
 # Example usage
  Run the server with the following:

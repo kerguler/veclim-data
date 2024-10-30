@@ -107,13 +107,16 @@ def getTiles(dat, pr_z, pr_x, pr_y, cmap=None, norm=None, label=''):
     #
     # Note: This has to come after setting the axis limits
     # Note: vmin and vmax should be set (not left as None)
-    submap['ax'].imshow(dat,
-                        origin="upper",
-                        interpolation='none',
-                        transform=proj0,
-                        cmap=cmap,
-                        norm=norm,
-                        extent=extbound)
+    try:
+        submap['ax'].imshow(dat,
+                            origin="upper",
+                            interpolation='none',
+                            transform=proj0,
+                            cmap=cmap,
+                            norm=norm,
+                            extent=extbound)
+    except Exception as e:
+        pass
     #
     canvas = plotCanvas(submap['fig'])
     buffr = buffArray(canvas['array'])

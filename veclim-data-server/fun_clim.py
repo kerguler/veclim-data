@@ -60,26 +60,26 @@ class annualERA5:
         tf = 365
         latitude = atemp['lat'].values
         self.photo = numpy.array([[daylength(lat, d) for d in numpy.arange(tf)] for lat in latitude])
-        self.atemp = atemp['2m_temperature'].values
-        self.atmin = xarray.open_dataset("%s/ERA5_ERA5_single_levels_decadal_2010_to_2019_2m_temperature_min.nc" %(dr))['2m_temperature_min'].values
-        self.atmax = xarray.open_dataset("%s/ERA5_ERA5_single_levels_decadal_2010_to_2019_2m_temperature_max.nc" %(dr))['2m_temperature_max'].values
-        self.rehum = xarray.open_dataset("%s/ERA5_ERA5_single_levels_decadal_2010_to_2019_2m_relative_humidity.nc" %(dr))['2m_relative_humidity'].values
-        self.precp = xarray.open_dataset("%s/ERA5_ERA5_single_levels_decadal_2010_to_2019_total_precipitation.nc" %(dr))['total_precipitation'].values
-        self.soilw = xarray.open_dataset("%s/ERA5_ERA5_single_levels_decadal_2010_to_2019_volumetric_soil_water_layer_1.nc" %(dr))['volumetric_soil_water_layer_1'].values
+        self.atemp = atemp['2m_temperature']
+        self.atmin = xarray.open_dataset("%s/ERA5_ERA5_single_levels_decadal_2010_to_2019_2m_temperature_min.nc" %(dr))['2m_temperature_min']
+        self.atmax = xarray.open_dataset("%s/ERA5_ERA5_single_levels_decadal_2010_to_2019_2m_temperature_max.nc" %(dr))['2m_temperature_max']
+        self.rehum = xarray.open_dataset("%s/ERA5_ERA5_single_levels_decadal_2010_to_2019_2m_relative_humidity.nc" %(dr))['2m_relative_humidity']
+        self.precp = xarray.open_dataset("%s/ERA5_ERA5_single_levels_decadal_2010_to_2019_total_precipitation.nc" %(dr))['total_precipitation']
+        self.soilw = xarray.open_dataset("%s/ERA5_ERA5_single_levels_decadal_2010_to_2019_volumetric_soil_water_layer_1.nc" %(dr))['volumetric_soil_water_layer_1']
 
 class annualVectorA:
     def __init__(self) -> None:
         self.decade = "2010-2019"
         self.dlabel = "2010_to_2019"
         dr = "%s/sims/vector08c_Q4.a100+1/ERA5_single_levels_decadal/%s" %(DIR_DATA,self.dlabel)
-        self.colegg = xarray.open_dataset("%s/sims_vector08c_Q4.a100+1_ERA5_single_levels_decadal_%s_colegg.nc" %(dr,self.dlabel))['colegg'].values
-        self.colK = xarray.open_dataset("%s/sims_vector08c_Q4.a100+1_ERA5_single_levels_decadal_%s_colK.nc" %(dr,self.dlabel))['colK'].values
-        self.coln2 = xarray.open_dataset("%s/sims_vector08c_Q4.a100+1_ERA5_single_levels_decadal_%s_coln2.nc" %(dr,self.dlabel))['coln2'].values
-        self.coln4f = xarray.open_dataset("%s/sims_vector08c_Q4.a100+1_ERA5_single_levels_decadal_%s_coln4f.nc" %(dr,self.dlabel))['coln4f'].values
+        self.colegg = xarray.open_dataset("%s/sims_vector08c_Q4.a100+1_ERA5_single_levels_decadal_%s_colegg.nc" %(dr,self.dlabel))['colegg']
+        self.colK = xarray.open_dataset("%s/sims_vector08c_Q4.a100+1_ERA5_single_levels_decadal_%s_colK.nc" %(dr,self.dlabel))['colK']
+        self.coln2 = xarray.open_dataset("%s/sims_vector08c_Q4.a100+1_ERA5_single_levels_decadal_%s_coln2.nc" %(dr,self.dlabel))['coln2']
+        self.coln4f = xarray.open_dataset("%s/sims_vector08c_Q4.a100+1_ERA5_single_levels_decadal_%s_coln4f.nc" %(dr,self.dlabel))['coln4f']
         #
         dr = "%s/sims/vector08c_Q4.a100+1_chikv_QI/ERA5_single_levels_decadal/p4000r100w60/%s" %(DIR_DATA,self.dlabel)
-        self.iouts = xarray.open_dataset("%s/sims_vector08c_Q4.a100+1_chikv_QI_ERA5_single_levels_decadal_p4000r100w60_%s_iouts.nc" %(dr,self.dlabel))['iouts'].values
-        self.pouts = xarray.open_dataset("%s/sims_vector08c_Q4.a100+1_chikv_QI_ERA5_single_levels_decadal_p4000r100w60_%s_pouts.nc" %(dr,self.dlabel))['pouts'].values
+        self.iouts = xarray.open_dataset("%s/sims_vector08c_Q4.a100+1_chikv_QI_ERA5_single_levels_decadal_p4000r100w60_%s_iouts.nc" %(dr,self.dlabel))['iouts']
+        self.pouts = xarray.open_dataset("%s/sims_vector08c_Q4.a100+1_chikv_QI_ERA5_single_levels_decadal_p4000r100w60_%s_pouts.nc" %(dr,self.dlabel))['pouts']
         #
         tmp = numpy.genfromtxt("%s/surveillance/Italy2008/coord_albopictus_Italy2008.csv" %(DIR_DATA), delimiter=',',names=True)
         self.acc = {}
@@ -101,14 +101,14 @@ class annualVectorA_1980:
         self.dlabel = "1980_to_1989"
         #
         dr = "%s/sims/vector08c_Q4.a100+1/ERA5_single_levels_decadal/%s" %(DIR_DATA,self.dlabel)
-        self.colegg = xarray.open_dataset("%s/sims_vector08c_Q4.a100+1_ERA5_single_levels_decadal_%s_colegg.nc" %(dr,self.dlabel))['colegg'].values
-        self.colK = xarray.open_dataset("%s/sims_vector08c_Q4.a100+1_ERA5_single_levels_decadal_%s_colK.nc" %(dr,self.dlabel))['colK'].values
-        self.coln2 = xarray.open_dataset("%s/sims_vector08c_Q4.a100+1_ERA5_single_levels_decadal_%s_coln2.nc" %(dr,self.dlabel))['coln2'].values
-        self.coln4f = xarray.open_dataset("%s/sims_vector08c_Q4.a100+1_ERA5_single_levels_decadal_%s_coln4f.nc" %(dr,self.dlabel))['coln4f'].values
+        self.colegg = xarray.open_dataset("%s/sims_vector08c_Q4.a100+1_ERA5_single_levels_decadal_%s_colegg.nc" %(dr,self.dlabel))['colegg']
+        self.colK = xarray.open_dataset("%s/sims_vector08c_Q4.a100+1_ERA5_single_levels_decadal_%s_colK.nc" %(dr,self.dlabel))['colK']
+        self.coln2 = xarray.open_dataset("%s/sims_vector08c_Q4.a100+1_ERA5_single_levels_decadal_%s_coln2.nc" %(dr,self.dlabel))['coln2']
+        self.coln4f = xarray.open_dataset("%s/sims_vector08c_Q4.a100+1_ERA5_single_levels_decadal_%s_coln4f.nc" %(dr,self.dlabel))['coln4f']
         #
         dr = "%s/sims/vector08c_Q4.a100+1_chikv_QI/ERA5_single_levels_decadal/p4000r100w60/%s" %(DIR_DATA,self.dlabel)
-        self.iouts = xarray.open_dataset("%s/sims_vector08c_Q4.a100+1_chikv_QI_ERA5_single_levels_decadal_p4000r100w60_%s_iouts.nc" %(dr,self.dlabel))['iouts'].values
-        self.pouts = xarray.open_dataset("%s/sims_vector08c_Q4.a100+1_chikv_QI_ERA5_single_levels_decadal_p4000r100w60_%s_pouts.nc" %(dr,self.dlabel))['pouts'].values
+        self.iouts = xarray.open_dataset("%s/sims_vector08c_Q4.a100+1_chikv_QI_ERA5_single_levels_decadal_p4000r100w60_%s_iouts.nc" %(dr,self.dlabel))['iouts']
+        self.pouts = xarray.open_dataset("%s/sims_vector08c_Q4.a100+1_chikv_QI_ERA5_single_levels_decadal_p4000r100w60_%s_pouts.nc" %(dr,self.dlabel))['pouts']
 
 class annualNASA:
     def __init__(self) -> None:
@@ -118,25 +118,16 @@ class annualNASA:
         self.dlabel = "2090_to_2099"
         dr = "%s/sims/vector08c_Q4.a100+1" %(DIR_DATA)
         self.colegg = {
-            ssp: numpy.nanmean([
-                xarray.open_dataset("%s/NASA_decadal_%s_%s/%s/sims_vector08c_Q4.a100+1_NASA_decadal_%s_%s_%s_colegg.nc" %(dr,model,ssp,self.dlabel,model,ssp,self.dlabel))['colegg'].values
-                for model in self.models
-            ], axis=0)
+            ssp: xarray.open_dataset("%s/NASA_decadal_%s/%s/sims_vector08c_Q4.a100+1_NASA_decadal_%s_%s_colegg.nc" %(dr,ssp,self.dlabel,ssp,self.dlabel))['colegg']
             for ssp in self.ssps
         }
         dr = "%s/sims/vector08c_Q4.a100+1_chikv_QI" %(DIR_DATA)
         self.iouts = {
-            ssp: numpy.nanmean([
-                xarray.open_dataset("%s/NASA_decadal_%s_%s/p4000r100w60/%s/sims_vector08c_Q4.a100+1_chikv_QI_NASA_decadal_%s_%s_p4000r100w60_%s_iouts.nc" %(dr,model,ssp,self.dlabel,model,ssp,self.dlabel))['iouts'].values
-                for model in self.models
-            ], axis=0)
+            ssp: xarray.open_dataset("%s/NASA_decadal_%s/p4000r100w60/%s/sims_vector08c_Q4.a100+1_chikv_QI_NASA_decadal_%s_p4000r100w60_%s_iouts.nc" %(dr,ssp,self.dlabel,ssp,self.dlabel))['iouts']
             for ssp in self.ssps
         }
         self.pouts = {
-            ssp: numpy.nanmean([
-                xarray.open_dataset("%s/NASA_decadal_%s_%s/p4000r100w60/%s/sims_vector08c_Q4.a100+1_chikv_QI_NASA_decadal_%s_%s_p4000r100w60_%s_pouts.nc" %(dr,model,ssp,self.dlabel,model,ssp,self.dlabel))['pouts'].values
-                for model in self.models
-            ], axis=0)
+            ssp: xarray.open_dataset("%s/NASA_decadal_%s/p4000r100w60/%s/sims_vector08c_Q4.a100+1_chikv_QI_NASA_decadal_%s_p4000r100w60_%s_pouts.nc" %(dr,ssp,self.dlabel,ssp,self.dlabel))['pouts']
             for ssp in self.ssps
         }
         #
@@ -153,17 +144,18 @@ class forecastECMWF:
             stdwarn("Vector forecast directory is misworded! %s" %self.fld)
             return
         #
-        self.colegg = xarray.open_dataset("%s/%s/sims_vector08c_Q4.a100+1_ECMWF_%s_colegg.nc" %(dr,self.fld,self.fld))['colegg'].values
-        self.colK = xarray.open_dataset("%s/%s/sims_vector08c_Q4.a100+1_ECMWF_%s_colK.nc" %(dr,self.fld,self.fld))['colK'].values
-        self.coln2 = xarray.open_dataset("%s/%s/sims_vector08c_Q4.a100+1_ECMWF_%s_coln2.nc" %(dr,self.fld,self.fld))['coln2'].values
+        self.colegg = xarray.open_dataset("%s/%s/sims_vector08c_Q4.a100+1_ECMWF_%s_colegg.nc" %(dr,self.fld,self.fld))['colegg']
+        self.colK = xarray.open_dataset("%s/%s/sims_vector08c_Q4.a100+1_ECMWF_%s_colK.nc" %(dr,self.fld,self.fld))['colK']
+        self.coln2 = xarray.open_dataset("%s/%s/sims_vector08c_Q4.a100+1_ECMWF_%s_coln2.nc" %(dr,self.fld,self.fld))['coln2']
         coln4f = xarray.open_dataset("%s/%s/sims_vector08c_Q4.a100+1_ECMWF_%s_coln4f.nc" %(dr,self.fld,self.fld))
-        self.coln4f = coln4f['coln4f'].values
+        self.coln4f = coln4f['coln4f']
         self.dates = coln4f['time'].values
         #
         dr = "%s/sims/vector08c_Q4.a100+1_chikv_QI/ECMWF" %(DIR_DATA)
         #
         fld = sorted(os.listdir(dr))[-1]
         overlap = [re.sub(r"\_","-",s) for s in re.findall(r"\d\d\d\d\_\d+\_\d+",fld)]
+        print("Reading forecast...", overlap)
         #
         if (len(overlap)!=2):
             stdwarn("Disease forecast directory is misworded! %s" %fld)
@@ -179,8 +171,8 @@ class forecastECMWF:
         #
         self.popsize, self.reps, self.win = tmp[0]
         #
-        self.iouts = xarray.open_dataset("%s/%s/sims_vector08c_Q4.a100+1_chikv_QI_ECMWF_%s_iouts.nc" %(dr,fld,fld))['iouts'].values
-        self.pouts = xarray.open_dataset("%s/%s/sims_vector08c_Q4.a100+1_chikv_QI_ECMWF_%s_pouts.nc" %(dr,fld,fld))['pouts'].values
+        self.iouts = xarray.open_dataset("%s/%s/sims_vector08c_Q4.a100+1_chikv_QI_ECMWF_%s_iouts.nc" %(dr,fld,fld))['iouts']
+        self.pouts = xarray.open_dataset("%s/%s/sims_vector08c_Q4.a100+1_chikv_QI_ECMWF_%s_pouts.nc" %(dr,fld,fld))['pouts']
         #
     def getOverlap(self):
         return self.overlap

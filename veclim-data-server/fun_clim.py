@@ -164,6 +164,7 @@ class forecastECMWF:
         #
         fld = sorted(os.listdir(dr))[-1]
         overlap = [re.sub(r"\_","-",s) for s in re.findall(r"\d\d\d\d\_\d+\_\d+",fld)]
+        print("Reading forecast...", overlap)
         #
         if (len(overlap)!=2):
             stdwarn("Disease forecast directory is misworded! %s" %fld)

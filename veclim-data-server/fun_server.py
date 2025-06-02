@@ -581,7 +581,7 @@ def get_risk(ret):
     }
 
 def get_surv(lon,lat,dt0,dt1):
-    return numpy.nan_to_num(vabun.getSurv(lon,lat,[dt0,dt1]),nan=0.0)
+    return numpy.nan_to_num(vabun.getSurv(lon,lat,[dt0,dt1]),nan=0.0).tolist()
 
 def get_decadal(lon, lat, date0, date1=False, ts=False):
     dats = get_dates(date0, date1=date1, ts=ts)

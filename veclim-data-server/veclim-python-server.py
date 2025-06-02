@@ -102,6 +102,9 @@ def respondAlbopictus(date0,date1,lon,lat,timeseries,meteo_key,sim_key,fcast_key
     ret[fcast_key] = simclm['fcast']
     ret[risk_key] = simclm['risk']
     #
+    if 'surv' in simclm:
+        ret['surv-ts'] = simclm['surv']
+    #
     response_body = json.dumps(ret)
     return returnResponse(start_response, response_body)
 

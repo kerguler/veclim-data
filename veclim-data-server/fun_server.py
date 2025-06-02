@@ -2,6 +2,7 @@ import numpy
 import pandas
 
 import fun_clim
+import fun_surv
 import fun_colors
 import fun_tiles
 
@@ -26,6 +27,7 @@ forecastECMWF = False
 papatasi2015 = False
 popdens = False
 presence = False
+vabun = False
 
 def load_forecast_var(reload=False):
     global forecastECMWF
@@ -41,6 +43,7 @@ def load_global_var():
     global papatasi2015
     global popdens
     global presence
+    global vabun
     #
     if not lwMaskERA5:
         lwMaskERA5 = fun_clim.lwMaskERA5()
@@ -64,7 +67,10 @@ def load_global_var():
         popdens = fun_clim.popDens()
     #
     if not presence:
-        presence = fun_clim.presenceAlbopictus()
+        presence = fun_surv.presenceAlbopictus()
+    #
+    if not vabun:
+        vabun = fun_surv.VectAbundance()
     #
     load_forecast_var(reload=False)
 
@@ -574,6 +580,9 @@ def get_risk(ret):
         "iouts": calc_cut(ret["iouts"], iouts_limit, labels)
     }
 
+def get_surv(lon,lat,dt0,dt1):
+    return numpy.nan_to_num(vabun.getSurv(lon,lat,[dt0,dt1]),nan=0.0)
+
 def get_decadal(lon, lat, date0, date1=False, ts=False):
     dats = get_dates(date0, date1=date1, ts=ts)
     ret = {
@@ -649,6 +658,18 @@ def get_decadal(lon, lat, date0, date1=False, ts=False):
             'accuracy': acc
         }
     }
+    #
+    if ts:
+        tmp = get_surv(ret['location']['lon'],
+                       ret['location']['lat'],
+                       ret['date']['date0'],
+                       ret['date']['date1'])
+        if len(tmp) > 0:
+            ret['surv'] = {
+                'vabun': {
+                    'v015': tmp
+                }
+            }
     #
     return ret
 

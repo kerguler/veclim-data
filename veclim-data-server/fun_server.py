@@ -338,7 +338,7 @@ def load_tiles():
     #
     for ssp in ['ssp245','ssp585']:
         if "colegg_%s" %ssp not in tile_dat:
-            print("Loading tiles: colegg_%s...",ssp,flush=True)
+            print("Loading tiles: colegg_%s..." %ssp,flush=True)
             cmap = fun_colors.cmaps['FuzzyLocV6']
             tile_dat["colegg_%s" %ssp] = {
                 'fun': fun_tiles.getTiles,
@@ -350,7 +350,7 @@ def load_tiles():
                 'clscl': cmap['clscl']
             }
         if "iouts_%s" %ssp not in tile_dat:
-            print("Loading tiles: iouts_%s...",ssp,flush=True)
+            print("Loading tiles: iouts_%s..." %ssp,flush=True)
             cmap = fun_colors.cmaps['iouts']
             tile_dat["iouts_%s" %ssp] = {
                 'fun': fun_tiles.getTiles,
@@ -362,7 +362,7 @@ def load_tiles():
                 'clscl': cmap['clscl']
             }
         if "pouts_%s" %ssp not in tile_dat:
-            print("Loading tiles: pouts_%s...",ssp,flush=True)
+            print("Loading tiles: pouts_%s..." %ssp,flush=True)
             cmap = fun_colors.cmaps['pouts']
             tile_dat["pouts_%s" %ssp] = {
                 'fun': fun_tiles.getTiles,
@@ -374,7 +374,7 @@ def load_tiles():
                 'clscl': cmap['clscl']
             }
         if "diff_colegg_%s" %ssp not in tile_dat:
-            print("Loading tiles: diff_colegg_%s...",ssp,flush=True)
+            print("Loading tiles: diff_colegg_%s..." %ssp,flush=True)
             cmap = fun_colors.cmaps['diff_colegg']
             # Based on FuzzyLocV6
             tmp = numpy.log2(numpy.nanmean(annualNASA.colegg[ssp][:-1,:,:],axis=2)/5.0)
@@ -395,7 +395,7 @@ def load_tiles():
                 'clscl': cmap['clscl']
             }
         if "diff_iouts_%s" %ssp not in tile_dat:
-            print("Loading tiles: diff_iouts_%s...",ssp,flush=True)
+            print("Loading tiles: diff_iouts_%s..." %ssp,flush=True)
             cmap = fun_colors.cmaps['diff_iouts']
             tile_dat["diff_iouts_%s" %ssp] = {
                 'fun': fun_tiles.getTiles,
@@ -407,7 +407,7 @@ def load_tiles():
                 'clscl': cmap['clscl']
             }
         if "diff_pouts_%s" %ssp not in tile_dat:
-            print("Loading tiles: diff_pouts_%s...",ssp,flush=True)
+            print("Loading tiles: diff_pouts_%s..." %ssp,flush=True)
             cmap = fun_colors.cmaps['diff_pouts']
             tile_dat["diff_pouts_%s" %ssp] = {
                 'fun': fun_tiles.getTiles,
@@ -447,7 +447,7 @@ def load_tiles():
     #
     for prd in papatasi2015.shps:
         if 'papatasi_'+prd not in tile_dat:
-            print("Loading tiles: papatasi_%s...",prd,flush=True)
+            print("Loading tiles: papatasi_%s..." %prd,flush=True)
             cmap = fun_colors.cmaps['papatasi']
             tile_dat['papatasi_'+prd] = {
                 'fun': fun_tiles.getSandTiles,

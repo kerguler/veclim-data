@@ -32,6 +32,7 @@ vabun = False
 def load_forecast_var(reload=False):
     global forecastECMWF
     if reload or (not forecastECMWF):
+        print("Loading ECMWF forecast...",flush=True)
         forecastECMWF = fun_clim.forecastECMWF()
 
 def load_global_var():
@@ -46,30 +47,39 @@ def load_global_var():
     global vabun
     #
     if not lwMaskERA5:
+        print("Loading ERA5 land/water mask...",flush=True)
         lwMaskERA5 = fun_clim.lwMaskERA5()
     #
     if not annualERA5:
+        print("Loading annual ERA5...",flush=True)
         annualERA5 = fun_clim.annualERA5()
     #
     if not annualVectorA:
+        print("Loading VectorA...",flush=True)
         annualVectorA = fun_clim.annualVectorA()
     #
     if not annualVectorA_1980:
+        print("Loading VectorA_1980...",flush=True)
         annualVectorA_1980 = fun_clim.annualVectorA_1980()
     #
     if not annualNASA:
+        print("Loading NASA...",flush=True)
         annualNASA = fun_clim.annualNASA()
     #
     if not papatasi2015:
+        print("Loading papatasi2015...",flush=True)
         papatasi2015 = fun_clim.papatasi2015()
     #
     if not popdens:
+        print("Loading popdens...",flush=True)
         popdens = fun_clim.popDens()
     #
     if not presence:
+        print("Loading presence...",flush=True)
         presence = fun_surv.presenceAlbopictus()
     #
     if not vabun:
+        print("Loading VectAbundance...",flush=True)
         vabun = fun_surv.VectAbundance()
     #
     load_forecast_var(reload=False)
@@ -192,6 +202,7 @@ def load_tiles():
     load_global_var()
     #
     if 'colegg' not in tile_dat:
+        print("Loading tiles: colegg...",flush=True)
         cmap = fun_colors.cmaps['FuzzyLocV6']
         tile_dat['colegg'] = {
             'fun': fun_tiles.getTiles,
@@ -204,6 +215,7 @@ def load_tiles():
         }
     #
     if 'larva' not in tile_dat:
+        print("Loading tiles: larva...",flush=True)
         cmap = fun_colors.cmaps['larva']
         tile_dat['larva'] = {
             'fun': fun_tiles.getTiles,
@@ -216,6 +228,7 @@ def load_tiles():
         }
     #
     if 'chikv_iouts' not in tile_dat:
+        print("Loading tiles: chikv_iouts...",flush=True)
         cmap = fun_colors.cmaps['iouts']
         tile_dat['chikv_iouts'] = {
             'fun': fun_tiles.getTiles,
@@ -228,6 +241,7 @@ def load_tiles():
         }
     #
     if 'chikv_pouts' not in tile_dat:
+        print("Loading tiles: chikv_pouts...",flush=True)
         cmap = fun_colors.cmaps['pouts']
         tile_dat['chikv_pouts'] = {
             'fun': fun_tiles.getTiles,
@@ -240,84 +254,91 @@ def load_tiles():
         }
     #
     if "colegg_1980" not in tile_dat:
-            cmap = fun_colors.cmaps['FuzzyLocV6']
-            tile_dat["colegg_1980"] = {
-                'fun': fun_tiles.getTiles,
-                'dat': cmap['tran'](annualVectorA_1980.colegg[:-1,:,:]),
-                'cmap': cmap['cmap'],
-                'norm': cmap['norm'],
-                'label': "colegg_1980",
-                'cllbl': cmap['cllbl'],
-                'clscl': cmap['clscl']
-            }
+        print("Loading tiles: colegg_1980...",flush=True)
+        cmap = fun_colors.cmaps['FuzzyLocV6']
+        tile_dat["colegg_1980"] = {
+            'fun': fun_tiles.getTiles,
+            'dat': cmap['tran'](annualVectorA_1980.colegg[:-1,:,:]),
+            'cmap': cmap['cmap'],
+            'norm': cmap['norm'],
+            'label': "colegg_1980",
+            'cllbl': cmap['cllbl'],
+            'clscl': cmap['clscl']
+        }
     if "chikv_iouts_1980" not in tile_dat:
-            cmap = fun_colors.cmaps['iouts']
-            tile_dat["chikv_iouts_1980"] = {
-                'fun': fun_tiles.getTiles,
-                'dat': cmap['tran'](annualVectorA_1980.iouts[:-1,:,:]),
-                'cmap': cmap['cmap'],
-                'norm': cmap['norm'],
-                'label': "chikv_iouts_1980",
-                'cllbl': cmap['cllbl'],
-                'clscl': cmap['clscl']
-            }
+        print("Loading tiles: chikv_iouts_1980...",flush=True)
+        cmap = fun_colors.cmaps['iouts']
+        tile_dat["chikv_iouts_1980"] = {
+            'fun': fun_tiles.getTiles,
+            'dat': cmap['tran'](annualVectorA_1980.iouts[:-1,:,:]),
+            'cmap': cmap['cmap'],
+            'norm': cmap['norm'],
+            'label': "chikv_iouts_1980",
+            'cllbl': cmap['cllbl'],
+            'clscl': cmap['clscl']
+        }
     if "chikv_pouts_1980" not in tile_dat:
-            cmap = fun_colors.cmaps['pouts']
-            tile_dat["chikv_pouts_1980"] = {
-                'fun': fun_tiles.getTiles,
-                'dat': cmap['tran'](annualVectorA_1980.pouts[:-1,:,:]),
-                'cmap': cmap['cmap'],
-                'norm': cmap['norm'],
-                'label': "chikv_pouts_1980",
-                'cllbl': cmap['cllbl'],
-                'clscl': cmap['clscl']
-            }
+        print("Loading tiles: chikv_pouts_1980...",flush=True)
+        cmap = fun_colors.cmaps['pouts']
+        tile_dat["chikv_pouts_1980"] = {
+            'fun': fun_tiles.getTiles,
+            'dat': cmap['tran'](annualVectorA_1980.pouts[:-1,:,:]),
+            'cmap': cmap['cmap'],
+            'norm': cmap['norm'],
+            'label': "chikv_pouts_1980",
+            'cllbl': cmap['cllbl'],
+            'clscl': cmap['clscl']
+        }
     #
     if "diff_colegg_1980" not in tile_dat:
-            cmap = fun_colors.cmaps['diff_colegg']
-            # Based on FuzzyLocV6
-            tmp = numpy.log2(numpy.nanmean(annualVectorA.colegg[:-1,:,:],axis=2)/5.0)
-            tmp[tmp<-4] = -4
-            tmp[tmp>4] = 4
-            tmpf = numpy.log2(numpy.nanmean(annualVectorA_1980.colegg[:-1,:,:],axis=2)/5.0)
-            tmpf[tmpf<-4] = -4
-            tmpf[tmpf>4] = 4
-            tmp = tmp-tmpf
-            # 
-            tile_dat["diff_colegg_1980"] = {
-                'fun': fun_tiles.getTiles,
-                'dat': cmap['tran'](tmp),
-                'cmap': cmap['cmap'],
-                'norm': cmap['norm'],
-                'label': "diff_colegg_1980",
-                'cllbl': cmap['cllbl'],
-                'clscl': cmap['clscl']
-            }
+        print("Loading tiles: diff_colegg_1980...",flush=True)
+        cmap = fun_colors.cmaps['diff_colegg']
+        # Based on FuzzyLocV6
+        tmp = numpy.log2(numpy.nanmean(annualVectorA.colegg[:-1,:,:],axis=2)/5.0)
+        tmp[tmp<-4] = -4
+        tmp[tmp>4] = 4
+        tmpf = numpy.log2(numpy.nanmean(annualVectorA_1980.colegg[:-1,:,:],axis=2)/5.0)
+        tmpf[tmpf<-4] = -4
+        tmpf[tmpf>4] = 4
+        tmp = tmp-tmpf
+        # 
+        tile_dat["diff_colegg_1980"] = {
+            'fun': fun_tiles.getTiles,
+            'dat': cmap['tran'](tmp),
+            'cmap': cmap['cmap'],
+            'norm': cmap['norm'],
+            'label': "diff_colegg_1980",
+            'cllbl': cmap['cllbl'],
+            'clscl': cmap['clscl']
+        }
     if "diff_iouts_1980" not in tile_dat:
-            cmap = fun_colors.cmaps['diff_iouts']
-            tile_dat["diff_iouts_1980"] = {
-                'fun': fun_tiles.getTiles,
-                'dat': cmap['tran'](annualVectorA.iouts[:-1,:,:]-annualVectorA_1980.iouts[:-1,:,:]),
-                'cmap': cmap['cmap'],
-                'norm': cmap['norm'],
-                'label': "diff_iouts_1980",
-                'cllbl': cmap['cllbl'],
-                'clscl': cmap['clscl']
-            }
+        print("Loading tiles: diff_iouts_1980...",flush=True)
+        cmap = fun_colors.cmaps['diff_iouts']
+        tile_dat["diff_iouts_1980"] = {
+            'fun': fun_tiles.getTiles,
+            'dat': cmap['tran'](annualVectorA.iouts[:-1,:,:]-annualVectorA_1980.iouts[:-1,:,:]),
+            'cmap': cmap['cmap'],
+            'norm': cmap['norm'],
+            'label': "diff_iouts_1980",
+            'cllbl': cmap['cllbl'],
+            'clscl': cmap['clscl']
+        }
     if "diff_pouts_1980" not in tile_dat:
-            cmap = fun_colors.cmaps['diff_pouts']
-            tile_dat["diff_pouts_1980"] = {
-                'fun': fun_tiles.getTiles,
-                'dat': cmap['tran'](annualVectorA.pouts[:-1,:,:]-annualVectorA_1980.pouts[:-1,:,:]),
-                'cmap': cmap['cmap'],
-                'norm': cmap['norm'],
-                'label': "diff_pouts_1980",
-                'cllbl': cmap['cllbl'],
-                'clscl': cmap['clscl']
-            }
+        print("Loading tiles: diff_pouts_1980...",flush=True)
+        cmap = fun_colors.cmaps['diff_pouts']
+        tile_dat["diff_pouts_1980"] = {
+            'fun': fun_tiles.getTiles,
+            'dat': cmap['tran'](annualVectorA.pouts[:-1,:,:]-annualVectorA_1980.pouts[:-1,:,:]),
+            'cmap': cmap['cmap'],
+            'norm': cmap['norm'],
+            'label': "diff_pouts_1980",
+            'cllbl': cmap['cllbl'],
+            'clscl': cmap['clscl']
+        }
     #
     for ssp in ['ssp245','ssp585']:
         if "colegg_%s" %ssp not in tile_dat:
+            print("Loading tiles: colegg_%s...",ssp,flush=True)
             cmap = fun_colors.cmaps['FuzzyLocV6']
             tile_dat["colegg_%s" %ssp] = {
                 'fun': fun_tiles.getTiles,
@@ -329,6 +350,7 @@ def load_tiles():
                 'clscl': cmap['clscl']
             }
         if "iouts_%s" %ssp not in tile_dat:
+            print("Loading tiles: iouts_%s...",ssp,flush=True)
             cmap = fun_colors.cmaps['iouts']
             tile_dat["iouts_%s" %ssp] = {
                 'fun': fun_tiles.getTiles,
@@ -340,6 +362,7 @@ def load_tiles():
                 'clscl': cmap['clscl']
             }
         if "pouts_%s" %ssp not in tile_dat:
+            print("Loading tiles: pouts_%s...",ssp,flush=True)
             cmap = fun_colors.cmaps['pouts']
             tile_dat["pouts_%s" %ssp] = {
                 'fun': fun_tiles.getTiles,
@@ -351,6 +374,7 @@ def load_tiles():
                 'clscl': cmap['clscl']
             }
         if "diff_colegg_%s" %ssp not in tile_dat:
+            print("Loading tiles: diff_colegg_%s...",ssp,flush=True)
             cmap = fun_colors.cmaps['diff_colegg']
             # Based on FuzzyLocV6
             tmp = numpy.log2(numpy.nanmean(annualNASA.colegg[ssp][:-1,:,:],axis=2)/5.0)
@@ -371,6 +395,7 @@ def load_tiles():
                 'clscl': cmap['clscl']
             }
         if "diff_iouts_%s" %ssp not in tile_dat:
+            print("Loading tiles: diff_iouts_%s...",ssp,flush=True)
             cmap = fun_colors.cmaps['diff_iouts']
             tile_dat["diff_iouts_%s" %ssp] = {
                 'fun': fun_tiles.getTiles,
@@ -382,6 +407,7 @@ def load_tiles():
                 'clscl': cmap['clscl']
             }
         if "diff_pouts_%s" %ssp not in tile_dat:
+            print("Loading tiles: diff_pouts_%s...",ssp,flush=True)
             cmap = fun_colors.cmaps['diff_pouts']
             tile_dat["diff_pouts_%s" %ssp] = {
                 'fun': fun_tiles.getTiles,
@@ -394,6 +420,7 @@ def load_tiles():
             }
     #
     if 'pop' not in tile_dat:
+        print("Loading tiles: pop...",flush=True)
         cmap = fun_colors.cmaps['viridis.pop']
         tile_dat['pop'] = {
             'fun': fun_tiles.getTiles,
@@ -406,6 +433,7 @@ def load_tiles():
         }
     #
     if 'presence' not in tile_dat:
+        print("Loading tiles: presence...",flush=True)
         cmap = fun_colors.cmaps['presence']
         tile_dat['presence'] = {
             'fun': fun_tiles.getTiles,
@@ -419,6 +447,7 @@ def load_tiles():
     #
     for prd in papatasi2015.shps:
         if 'papatasi_'+prd not in tile_dat:
+            print("Loading tiles: papatasi_%s...",prd,flush=True)
             cmap = fun_colors.cmaps['papatasi']
             tile_dat['papatasi_'+prd] = {
                 'fun': fun_tiles.getSandTiles,

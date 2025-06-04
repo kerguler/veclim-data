@@ -199,7 +199,7 @@ def load_tiles_dates(v_label,date0=None,date1=None):
     date0 = pandas.to_datetime(date0)
     date1 = pandas.to_datetime(date1)
     dt = (forecastECMWF.dates >= date0) & (forecastECMWF.dates <= date1)
-    if numpy.sum(dt) != (date1-date0).days+1:
+    if numpy.abs(numpy.sum(dt) - (date1-date0).days) > 7:
         return {'error': "Forecast dates do not match the request!"}
     #
     if v_label == 'colegg_fcast_dates':

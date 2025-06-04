@@ -147,7 +147,7 @@ def load_tiles_dates(v_label,date0=None,date1=None):
     load_global_var()
     #
     if ((date0 == None) or (date1 == None)):
-        return
+        return {}
     #
     dt = get_dates(date0, date1=date1, ts=False)
     #
@@ -195,6 +195,59 @@ def load_tiles_dates(v_label,date0=None,date1=None):
                 'cllbl': cmap['cllbl'],
                 'clscl': cmap['clscl']
             }
+    #
+    date0 = pandas.to_datetime(date0)
+    date1 = pandas.to_datetime(date1)
+    dt = (forecastECMWF.dates >= date0) & (forecastECMWF.dates <= date1)
+    if numpy.sum(dt) != (date1-date0).days+1:
+        return {'error': "Forecast dates do not match the request!"}
+    #
+    if v_label == 'colegg_fcast_dates':
+        cmap = fun_colors.cmaps['FuzzyLocV6']
+        tile_dat['colegg_fcast_dates'] = {
+                'fun': fun_tiles.getTiles,
+                'dat': cmap['tran'](remove3_feb29(forecastECMWF.colegg,dt['days'],dt['isFeb29'],tolist=False)[:-1,:,:]),
+                'cmap': cmap['cmap'],
+                'norm': cmap['norm'],
+                'label': '',
+                'cllbl': cmap['cllbl'],
+                'clscl': cmap['clscl']
+            }
+    elif v_label == 'larva_fcast_dates':
+        cmap = fun_colors.cmaps['larva']
+        tile_dat['larva_fcast_dates'] = {
+                'fun': fun_tiles.getTiles,
+                'dat': cmap['tran'](remove3_feb29(forecastECMWF.coln2,dt['days'],dt['isFeb29'],tolist=False)[:-1,:,:]),
+                'cmap': cmap['cmap'],
+                'norm': cmap['norm'],
+                'label': '',
+                'cllbl': cmap['cllbl'],
+                'clscl': cmap['clscl']
+            }
+    elif v_label == 'chikv_iouts_fcast_dates':
+        cmap = fun_colors.cmaps['iouts']
+        tile_dat['chikv_iouts_fcast_dates'] = {
+                'fun': fun_tiles.getTiles,
+                'dat': cmap['tran'](remove3_feb29(forecastECMWF.iouts,dt['days'],dt['isFeb29'],tolist=False)[:-1,:,:]),
+                'cmap': cmap['cmap'],
+                'norm': cmap['norm'],
+                'label': '',
+                'cllbl': cmap['cllbl'],
+                'clscl': cmap['clscl']
+            }
+    elif v_label == 'chikv_pouts_fcast_dates':
+        cmap = fun_colors.cmaps['pouts']
+        tile_dat['chikv_pouts_fcast_dates'] = {
+                'fun': fun_tiles.getTiles,
+                'dat': cmap['tran'](remove3_feb29(forecastECMWF.pouts,dt['days'],dt['isFeb29'],tolist=False)[:-1,:,:]),
+                'cmap': cmap['cmap'],
+                'norm': cmap['norm'],
+                'label': '',
+                'cllbl': cmap['cllbl'],
+                'clscl': cmap['clscl']
+            }
+    # 
+    return {}
 
 def load_tiles():
     global tile_dat

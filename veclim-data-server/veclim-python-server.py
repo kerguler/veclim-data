@@ -55,7 +55,10 @@ def respondTiles(date0,date1,pr_x,pr_y,pr_z,pr_v,start_response):
     v_label = pr_v
     if ((date0 != None) and (date1 != None)):
         v_label += '_dates'
-        fun_server.load_tiles_dates(v_label,date0,date1)
+        ret = fun_server.load_tiles_dates(v_label,date0,date1)
+        if ret:
+            response_body = json.dumps(ret)
+            return returnResponse(start_response, response_body)
     #
     if ((pr_z == None) or 
         (pr_x == None) or 

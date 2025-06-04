@@ -206,7 +206,7 @@ def load_tiles_dates(v_label,date0=None,date1=None):
         cmap = fun_colors.cmaps['FuzzyLocV6']
         tile_dat['colegg_fcast_dates'] = {
                 'fun': fun_tiles.getTiles,
-                'dat': cmap['tran'](remove3_feb29(forecastECMWF.colegg,dt['days'],dt['isFeb29'],tolist=False)[:-1,:,:]),
+                'dat': cmap['tran'](forecastECMWF.colegg[:-1,:,dt]),
                 'cmap': cmap['cmap'],
                 'norm': cmap['norm'],
                 'label': '',
@@ -217,7 +217,7 @@ def load_tiles_dates(v_label,date0=None,date1=None):
         cmap = fun_colors.cmaps['larva']
         tile_dat['larva_fcast_dates'] = {
                 'fun': fun_tiles.getTiles,
-                'dat': cmap['tran'](remove3_feb29(forecastECMWF.coln2,dt['days'],dt['isFeb29'],tolist=False)[:-1,:,:]),
+                'dat': cmap['tran'](forecastECMWF.coln2[:-1,:,dt]),
                 'cmap': cmap['cmap'],
                 'norm': cmap['norm'],
                 'label': '',
@@ -228,7 +228,7 @@ def load_tiles_dates(v_label,date0=None,date1=None):
         cmap = fun_colors.cmaps['iouts']
         tile_dat['chikv_iouts_fcast_dates'] = {
                 'fun': fun_tiles.getTiles,
-                'dat': cmap['tran'](remove3_feb29(forecastECMWF.iouts,dt['days'],dt['isFeb29'],tolist=False)[:-1,:,:]),
+                'dat': cmap['tran'](forecastECMWF.iouts[:-1,:,dt]),
                 'cmap': cmap['cmap'],
                 'norm': cmap['norm'],
                 'label': '',
@@ -239,7 +239,7 @@ def load_tiles_dates(v_label,date0=None,date1=None):
         cmap = fun_colors.cmaps['pouts']
         tile_dat['chikv_pouts_fcast_dates'] = {
                 'fun': fun_tiles.getTiles,
-                'dat': cmap['tran'](remove3_feb29(forecastECMWF.pouts,dt['days'],dt['isFeb29'],tolist=False)[:-1,:,:]),
+                'dat': cmap['tran'](forecastECMWF.pouts[:-1,:,dt]),
                 'cmap': cmap['cmap'],
                 'norm': cmap['norm'],
                 'label': '',

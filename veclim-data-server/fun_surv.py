@@ -129,8 +129,8 @@ class VectAbundance:
     def __init__(self):
         self.grid = gridClass_LD()
         #
-        self.filename = "%s/surveillance/VectAbundance/Vectabundace_v015.csv" %(DIR_DATA)
-        vabo = pandas.read_csv(self.filename)
+        self.filename = "%s/surveillance/VectAbundance/Vectabundace_v015" %(DIR_DATA)
+        vabo = pandas.read_csv(self.filename + ".csv")
         vabo = vabo.loc[
             (vabo["species"] == "albopictus") &
             (~numpy.isnan(vabo["value"])) &
@@ -160,3 +160,23 @@ class VectAbundance:
         obs["week"] = [get_isoweek(a) for a in obs["date"]]
         obs = obs.merge(ss, on='week', how='left')
         return obs["samples"].values.tolist()
+        #
+    def getShp(self, res=[0.125,0.125]):
+        try:
+            gdf = gpd.GeoDataFrame.from_file(self.filename + ".shp", crs='epsg:4326')
+        except:
+            geoms = []
+            feats = []
+            for gr in self.vb.groupby(["gridLon","gridLat"]):
+                lon, lat = gr[0]
+                geoms.append(shapely.geometry.box(lon-res[0], 
+                                                  lat-res[1], 
+                                                  lon+res[0], 
+                                                  lat+res[1]))
+                feats.append(gr[1]['samples'].mean(skipna=True))
+            gdf = gpd.GeoDataFrame({
+                'mean': feats,
+                'geometry': geoms 
+            }, crs='epsg:4326')       
+            gdf.to_file(self.filename + ".shp")
+        return gdf

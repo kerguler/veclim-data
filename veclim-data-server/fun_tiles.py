@@ -131,7 +131,7 @@ def getTiles(dat, pr_z, pr_x, pr_y, cmap=None, norm=None, label=''):
 # -----
 # This needs to be combined with getTiles 
 # -----
-def getSandTiles(shp, pr_z, pr_x, pr_y, cmap=None, norm=None, label=''):
+def getShpTiles(shp, pr_z, pr_x, pr_y, cmap=None, norm=None, label=''):
     if label:
         carray = loadTile(label,pr_x,pr_y,pr_z)
         if len(carray) > 0:
@@ -155,10 +155,16 @@ def getSandTiles(shp, pr_z, pr_x, pr_y, cmap=None, norm=None, label=''):
     #
     # Note: This has to come after setting the axis limits
     # Note: vmin and vmax should be set (not left as None)
-    shp.plot(column='mean',
-             cmap=cmap,
-             norm=norm,
-             ax=submap['ax'])
+    if cmap == None and norm == None:
+        shp.plot(edgecolor='black', 
+                 facecolor='none',
+                 linewidth=2,
+                 ax=submap['ax'])
+    else:
+        shp.plot(column='mean',
+                 cmap=cmap,
+                 norm=norm,
+                 ax=submap['ax'])
     #
     canvas = plotCanvas(submap['fig'])
     buffr = buffArray(canvas['array'])

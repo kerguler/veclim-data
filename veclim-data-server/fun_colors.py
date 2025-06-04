@@ -109,6 +109,22 @@ cmaps['iouts'] = {
     'tran': tran
 }
 
+clscl = ["black"]
+clbins = [0,1]
+cllbl = ["0"]
+
+cmap = None
+norm = None
+tran = lambda x: x
+
+cmaps['vabun'] = {
+    'clscl': clscl,
+    'clbins': clbins,
+    'cllbl': cllbl,
+    'cmap': cmap,
+    'norm': norm,
+    'tran': tran
+}
 
 clscl = numpy.array([
          '#081d58',

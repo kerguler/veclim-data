@@ -445,12 +445,25 @@ def load_tiles():
             'clscl': cmap['clscl']
         }
     #
+    if 'vabun_v015' not in tile_dat:
+        print("Loading tiles: vabun_v015...",flush=True)
+        cmap = fun_colors.cmaps['vabun']
+        tile_dat['vabun_v015'] = {
+            'fun': fun_tiles.getShpTiles,
+            'dat': cmap['tran'](vabun.getShp()).to_crs(fun_tiles.proj1),
+            'cmap': cmap['cmap'],
+            'norm': cmap['norm'],
+            'label': 'vabun_v015',
+            'cllbl': cmap['cllbl'],
+            'clscl': cmap['clscl']
+        }
+    #
     for prd in papatasi2015.shps:
         if 'papatasi_'+prd not in tile_dat:
             print("Loading tiles: papatasi_%s..." %prd,flush=True)
             cmap = fun_colors.cmaps['papatasi']
             tile_dat['papatasi_'+prd] = {
-                'fun': fun_tiles.getSandTiles,
+                'fun': fun_tiles.getShpTiles,
                 'dat': cmap['tran'](papatasi2015.shps[prd]).to_crs(fun_tiles.proj1),
                 'cmap': cmap['cmap'],
                 'norm': cmap['norm'],

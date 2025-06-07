@@ -199,11 +199,11 @@ def load_tiles_dates(v_label,date0=None,date1=None):
     date0 = pandas.to_datetime(date0)
     date1 = pandas.to_datetime(date1)
     #
-    if numpy.abs(numpy.sum(dt) - (date1-date0).days) > 7:
-        return {'error': "Forecast dates do not match the request!"}
-    #
     if v_label == 'colegg_fcast_dates':
         dt = (forecastECMWF.dates >= date0) & (forecastECMWF.dates <= date1)
+        if numpy.abs(numpy.sum(dt) - (date1-date0).days) > 7:
+            return {'error': "Forecast dates do not match the request!"}
+        #
         cmap = fun_colors.cmaps['FuzzyLocV6']
         tile_dat['colegg_fcast_dates'] = {
                 'fun': fun_tiles.getTiles,
@@ -216,6 +216,9 @@ def load_tiles_dates(v_label,date0=None,date1=None):
             }
     elif v_label == 'larva_fcast_dates':
         dt = (forecastECMWF.dates >= date0) & (forecastECMWF.dates <= date1)
+        if numpy.abs(numpy.sum(dt) - (date1-date0).days) > 7:
+            return {'error': "Forecast dates do not match the request!"}
+        #
         cmap = fun_colors.cmaps['larva']
         tile_dat['larva_fcast_dates'] = {
                 'fun': fun_tiles.getTiles,
@@ -228,6 +231,9 @@ def load_tiles_dates(v_label,date0=None,date1=None):
             }
     elif v_label == 'chikv_iouts_fcast_dates':
         dt = (forecastECMWF.idates >= date0) & (forecastECMWF.idates <= date1)
+        if numpy.abs(numpy.sum(dt) - (date1-date0).days) > 7:
+            return {'error': "Forecast dates do not match the request!"}
+        #
         cmap = fun_colors.cmaps['iouts']
         tile_dat['chikv_iouts_fcast_dates'] = {
                 'fun': fun_tiles.getTiles,
@@ -240,6 +246,9 @@ def load_tiles_dates(v_label,date0=None,date1=None):
             }
     elif v_label == 'chikv_pouts_fcast_dates':
         dt = (forecastECMWF.idates >= date0) & (forecastECMWF.idates <= date1)
+        if numpy.abs(numpy.sum(dt) - (date1-date0).days) > 7:
+            return {'error': "Forecast dates do not match the request!"}
+        #
         cmap = fun_colors.cmaps['pouts']
         tile_dat['chikv_pouts_fcast_dates'] = {
                 'fun': fun_tiles.getTiles,

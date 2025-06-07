@@ -198,11 +198,12 @@ def load_tiles_dates(v_label,date0=None,date1=None):
     #
     date0 = pandas.to_datetime(date0)
     date1 = pandas.to_datetime(date1)
-    dt = (forecastECMWF.dates >= date0) & (forecastECMWF.dates <= date1)
+    #
     if numpy.abs(numpy.sum(dt) - (date1-date0).days) > 7:
         return {'error': "Forecast dates do not match the request!"}
     #
     if v_label == 'colegg_fcast_dates':
+        dt = (forecastECMWF.dates >= date0) & (forecastECMWF.dates <= date1)
         cmap = fun_colors.cmaps['FuzzyLocV6']
         tile_dat['colegg_fcast_dates'] = {
                 'fun': fun_tiles.getTiles,
@@ -214,6 +215,7 @@ def load_tiles_dates(v_label,date0=None,date1=None):
                 'clscl': cmap['clscl']
             }
     elif v_label == 'larva_fcast_dates':
+        dt = (forecastECMWF.dates >= date0) & (forecastECMWF.dates <= date1)
         cmap = fun_colors.cmaps['larva']
         tile_dat['larva_fcast_dates'] = {
                 'fun': fun_tiles.getTiles,
@@ -225,6 +227,7 @@ def load_tiles_dates(v_label,date0=None,date1=None):
                 'clscl': cmap['clscl']
             }
     elif v_label == 'chikv_iouts_fcast_dates':
+        dt = (forecastECMWF.idates >= date0) & (forecastECMWF.idates <= date1)
         cmap = fun_colors.cmaps['iouts']
         tile_dat['chikv_iouts_fcast_dates'] = {
                 'fun': fun_tiles.getTiles,
@@ -236,6 +239,7 @@ def load_tiles_dates(v_label,date0=None,date1=None):
                 'clscl': cmap['clscl']
             }
     elif v_label == 'chikv_pouts_fcast_dates':
+        dt = (forecastECMWF.idates >= date0) & (forecastECMWF.idates <= date1)
         cmap = fun_colors.cmaps['pouts']
         tile_dat['chikv_pouts_fcast_dates'] = {
                 'fun': fun_tiles.getTiles,
@@ -675,8 +679,8 @@ def get_risk(ret):
         "iouts": calc_cut(ret["iouts"], iouts_limit, labels)
     }
 
-def get_surv(lon,lat,dt0,dt1):
-    return numpy.nan_to_num(vabun.getSurv(lon,lat,[dt0,dt1]),nan=0.0).tolist()
+def get_surv(lon,lat):
+    return numpy.nan_to_num(vabun.getSurv(lon,lat),nan=0.0).tolist()
 
 def get_decadal(lon, lat, date0, date1=False, ts=False):
     dats = get_dates(date0, date1=date1, ts=ts)
@@ -756,9 +760,7 @@ def get_decadal(lon, lat, date0, date1=False, ts=False):
     #
     if ts:
         tmp = get_surv(ret['location']['lon'],
-                       ret['location']['lat'],
-                       ret['date']['date0'],
-                       ret['date']['date1'])
+                       ret['location']['lat'])
         if len(tmp) > 0:
             ret['surv'] = {
                 'vabun': {

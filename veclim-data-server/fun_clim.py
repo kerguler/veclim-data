@@ -178,8 +178,10 @@ class forecastECMWF:
         #
         self.popsize, self.reps, self.win = tmp[0]
         #
-        self.iouts = xarray.open_dataset("%s/%s/sims_vector08c_Q4.a100+1_chikv_QI_ECMWF_%s_iouts.nc" %(dr,fld,fld))['iouts'].values
         self.pouts = xarray.open_dataset("%s/%s/sims_vector08c_Q4.a100+1_chikv_QI_ECMWF_%s_pouts.nc" %(dr,fld,fld))['pouts'].values
+        self.iouts = xarray.open_dataset("%s/%s/sims_vector08c_Q4.a100+1_chikv_QI_ECMWF_%s_iouts.nc" %(dr,fld,fld))['iouts']
+        self.idates = self.iouts['time'].values
+        self.iouts = self.iouts.values
         #
     def getOverlap(self):
         return self.overlap

@@ -151,15 +151,16 @@ class VectAbundance:
             "samples": vabo["value"]
         })
         #
-    def getSurv(self, lon, lat, dts):
+    def getSurv(self, lon, lat, win=14):
         obs = self.vb[approx(self.vb["gridLon"],lon) & approx(self.vb["gridLat"],lat)]
         if len(obs) == 0:
             return []
-        ss = obs.groupby(["week"])["samples"].mean().to_frame()
-        obs = pandas.DataFrame({'date': pandas.date_range(dts[0],dts[1])})
-        obs["week"] = [get_isoweek(a) for a in obs["date"]]
-        obs = obs.merge(ss, on='week', how='left')
-        return obs["samples"].values.tolist()
+        ss = obs.groupby(["week"])["samples"].mean().sort_index().to_frame()
+        #
+        daily_values = numpy.interp(numpy.arange(365), (ss.index-1)*7, ss["samples"].values)
+        smo = numpy.convolve(daily_values, numpy.ones(win)/win, mode='same')
+        #
+        return smo
         #
     def getShp(self, res=[0.125,0.125]):
         try:

@@ -181,7 +181,7 @@ clbins = [0,1,2,3,4,5]
 cllbl = ["Unknown/absent","","Global presence (2024)", "VectAbundance (2010-2022)", "AIMsurv (2020)", "VectorBase (2010-2024)"]
 cmap = None
 norm = None
-tran = lambda x: numpy.array(x)
+tran = lambda x: x
 
 cmaps['albosurv'] = {
     'clscl': clscl,

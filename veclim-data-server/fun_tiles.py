@@ -156,8 +156,8 @@ def getShpTiles(shp, pr_z, pr_x, pr_y, cmap=None, norm=None, label=''):
     # Note: This has to come after setting the axis limits
     # Note: vmin and vmax should be set (not left as None)
     if cmap == None and norm == None:
-        shp.plot(edgecolor='black', 
-                 facecolor='none',
+        shp.plot(edgecolor=shp['edgecolor'], 
+                 facecolor=shp['facecolor'],
                  linewidth=2,
                  ax=submap['ax'])
     else:

@@ -354,9 +354,9 @@ class albosurv:
         #
     def getSurv(self, lon, lat):
         return {
-            'vabun': numpy.nan_to_num(self.vabun.getSurv(lon,lat),nan=0.0).tolist(),
-            'aimsurv': numpy.nan_to_num(self.aimsurv.getSurv(lon,lat),nan=0.0).tolist(),
-            'vbase': numpy.nan_to_num(self.vbase.getSurv(lon,lat),nan=0.0).tolist()
+            'vabun': self.vabun.getSurv(lon,lat),
+            'aimsurv': self.aimsurv.getSurv(lon,lat),
+            'vbase': self.vbase.getSurv(lon,lat)
         }
         #
     def getShp(self):

@@ -687,6 +687,12 @@ def get_papatasi_days(loni, lati, idates, isFeb29):
         "simH": remove_feb29(papatasi2015.simSTENI[:,lati,loni],idates,isFeb29)
     }
 
+def get_surv(lon, lat, idates, isFeb29):
+    return {
+        key: [] if len(value)==0 else remove_feb29(value,idates,isFeb29)
+        for key,value in albosurv.getSurv(lon,lat).itemize()
+    }
+
 def calc_cut(vec,lim,lab):
     if hasattr(vec, '__iter__'):
         return pandas.cut(vec, bins=lim, include_lowest=False, right=False, labels=lab).tolist()
@@ -706,9 +712,6 @@ def get_risk(ret):
         "pouts": calc_cut(ret["pouts"], pouts_limit, labels),
         "iouts": calc_cut(ret["iouts"], iouts_limit, labels)
     }
-
-def get_surv(lon,lat):
-    return albosurv.getSurv(lon,lat)
 
 def get_decadal(lon, lat, date0, date1=False, ts=False):
     dats = get_dates(date0, date1=date1, ts=ts)
@@ -788,7 +791,9 @@ def get_decadal(lon, lat, date0, date1=False, ts=False):
     #
     if ts:
         ret['surv'] = get_surv(ret['location']['lon'],
-                               ret['location']['lat'])
+                               ret['location']['lat'],
+                               dats['days'],
+                               dats['isFeb29'])
     #
     return ret
 

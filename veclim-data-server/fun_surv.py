@@ -360,9 +360,14 @@ class albosurv:
         }
         #
     def getShp(self):
-        return pandas.concat([
-            self.presence.getShp(), 
-            self.vabun.getShp(), 
-            self.aimsurv.getShp(),
-            self.vbase.getShp()
-        ], ignore_index=True)
+        tmp = self.presence.getShp()
+        return gpd.GeoDataFrame(
+            pandas.concat([
+                tmp, 
+                self.vabun.getShp(), 
+                self.aimsurv.getShp(),
+                self.vbase.getShp()
+            ], ignore_index=True),
+            geometry='geometry', 
+            crs=tmp.crs
+        )

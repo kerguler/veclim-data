@@ -176,6 +176,22 @@ cmaps['presence'] = {
     'tran': tran
 }
 
+clscl = ['#00000000', '#f15a48', '#1b3958', '#167997', '#50c0ad']
+clbins = [0,1,2,3,4,5]
+cllbl = ["Unknown/absent","","Global presence (2024)", "VectAbundance (2010-2022)", "AIMsurv (2020)", "VectorBase (2010-2024)"]
+cmap = mpl.colors.ListedColormap([mpl.colors.to_rgba(c) for c in clscl])
+norm = mpl.colors.BoundaryNorm(clbins, cmap.N, clip=True, extend='neither')
+tran = lambda x: numpy.array(x)
+
+cmaps['albosurv'] = {
+    'clscl': clscl,
+    'clbins': clbins,
+    'cllbl': cllbl,
+    'cmap': cmap,
+    'norm': norm,
+    'tran': tran
+}
+
 clscl = ['#00000000', '#fbe590', '#fcc65a', '#f7a034', '#f47b2c', '#e85229', '#d82929', '#931b1f']
 clbins = [-4,-3,-2,-1,0,1,2,3,4]
 cllbl = ["1/16","1/8","1/4","1/2","1","2","4","8","16"]

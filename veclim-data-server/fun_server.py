@@ -28,6 +28,7 @@ papatasi2015 = False
 popdens = False
 presence = False
 vabun = False
+albosurv = False
 
 def load_forecast_var(reload=False):
     global forecastECMWF
@@ -45,6 +46,7 @@ def load_global_var():
     global popdens
     global presence
     global vabun
+    global albosurv
     #
     if not lwMaskERA5:
         print("Loading ERA5 land/water mask...",flush=True)
@@ -81,6 +83,10 @@ def load_global_var():
     if not vabun:
         print("Loading VectAbundance...",flush=True)
         vabun = fun_surv.VectAbundance()
+    #
+    if not albosurv:
+        print("Loading multiple presence datasets...",flush=True)
+        albosurv = fun_surv.albosurv()
     #
     load_forecast_var(reload=False)
 
@@ -524,6 +530,19 @@ def load_tiles():
             'clscl': cmap['clscl']
         }
     #
+    if 'albosurv' not in tile_dat:
+        print("Loading tiles: albosurv...",flush=True)
+        cmap = fun_colors.cmaps['albosurv']
+        tile_dat['albosurv'] = {
+            'fun': fun_tiles.getShpTiles,
+            'dat': cmap['tran'](albosurv.getShp()).to_crs(fun_tiles.proj1),
+            'cmap': cmap['cmap'],
+            'norm': cmap['norm'],
+            'label': 'albosurv',
+            'cllbl': cmap['cllbl'],
+            'clscl': cmap['clscl']
+        }
+    #
     for prd in papatasi2015.shps:
         if 'papatasi_'+prd not in tile_dat:
             print("Loading tiles: papatasi_%s..." %prd,flush=True)
@@ -689,7 +708,7 @@ def get_risk(ret):
     }
 
 def get_surv(lon,lat):
-    return numpy.nan_to_num(vabun.getSurv(lon,lat),nan=0.0).tolist()
+    return albosurv.getSurv(lon,lat)
 
 def get_decadal(lon, lat, date0, date1=False, ts=False):
     dats = get_dates(date0, date1=date1, ts=ts)
@@ -768,14 +787,8 @@ def get_decadal(lon, lat, date0, date1=False, ts=False):
     }
     #
     if ts:
-        tmp = get_surv(ret['location']['lon'],
-                       ret['location']['lat'])
-        if len(tmp) > 0:
-            ret['surv'] = {
-                'vabun': {
-                    'v015': tmp
-                }
-            }
+        ret['surv'] = get_surv(ret['location']['lon'],
+                               ret['location']['lat'])
     #
     return ret
 

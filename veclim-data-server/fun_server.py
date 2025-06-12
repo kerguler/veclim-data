@@ -535,7 +535,7 @@ def load_tiles():
         cmap = fun_colors.cmaps['albosurv']
         tile_dat['albosurv'] = {
             'fun': fun_tiles.getShpTiles,
-            'dat': cmap['tran'](albosurv.getShp()).to_crs(fun_tiles.proj1),
+            'dat': cmap['tran'](albosurv.getShp()),
             'cmap': cmap['cmap'],
             'norm': cmap['norm'],
             'label': 'albosurv',

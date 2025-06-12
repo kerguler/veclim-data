@@ -690,7 +690,7 @@ def get_papatasi_days(loni, lati, idates, isFeb29):
 def get_surv(lon, lat, idates, isFeb29):
     return {
         key: [] if len(value)==0 else remove_feb29(value,idates,isFeb29)
-        for key,value in albosurv.getSurv(lon,lat).itemize()
+        for key,value in albosurv.getSurv(lon,lat).items()
     }
 
 def calc_cut(vec,lim,lab):

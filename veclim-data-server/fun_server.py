@@ -93,7 +93,7 @@ def load_global_var():
 def remove_feb29(vec,days,isFeb29):
     tmp = vec[days-1]
     if len(isFeb29) == 0:
-        return tmp.tolist()
+        return numpy.nan_to_num(tmp,nan=0.0).tolist()
     tmp[isFeb29+1] = 0.5*(tmp[isFeb29]+tmp[isFeb29+1])
     return numpy.nan_to_num(numpy.delete(tmp,isFeb29),nan=0.0).tolist()
 

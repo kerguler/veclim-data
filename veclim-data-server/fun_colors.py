@@ -181,8 +181,7 @@ cmaps['presence'] = {
     'cllbl': cllbl,
     'cmap': cmap,
     'norm': norm,
-    'tran': tran,
-    'cont': 0
+    'tran': tran
 }
 
 clscl = ['#00000000', '#f15a48', '#1b3958', '#167997', '#50c0ad']
@@ -198,8 +197,7 @@ cmaps['albosurv'] = {
     'cllbl': cllbl,
     'cmap': cmap,
     'norm': norm,
-    'tran': tran,
-    'cont': 0
+    'tran': tran
 }
 
 clscl = ['#00000000', '#fbe590', '#fcc65a', '#f7a034', '#f47b2c', '#e85229', '#d82929', '#931b1f']
@@ -215,8 +213,7 @@ cmaps['FuzzyLocV6'] = {
     'cllbl': cllbl,
     'cmap': cmap,
     'norm': norm,
-    'tran': tran,
-    'cont': 1
+    'tran': tran
 }
 
 clscl = ['#00000000', '#fbe590', '#fcc65a', '#f7a034', '#f47b2c', '#e85229', '#d82929', '#931b1f']
@@ -232,8 +229,7 @@ cmaps['FuzzyLoc'] = {
     'cllbl': cllbl,
     'cmap': cmap,
     'norm': norm,
-    'tran': tran,
-    'cont': 1
+    'tran': tran
 }
 
 clscl = ['#FFFFFF','#C2C200','#FFE53B','#FFA500','#FF0000','#EE82EE','#A020F0','#4C00FF','#00008B']
@@ -249,8 +245,7 @@ cmaps['PopDM'] = {
     'cllbl': cllbl,
     'cmap': cmap,
     'norm': norm,
-    'tran': tran,
-    'cont': 1
+    'tran': tran
 }
 
 clscl = []
@@ -266,8 +261,7 @@ cmaps['viridis'] = {
     'cllbl': cllbl,
     'cmap': cmap,
     'norm': norm,
-    'tran': tran,
-    'cont': 1
+    'tran': tran
 }
 
 clscl = []
@@ -283,6 +277,5 @@ cmaps['viridis.pop'] = {
     'cllbl': cllbl,
     'cmap': cmap,
     'norm': norm,
-    'tran': tran,
-    'cont': 1
+    'tran': tran
 }

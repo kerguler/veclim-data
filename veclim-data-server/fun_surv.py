@@ -182,6 +182,9 @@ class VectAbundance:
         })
         #
     def getSurv(self, lon, lat, win=14):
+        if lon > 180.0:
+            lon -= 360.0
+        #
         obs = self.vb[approx(self.vb["gridLon"],lon) & approx(self.vb["gridLat"],lat)]
         if len(obs) == 0:
             return []
@@ -247,6 +250,9 @@ class AIMsurv:
         self.vb = self.vb.groupby(["gridLon", "gridLat"]).filter(lambda gr: dateRange(gr) > 90)
         #
     def getSurv(self, lon, lat, win=14):
+        if lon > 180.0:
+            lon -= 360.0
+        #
         obs = self.vb[approx(self.vb["gridLon"],lon) & approx(self.vb["gridLat"],lat)]
         if len(obs) == 0:
             return []
@@ -308,6 +314,9 @@ class VectorBase:
         self.vb = self.vb.groupby(["gridLon", "gridLat"]).filter(lambda gr: dateRange(gr) > 90)
         #
     def getSurv(self, lon, lat, win=14):
+        if lon > 180.0:
+            lon -= 360.0
+        #
         obs = self.vb[approx(self.vb["gridLon"],lon) & approx(self.vb["gridLat"],lat)]
         if len(obs) == 0:
             return []
@@ -354,6 +363,9 @@ class albosurv:
         self.vbase = VectorBase()
         #
     def getSurv(self, lon, lat):
+        if lon > 180.0:
+            lon -= 360.0
+        #
         return {
             'vabun': self.vabun.getSurv(lon,lat),
             'aimsurv': self.aimsurv.getSurv(lon,lat),
@@ -377,12 +389,12 @@ class albosurv:
         try:
             mat = numpy.load(self.filename + ".npy")
         except:
-            tran = {
-                "Global presence (2024)": 1, 
-                "VectAbundance (2010-2022)": 2, 
-                "AIMsurv (2020)": 3, 
-                "VectorBase (2010-2024)": 4
-            }
+            tran = [
+                2, # "VectAbundance (2010-2022)"
+                3, # "AIMsurv (2020)"
+                4, # "VectorBase (2010-2024)"
+                1, # "Global presence (2024)"
+            ]
             pres = [
                 gpd.GeoDataFrame(prs, geometry='geometry', crs=prs.crs)
                 for prs in [
@@ -396,15 +408,16 @@ class albosurv:
             mat = numpy.ndarray((len(grid.latitude),len(grid.longitude)),dtype=numpy.float64)
             for lati,lat in enumerate(grid.latitude):
                 for loni,lon in enumerate(grid.longitude):
-                    print(lat,lon)
-                    box = shapely.geometry.box(lon-res[0], 
-                                               lat-res[1], 
-                                               lon+res[0], 
-                                               lat+res[1])
-                    for prs in pres:
+                    print("Processing albosurv matrix... %g,%g" %(lat,lon))
+                    box = shapely.geometry.box(lon-0.1*res[0], 
+                                               lat-0.1*res[1], 
+                                               lon+0.1*res[0], 
+                                               lat+0.1*res[1])
+                    for i,prs in enumerate(pres):
                         cut = prs.intersects(box)
                         if numpy.any(cut):
-                            mat[lati,loni] = tran[prs[cut]['label'].values[0]]
+                            mat[lati,loni] = tran[i]
                             break
             numpy.save(self.filename + ".npy", mat)
         return mat
+    

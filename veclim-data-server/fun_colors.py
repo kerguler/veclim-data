@@ -110,7 +110,7 @@ cmaps['iouts'] = {
 }
 
 clscl = ["black"]
-clbins = [0]
+clbins = [0,1]
 cllbl = ["0"]
 
 cmap = None

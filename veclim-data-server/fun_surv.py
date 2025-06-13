@@ -347,6 +347,8 @@ class VectorBase:
 
 class albosurv:
     def __init__(self):
+        self.filename = "%s/surveillance/presence/albosurv_matrix" %(DIR_DATA)
+        #
         self.presence = presenceAlbopictus()
         self.vabun = VectAbundance()
         self.aimsurv = AIMsurv()
@@ -371,3 +373,40 @@ class albosurv:
             geometry='geometry', 
             crs=tmp.crs
         )
+        #
+    def getMatrix(self, res=[0.125,0.125]):
+        #try:
+        #    mat = numpy.load(self.filename + ".npy")
+        #except:
+        if True:
+            tran = {
+                "Global presence (2024)": 1, 
+                "VectAbundance (2010-2022)": 2, 
+                "AIMsurv (2020)": 3, 
+                "VectorBase (2010-2024)": 4
+            }
+            pres = [
+                gpd.GeoDataFrame(prs, geometry='geometry', crs=prs.crs)
+                for prs in [
+                    self.vabun.getShp(),
+                    self.aimsurv.getShp(),
+                    self.vbase.getShp(),
+                    self.presence.getShp()
+                ]
+            ]
+            grid = gridClass_LD()
+            mat = numpy.ndarray((len(grid.latitude),len(grid.longitude)),dtype=numpy.float64)
+            for lati,lat in enumerate(grid.latitude):
+                for loni,lon in enumerate(grid.longitude):
+                    print(lat,lon)
+                    box = shapely.geometry.box(lon-res[0], 
+                                               lat-res[1], 
+                                               lon+res[0], 
+                                               lat+res[1])
+                    for prs in pres:
+                        cut = prs.intersects(box)
+                        if numpy.any(cut):
+                            mat[lati,loni] = tran[prs[cut]['label'].values[0]]
+                            break
+            numpy.save(self.filename + ".npy", mat)
+        return mat

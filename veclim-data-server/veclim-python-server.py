@@ -67,7 +67,8 @@ def respondTiles(date0,date1,pr_x,pr_y,pr_z,pr_v,start_response):
             ret = {
                 key: {
                     'colors': fun_server.tile_dat[key]['clscl'],
-                    'labels': fun_server.tile_dat[key]['cllbl']
+                    'labels': fun_server.tile_dat[key]['cllbl'],
+                    'continuous': fun_server.tile_dat[key]['cont']
                 }
                 for key in fun_server.tile_dat
             }

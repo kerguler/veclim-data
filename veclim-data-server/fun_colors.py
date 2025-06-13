@@ -18,7 +18,8 @@ cmaps['diff_colegg'] = {
     'cllbl': cllbl,
     'cmap': cmap,
     'norm': norm,
-    'tran': tran
+    'tran': tran,
+    'cont': 1
 }
 
 
@@ -36,7 +37,8 @@ cmaps['diff_pouts'] = {
     'cllbl': cllbl,
     'cmap': cmap,
     'norm': norm,
-    'tran': tran
+    'tran': tran,
+    'cont': 1
 }
 
 
@@ -54,7 +56,8 @@ cmaps['diff_iouts'] = {
     'cllbl': cllbl,
     'cmap': cmap,
     'norm': norm,
-    'tran': tran
+    'tran': tran,
+    'cont': 1
 }
 
 
@@ -72,7 +75,8 @@ cmaps['papatasi'] = {
     'cllbl': cllbl,
     'cmap': cmap,
     'norm': norm,
-    'tran': tran
+    'tran': tran,
+    'cont': 1
 }
 
 
@@ -89,7 +93,8 @@ cmaps['pouts'] = {
     'cllbl': cllbl,
     'cmap': cmap,
     'norm': norm,
-    'tran': tran
+    'tran': tran,
+    'cont': 1
 }
 
 
@@ -106,11 +111,12 @@ cmaps['iouts'] = {
     'cllbl': cllbl,
     'cmap': cmap,
     'norm': norm,
-    'tran': tran
+    'tran': tran,
+    'cont': 1
 }
 
 clscl = ["black"]
-clbins = [0,1]
+clbins = [0]
 cllbl = ["0"]
 
 cmap = None
@@ -123,7 +129,8 @@ cmaps['vabun'] = {
     'cllbl': cllbl,
     'cmap': cmap,
     'norm': norm,
-    'tran': tran
+    'tran': tran,
+    'cont': 0
 }
 
 clscl = numpy.array([
@@ -141,8 +148,8 @@ clscl = numpy.array([
          '#b42125',
          '#00000000',
          ])[::-1].tolist()
-clbins = numpy.cumsum([0,1,30,28,31,30,31,30,31,31,30,31,30,31])
-cllbl = ["NA","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec","Jan"]
+clbins = numpy.cumsum([0,30,28,31,30,31,30,31,31,30,31,30,31])
+cllbl = ["NA","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
 cmap = mpl.colors.ListedColormap([mpl.colors.to_rgba(c) for c in clscl])
 norm = mpl.colors.BoundaryNorm(clbins, cmap.N, clip=True, extend='neither')
 def trann2(mat):
@@ -157,11 +164,12 @@ cmaps['larva'] = {
     'cllbl': cllbl,
     'cmap': cmap,
     'norm': norm,
-    'tran': trann2
+    'tran': trann2,
+    'cont': 0
 }
 
 clscl = ['#00000000', '#931b1f']
-clbins = [0,0.5,1]
+clbins = [0,1]
 cllbl = ["Unknown/absent","","Reported/established"]
 cmap = mpl.colors.ListedColormap([mpl.colors.to_rgba(c) for c in clscl])
 norm = mpl.colors.BoundaryNorm(clbins, cmap.N, clip=True, extend='neither')
@@ -173,12 +181,13 @@ cmaps['presence'] = {
     'cllbl': cllbl,
     'cmap': cmap,
     'norm': norm,
-    'tran': tran
+    'tran': tran,
+    'cont': 0
 }
 
 clscl = ['#00000000', '#f15a48', '#1b3958', '#167997', '#50c0ad']
-clbins = [0,1,2,3,4,5]
-cllbl = ["Unknown/absent","","Global presence (2024)", "VectAbundance (2010-2022)", "AIMsurv (2020)", "VectorBase (2010-2024)"]
+clbins = [0,1,2,3,4]
+cllbl = ["Unknown/absent", "Global presence (2024)", "VectAbundance (2010-2022)", "AIMsurv (2020)", "VectorBase (2010-2024)"]
 cmap = mpl.colors.ListedColormap([mpl.colors.to_rgba(c) for c in clscl])
 norm = mpl.colors.BoundaryNorm(clbins, cmap.N, clip=True, extend='neither')
 tran = lambda x: x
@@ -189,7 +198,8 @@ cmaps['albosurv'] = {
     'cllbl': cllbl,
     'cmap': cmap,
     'norm': norm,
-    'tran': tran
+    'tran': tran,
+    'cont': 0
 }
 
 clscl = ['#00000000', '#fbe590', '#fcc65a', '#f7a034', '#f47b2c', '#e85229', '#d82929', '#931b1f']
@@ -205,7 +215,8 @@ cmaps['FuzzyLocV6'] = {
     'cllbl': cllbl,
     'cmap': cmap,
     'norm': norm,
-    'tran': tran
+    'tran': tran,
+    'cont': 1
 }
 
 clscl = ['#00000000', '#fbe590', '#fcc65a', '#f7a034', '#f47b2c', '#e85229', '#d82929', '#931b1f']
@@ -221,7 +232,8 @@ cmaps['FuzzyLoc'] = {
     'cllbl': cllbl,
     'cmap': cmap,
     'norm': norm,
-    'tran': tran
+    'tran': tran,
+    'cont': 1
 }
 
 clscl = ['#FFFFFF','#C2C200','#FFE53B','#FFA500','#FF0000','#EE82EE','#A020F0','#4C00FF','#00008B']
@@ -237,7 +249,8 @@ cmaps['PopDM'] = {
     'cllbl': cllbl,
     'cmap': cmap,
     'norm': norm,
-    'tran': tran
+    'tran': tran,
+    'cont': 1
 }
 
 clscl = []
@@ -253,7 +266,8 @@ cmaps['viridis'] = {
     'cllbl': cllbl,
     'cmap': cmap,
     'norm': norm,
-    'tran': tran
+    'tran': tran,
+    'cont': 1
 }
 
 clscl = []
@@ -269,5 +283,6 @@ cmaps['viridis.pop'] = {
     'cllbl': cllbl,
     'cmap': cmap,
     'norm': norm,
-    'tran': tran
+    'tran': tran,
+    'cont': 1
 }

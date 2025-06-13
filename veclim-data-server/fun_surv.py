@@ -5,7 +5,6 @@ import json
 import geopandas as gpd
 import shapely
 import shapely.geometry
-from shapely.ops import unary_union
 
 from scipy.interpolate import interp1d
 
@@ -375,10 +374,9 @@ class albosurv:
         )
         #
     def getMatrix(self, res=[0.125,0.125]):
-        #try:
-        #    mat = numpy.load(self.filename + ".npy")
-        #except:
-        if True:
+        try:
+            mat = numpy.load(self.filename + ".npy")
+        except:
             tran = {
                 "Global presence (2024)": 1, 
                 "VectAbundance (2010-2022)": 2, 

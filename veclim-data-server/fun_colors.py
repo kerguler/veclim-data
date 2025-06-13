@@ -18,8 +18,7 @@ cmaps['diff_colegg'] = {
     'cllbl': cllbl,
     'cmap': cmap,
     'norm': norm,
-    'tran': tran,
-    'cont': 1
+    'tran': tran
 }
 
 
@@ -37,8 +36,7 @@ cmaps['diff_pouts'] = {
     'cllbl': cllbl,
     'cmap': cmap,
     'norm': norm,
-    'tran': tran,
-    'cont': 1
+    'tran': tran
 }
 
 
@@ -56,8 +54,7 @@ cmaps['diff_iouts'] = {
     'cllbl': cllbl,
     'cmap': cmap,
     'norm': norm,
-    'tran': tran,
-    'cont': 1
+    'tran': tran
 }
 
 
@@ -75,8 +72,7 @@ cmaps['papatasi'] = {
     'cllbl': cllbl,
     'cmap': cmap,
     'norm': norm,
-    'tran': tran,
-    'cont': 1
+    'tran': tran
 }
 
 
@@ -93,8 +89,7 @@ cmaps['pouts'] = {
     'cllbl': cllbl,
     'cmap': cmap,
     'norm': norm,
-    'tran': tran,
-    'cont': 1
+    'tran': tran
 }
 
 
@@ -111,8 +106,7 @@ cmaps['iouts'] = {
     'cllbl': cllbl,
     'cmap': cmap,
     'norm': norm,
-    'tran': tran,
-    'cont': 1
+    'tran': tran
 }
 
 clscl = ["black"]
@@ -129,8 +123,7 @@ cmaps['vabun'] = {
     'cllbl': cllbl,
     'cmap': cmap,
     'norm': norm,
-    'tran': tran,
-    'cont': 0
+    'tran': tran
 }
 
 clscl = numpy.array([
@@ -148,7 +141,7 @@ clscl = numpy.array([
          '#b42125',
          '#00000000',
          ])[::-1].tolist()
-clbins = numpy.cumsum([0,30,28,31,30,31,30,31,31,30,31,30,31])
+clbins = numpy.cumsum([0,1,30,28,31,30,31,30,31,31,30,31,30,31])
 cllbl = ["NA","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
 cmap = mpl.colors.ListedColormap([mpl.colors.to_rgba(c) for c in clscl])
 norm = mpl.colors.BoundaryNorm(clbins, cmap.N, clip=True, extend='neither')
@@ -164,13 +157,12 @@ cmaps['larva'] = {
     'cllbl': cllbl,
     'cmap': cmap,
     'norm': norm,
-    'tran': trann2,
-    'cont': 0
+    'tran': trann2
 }
 
 clscl = ['#00000000', '#931b1f']
-clbins = [0,1]
-cllbl = ["Unknown/absent","","Reported/established"]
+clbins = [0,0.5,1]
+cllbl = ["Unknown/absent","Reported/established"]
 cmap = mpl.colors.ListedColormap([mpl.colors.to_rgba(c) for c in clscl])
 norm = mpl.colors.BoundaryNorm(clbins, cmap.N, clip=True, extend='neither')
 tran = lambda x: numpy.array(x)
@@ -185,7 +177,7 @@ cmaps['presence'] = {
 }
 
 clscl = ['#00000000', '#f15a48', '#1b3958', '#167997', '#50c0ad']
-clbins = [0,1,2,3,4]
+clbins = [0,1,2,3,4,5]
 cllbl = ["Unknown/absent", "Global presence (2024)", "VectAbundance (2010-2022)", "AIMsurv (2020)", "VectorBase (2010-2024)"]
 cmap = mpl.colors.ListedColormap([mpl.colors.to_rgba(c) for c in clscl])
 norm = mpl.colors.BoundaryNorm(clbins, cmap.N, clip=True, extend='neither')

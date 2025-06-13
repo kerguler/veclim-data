@@ -95,7 +95,7 @@ def remove_feb29(vec,days,isFeb29):
     if len(isFeb29) == 0:
         return tmp.tolist()
     tmp[isFeb29+1] = 0.5*(tmp[isFeb29]+tmp[isFeb29+1])
-    return numpy.delete(tmp,isFeb29).tolist()
+    return numpy.nan_to_num(numpy.delete(tmp,isFeb29),nan=0.0).tolist()
 
 def remove2_feb29(mat,days,isFeb29):
     tmp = mat[:,days-1]

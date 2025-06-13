@@ -187,9 +187,9 @@ class VectAbundance:
             return []
         ss = obs.groupby(["week"])["samples"].mean().sort_index().to_frame()
         #
-        daily_values = interp1d((ss.index-1)*7, ss["samples"].values, kind='linear', fill_value=numpy.nan, bounds_error=False)(numpy.arange(365))
-        daily_values[:((ss.index[0]-1)*7)] = numpy.nan
-        daily_values[((ss.index[-1]+1)*7):] = numpy.nan
+        daily_values = interp1d((ss.index-1)*7, ss["samples"].values, kind='linear', fill_value=0.0, bounds_error=False)(numpy.arange(365))
+        daily_values[:((ss.index[0]-1)*7)] = 0.0
+        daily_values[((ss.index[-1]+1)*7):] = 0.0
         smo = numpy.convolve(daily_values, numpy.ones(win)/win, mode='same')
         #
         return smo
@@ -252,9 +252,9 @@ class AIMsurv:
             return []
         ss = obs.groupby(["week"])["samples"].mean().sort_index().to_frame()
         #
-        daily_values = interp1d((ss.index-1)*7, ss["samples"].values, kind='linear', fill_value=numpy.nan, bounds_error=False)(numpy.arange(365))
-        daily_values[:((ss.index[0]-1)*7)] = numpy.nan
-        daily_values[((ss.index[-1]+1)*7):] = numpy.nan
+        daily_values = interp1d((ss.index-1)*7, ss["samples"].values, kind='linear', fill_value=0.0, bounds_error=False)(numpy.arange(365))
+        daily_values[:((ss.index[0]-1)*7)] = 0.0
+        daily_values[((ss.index[-1]+1)*7):] = 0.0
         smo = numpy.convolve(daily_values, numpy.ones(win)/win, mode='same')
         #
         return smo
@@ -313,9 +313,9 @@ class VectorBase:
             return []
         ss = obs.groupby(["week"])["samples"].mean().sort_index().to_frame()
         #
-        daily_values = interp1d((ss.index-1)*7, ss["samples"].values, kind='linear', fill_value=numpy.nan, bounds_error=False)(numpy.arange(365))
-        daily_values[:((ss.index[0]-1)*7)] = numpy.nan
-        daily_values[((ss.index[-1]+1)*7):] = numpy.nan
+        daily_values = interp1d((ss.index-1)*7, ss["samples"].values, kind='linear', fill_value=0.0, bounds_error=False)(numpy.arange(365))
+        daily_values[:((ss.index[0]-1)*7)] = 0.0
+        daily_values[((ss.index[-1]+1)*7):] = 0.0
         smo = numpy.convolve(daily_values, numpy.ones(win)/win, mode='same')
         #
         return smo

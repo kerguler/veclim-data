@@ -180,46 +180,6 @@ class VectAbundance:
             "gridLat": [self.grid.latitude[numpy.argmin((l-self.grid.latitude)**2)] for l in vabo["latitude"]],
             "samples": vabo["value"]
         })
-        #
-    def getSurv(self, lon, lat, win=14):
-        if lon > 180.0:
-            lon -= 360.0
-        #
-        obs = self.vb[approx(self.vb["gridLon"],lon) & approx(self.vb["gridLat"],lat)]
-        if len(obs) == 0:
-            return []
-        ss = obs.groupby(["week"])["samples"].mean().sort_index().to_frame()
-        #
-        daily_values = interp1d((ss.index-1)*7, ss["samples"].values, kind='linear', fill_value=0.0, bounds_error=False)(numpy.arange(365))
-        daily_values[:((ss.index[0]-1)*7)] = 0.0
-        daily_values[((ss.index[-1]+1)*7):] = 0.0
-        smo = numpy.convolve(daily_values, numpy.ones(win)/win, mode='same')
-        #
-        return smo
-        #
-    def getShp(self, res=[0.125,0.125]):
-        try:
-            gdf = gpd.GeoDataFrame.from_file(self.filename + ".shp", crs='epsg:4326')
-        except:
-            geoms = []
-            feats = []
-            for gr in self.vb.groupby(["gridLon","gridLat"]):
-                lon, lat = gr[0]
-                geoms.append(shapely.geometry.box(lon-res[0], 
-                                                  lat-res[1], 
-                                                  lon+res[0], 
-                                                  lat+res[1]))
-                feats.append(gr[1]['samples'].mean(skipna=True))
-            gdf = gpd.GeoDataFrame({
-                'mean': feats,
-                'geometry': geoms 
-            }, crs='epsg:4326')       
-            gdf.to_file(self.filename + ".shp")
-        #
-        gdf['edgecolor'] = '#1b3958'
-        gdf['facecolor'] = 'none'
-        gdf['label'] = 'VectAbundance (2010-2022)'
-        return gdf
 
 class AIMsurv:
     def __init__(self):
@@ -248,46 +208,6 @@ class AIMsurv:
         })
         #
         self.vb = self.vb.groupby(["gridLon", "gridLat"]).filter(lambda gr: dateRange(gr) > 90)
-        #
-    def getSurv(self, lon, lat, win=14):
-        if lon > 180.0:
-            lon -= 360.0
-        #
-        obs = self.vb[approx(self.vb["gridLon"],lon) & approx(self.vb["gridLat"],lat)]
-        if len(obs) == 0:
-            return []
-        ss = obs.groupby(["week"])["samples"].mean().sort_index().to_frame()
-        #
-        daily_values = interp1d((ss.index-1)*7, ss["samples"].values, kind='linear', fill_value=0.0, bounds_error=False)(numpy.arange(365))
-        daily_values[:((ss.index[0]-1)*7)] = 0.0
-        daily_values[((ss.index[-1]+1)*7):] = 0.0
-        smo = numpy.convolve(daily_values, numpy.ones(win)/win, mode='same')
-        #
-        return smo
-        #
-    def getShp(self, res=[0.125,0.125]):
-        try:
-            gdf = gpd.GeoDataFrame.from_file(self.filename + ".shp", crs='epsg:4326')
-        except:
-            geoms = []
-            feats = []
-            for gr in self.vb.groupby(["gridLon","gridLat"]):
-                lon, lat = gr[0]
-                geoms.append(shapely.geometry.box(lon-res[0], 
-                                                  lat-res[1], 
-                                                  lon+res[0], 
-                                                  lat+res[1]))
-                feats.append(gr[1]['samples'].mean(skipna=True))
-            gdf = gpd.GeoDataFrame({
-                'mean': feats,
-                'geometry': geoms 
-            }, crs='epsg:4326')       
-            gdf.to_file(self.filename + ".shp")
-        #
-        gdf['edgecolor'] = '#167997'
-        gdf['facecolor'] = 'none'
-        gdf['label'] = 'AIMsurv (2020)'
-        return gdf
 
 class VectorBase:
     def __init__(self):
@@ -312,46 +232,6 @@ class VectorBase:
         #
         self.vb = self.vb[self.vb['date'] > pandas.to_datetime('2009-12-31')]
         self.vb = self.vb.groupby(["gridLon", "gridLat"]).filter(lambda gr: dateRange(gr) > 90)
-        #
-    def getSurv(self, lon, lat, win=14):
-        if lon > 180.0:
-            lon -= 360.0
-        #
-        obs = self.vb[approx(self.vb["gridLon"],lon) & approx(self.vb["gridLat"],lat)]
-        if len(obs) == 0:
-            return []
-        ss = obs.groupby(["week"])["samples"].mean().sort_index().to_frame()
-        #
-        daily_values = interp1d((ss.index-1)*7, ss["samples"].values, kind='linear', fill_value=0.0, bounds_error=False)(numpy.arange(365))
-        daily_values[:((ss.index[0]-1)*7)] = 0.0
-        daily_values[((ss.index[-1]+1)*7):] = 0.0
-        smo = numpy.convolve(daily_values, numpy.ones(win)/win, mode='same')
-        #
-        return smo
-        #
-    def getShp(self, res=[0.125,0.125]):
-        try:
-            gdf = gpd.GeoDataFrame.from_file(self.filename + ".shp", crs='epsg:4326')
-        except:
-            geoms = []
-            feats = []
-            for gr in self.vb.groupby(["gridLon","gridLat"]):
-                lon, lat = gr[0]
-                geoms.append(shapely.geometry.box(lon-res[0], 
-                                                  lat-res[1], 
-                                                  lon+res[0], 
-                                                  lat+res[1]))
-                feats.append(gr[1]['samples'].mean(skipna=True))
-            gdf = gpd.GeoDataFrame({
-                'mean': feats,
-                'geometry': geoms 
-            }, crs='epsg:4326')       
-            gdf.to_file(self.filename + ".shp")
-        #
-        gdf['edgecolor'] = '#50c0ad'
-        gdf['facecolor'] = 'none'
-        gdf['label'] = 'VectorBase (2010-2024)'
-        return gdf
 
 class albosurv:
     def __init__(self):
@@ -362,27 +242,84 @@ class albosurv:
         self.aimsurv = AIMsurv()
         self.vbase = VectorBase()
         #
+    def _getSurv(self, vb, lon, lat, win=14):
+        if lon > 180.0:
+            lon -= 360.0
+        #
+        obs = vb[approx(vb["gridLon"],lon) & approx(vb["gridLat"],lat)]
+        if len(obs) == 0:
+            return []
+        ss = obs.groupby(["week"])["samples"].mean().sort_index().to_frame()
+        #
+        daily_values = interp1d((ss.index-1)*7, 
+                                ss["samples"].values, 
+                                kind='linear', 
+                                fill_value=None, 
+                                bounds_error=False)(numpy.arange(365))
+        daily_values[:((ss.index[0]-1)*7)] = None
+        daily_values[((ss.index[-1]+1)*7):] = None
+        smo = numpy.convolve(daily_values, numpy.ones(win)/win, mode='same')
+        #
+        return smo
+        #
+    def _getShp(self, obj, res=[0.125,0.125]):
+        try:
+            gdf = gpd.GeoDataFrame.from_file(obj.filename + ".shp", crs='epsg:4326')
+        except:
+            geoms = []
+            feats = []
+            for gr in obj.vb.groupby(["gridLon","gridLat"]):
+                lon, lat = gr[0]
+                geoms.append(shapely.geometry.box(lon-res[0], 
+                                                  lat-res[1], 
+                                                  lon+res[0], 
+                                                  lat+res[1]))
+                feats.append(gr[1]['samples'].mean(skipna=True))
+            gdf = gpd.GeoDataFrame({
+                'mean': feats,
+                'geometry': geoms 
+            }, crs='epsg:4326')       
+            gdf.to_file(obj.filename + ".shp")
+        #
+        return gdf
+        #
     def getSurv(self, lon, lat):
         if lon > 180.0:
             lon -= 360.0
         #
         return {
-            'vabun': self.vabun.getSurv(lon,lat),
-            'aimsurv': self.aimsurv.getSurv(lon,lat),
-            'vbase': self.vbase.getSurv(lon,lat)
+            'vabun': self._getSurv(self.vabun,lon,lat),
+            'aimsurv': self._getSurv(self.aimsurv,lon,lat),
+            'vbase': self._getSurv(self.vbase,lon,lat)
         }
         #
     def getShp(self):
-        tmp = self.presence.getShp()
+        prs = self.presence.getShp()
+        #
+        vbn = self._getShp(self.vabun)
+        vbn['edgecolor'] = '#1b3958'
+        vbn['facecolor'] = 'none'
+        vbn['label'] = 'VectAbundance (2010-2022)'
+        #
+        aim = self._getShp(self.aimsurv)
+        aim['edgecolor'] = '#167997'
+        aim['facecolor'] = 'none'
+        aim['label'] = 'AIMsurv (2020)'
+        #
+        vbs = self._getShp(self.vbase)
+        vbs['edgecolor'] = '#50c0ad'
+        vbs['facecolor'] = 'none'
+        vbs['label'] = 'VectorBase (2010-2024)'
+        #
         return gpd.GeoDataFrame(
             pandas.concat([
-                tmp, 
-                self.vabun.getShp(), 
-                self.aimsurv.getShp(),
-                self.vbase.getShp()
+                prs, 
+                vbn,
+                aim,
+                vbs
             ], ignore_index=True),
             geometry='geometry', 
-            crs=tmp.crs
+            crs=prs.crs
         )
         #
     def getMatrix(self, res=[0.125,0.125]):

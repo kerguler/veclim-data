@@ -288,9 +288,9 @@ class albosurv:
             lon -= 360.0
         #
         return {
-            'vabun': self._getSurv(self.vabun,lon,lat),
-            'aimsurv': self._getSurv(self.aimsurv,lon,lat),
-            'vbase': self._getSurv(self.vbase,lon,lat)
+            'vabun': self._getSurv(self.vabun.vb,lon,lat),
+            'aimsurv': self._getSurv(self.aimsurv.vb,lon,lat),
+            'vbase': self._getSurv(self.vbase.vb,lon,lat)
         }
         #
     def _getShpD(self):

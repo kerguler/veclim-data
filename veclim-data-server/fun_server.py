@@ -27,7 +27,6 @@ forecastECMWF = False
 papatasi2015 = False
 popdens = False
 presence = False
-vabun = False
 albosurv = False
 
 def load_forecast_var(reload=False):
@@ -45,7 +44,6 @@ def load_global_var():
     global papatasi2015
     global popdens
     global presence
-    global vabun
     global albosurv
     #
     if not lwMaskERA5:
@@ -79,10 +77,6 @@ def load_global_var():
     if not presence:
         print("Loading presence...",flush=True)
         presence = fun_surv.presenceAlbopictus()
-    #
-    if not vabun:
-        print("Loading VectAbundance...",flush=True)
-        vabun = fun_surv.VectAbundance()
     #
     if not albosurv:
         print("Loading multiple presence datasets...",flush=True)
@@ -513,19 +507,6 @@ def load_tiles():
             'cmap': cmap['cmap'],
             'norm': cmap['norm'],
             'label': 'presence',
-            'cllbl': cmap['cllbl'],
-            'clscl': cmap['clscl']
-        }
-    #
-    if 'vabun_v015' not in tile_dat:
-        print("Loading tiles: vabun_v015...",flush=True)
-        cmap = fun_colors.cmaps['vabun']
-        tile_dat['vabun_v015'] = {
-            'fun': fun_tiles.getShpTiles,
-            'dat': cmap['tran'](vabun.getShp()).to_crs(fun_tiles.proj1),
-            'cmap': cmap['cmap'],
-            'norm': cmap['norm'],
-            'label': 'vabun_v015',
             'cllbl': cmap['cllbl'],
             'clscl': cmap['clscl']
         }

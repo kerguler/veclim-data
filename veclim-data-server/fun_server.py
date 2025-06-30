@@ -84,12 +84,18 @@ def load_global_var():
     #
     load_forecast_var(reload=False)
 
-def remove_feb29(vec,days,isFeb29):
+def remove_feb29(vec,days,isFeb29,fill=0.0):
     tmp = vec[days-1]
     if len(isFeb29) == 0:
-        return numpy.nan_to_num(tmp,nan=0.0).tolist()
+        if fill == None:
+            return [None if numpy.isnan(a) else a for a in tmp]
+        else:
+            return numpy.nan_to_num(tmp,nan=fill).tolist()
     tmp[isFeb29+1] = 0.5*(tmp[isFeb29]+tmp[isFeb29+1])
-    return numpy.nan_to_num(numpy.delete(tmp,isFeb29),nan=0.0).tolist()
+    if fill == None:
+        return [None if numpy.isnan(a) else a for a in numpy.delete(tmp,isFeb29)]
+    else:
+        return numpy.nan_to_num(numpy.delete(tmp,isFeb29),nan=fill).tolist()
 
 def remove2_feb29(mat,days,isFeb29):
     tmp = mat[:,days-1]
@@ -670,7 +676,7 @@ def get_papatasi_days(loni, lati, idates, isFeb29):
 
 def get_surv(lon, lat, idates, isFeb29):
     return {
-        key: [] if len(value)==0 else remove_feb29(value,idates,isFeb29)
+        key: [] if len(value)==0 else remove_feb29(value,idates,isFeb29,fill=None)
         for key,value in albosurv.getSurv(lon,lat).items()
     }
 

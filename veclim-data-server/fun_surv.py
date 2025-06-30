@@ -293,7 +293,7 @@ class albosurv:
             'vbase': self._getSurv(self.vbase,lon,lat)
         }
         #
-    def getShp(self):
+    def _getShpD(self):
         prs = self.presence.getShp()
         #
         vbn = self._getShp(self.vabun)
@@ -311,21 +311,33 @@ class albosurv:
         vbs['facecolor'] = 'none'
         vbs['label'] = 'VectorBase (2010-2024)'
         #
+        return {
+            'prs': prs,
+            'vbn': vbn,
+            'aim': aim,
+            'vbs': vbs            
+        }
+
+    def getShp(self):
+        obj = self._getShpD()
+        #
         return gpd.GeoDataFrame(
             pandas.concat([
-                prs, 
-                vbn,
-                aim,
-                vbs
+                obj['prs'], 
+                obj['vbn'],
+                obj['aim'],
+                obj['vbs']
             ], ignore_index=True),
             geometry='geometry', 
-            crs=prs.crs
+            crs=obj['prs'].crs
         )
         #
     def getMatrix(self, res=[0.125,0.125]):
         try:
             mat = numpy.load(self.filename + ".npy")
         except:
+            obj = self._getShpD()
+            #
             tran = [
                 2, # "VectAbundance (2010-2022)"
                 3, # "AIMsurv (2020)"
@@ -335,10 +347,10 @@ class albosurv:
             pres = [
                 gpd.GeoDataFrame(prs, geometry='geometry', crs=prs.crs)
                 for prs in [
-                    self.vabun.getShp(),
-                    self.aimsurv.getShp(),
-                    self.vbase.getShp(),
-                    self.presence.getShp()
+                    obj['vbn'],
+                    obj['aim'],
+                    obj['vbs'],
+                    obj['prs'] 
                 ]
             ]
             grid = gridClass_LD()

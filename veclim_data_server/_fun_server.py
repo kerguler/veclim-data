@@ -1,12 +1,12 @@
 import numpy
 import pandas
 
-import fun_clim
+import veclim_data_server._fun_clim as _fun_clim
 import fun_surv
-import fun_colors
+import veclim_data_server._fun_colors as _fun_colors
 import fun_tiles
 
-Feb29 = fun_clim.datetime(2020,2,29).timetuple().tm_yday
+Feb29 = _fun_clim.datetime(2020,2,29).timetuple().tm_yday
 
 veclist = ['albopictus', 'papatasi']
 
@@ -33,7 +33,7 @@ def load_forecast_var(reload=False):
     global forecastECMWF
     if reload or (not forecastECMWF):
         print("Loading ECMWF forecast...",flush=True)
-        forecastECMWF = fun_clim.forecastECMWF()
+        forecastECMWF = _fun_clim.forecastECMWF()
 
 def load_global_var():
     global lwMaskERA5
@@ -48,31 +48,31 @@ def load_global_var():
     #
     if not lwMaskERA5:
         print("Loading ERA5 land/water mask...",flush=True)
-        lwMaskERA5 = fun_clim.lwMaskERA5()
+        lwMaskERA5 = _fun_clim.lwMaskERA5()
     #
     if not annualERA5:
         print("Loading annual ERA5...",flush=True)
-        annualERA5 = fun_clim.annualERA5()
+        annualERA5 = _fun_clim.annualERA5()
     #
     if not annualVectorA:
         print("Loading VectorA...",flush=True)
-        annualVectorA = fun_clim.annualVectorA()
+        annualVectorA = _fun_clim.annualVectorA()
     #
     if not annualVectorA_1980:
         print("Loading VectorA_1980...",flush=True)
-        annualVectorA_1980 = fun_clim.annualVectorA_1980()
+        annualVectorA_1980 = _fun_clim.annualVectorA_1980()
     #
     if not annualNASA:
         print("Loading NASA...",flush=True)
-        annualNASA = fun_clim.annualNASA()
+        annualNASA = _fun_clim.annualNASA()
     #
     if not papatasi2015:
         print("Loading papatasi2015...",flush=True)
-        papatasi2015 = fun_clim.papatasi2015()
+        papatasi2015 = _fun_clim.papatasi2015()
     #
     if not popdens:
         print("Loading popdens...",flush=True)
-        popdens = fun_clim.popDens()
+        popdens = _fun_clim.popDens()
     #
     if not presence:
         print("Loading presence...",flush=True)
@@ -124,12 +124,12 @@ def get_dates(date0, date1=False, ts=False):
     ddates = []
     while date0 <= date1:
         ddates.append(date0)
-        idates.append(date0.timetuple().tm_yday-1 if fun_clim.is_leap_year(date0.year) and date0.timetuple().tm_yday>Feb29 else date0.timetuple().tm_yday)
+        idates.append(date0.timetuple().tm_yday-1 if _fun_clim.is_leap_year(date0.year) and date0.timetuple().tm_yday>Feb29 else date0.timetuple().tm_yday)
         if date0.month==2 and date0.day==29:
             isFeb29.append(len(ddates)-1)
             ddates.append(date0)
             idates.append(Feb29-1)
-        date0 += fun_clim.timedelta(days=1)
+        date0 += _fun_clim.timedelta(days=1)
     #
     ddates = numpy.array(ddates)
     idates = numpy.array(idates)
@@ -158,7 +158,7 @@ def load_tiles_dates(v_label,date0=None,date1=None):
     dt = get_dates(date0, date1=date1, ts=False)
     #
     if v_label == 'colegg_dates':
-        cmap = fun_colors.cmaps['FuzzyLocV6']
+        cmap = _fun_colors.cmaps['FuzzyLocV6']
         tile_dat['colegg_dates'] = {
                 'fun': fun_tiles.getTiles,
                 'dat': cmap['tran'](remove3_feb29(annualVectorA.colegg,dt['days'],dt['isFeb29'],tolist=False)[:-1,:,:]),
@@ -169,7 +169,7 @@ def load_tiles_dates(v_label,date0=None,date1=None):
                 'clscl': cmap['clscl']
             }
     elif v_label == 'larva_dates':
-        cmap = fun_colors.cmaps['larva']
+        cmap = _fun_colors.cmaps['larva']
         tile_dat['larva_dates'] = {
                 'fun': fun_tiles.getTiles,
                 'dat': cmap['tran'](remove3_feb29(annualVectorA.coln2,dt['days'],dt['isFeb29'],tolist=False)[:-1,:,:]),
@@ -180,7 +180,7 @@ def load_tiles_dates(v_label,date0=None,date1=None):
                 'clscl': cmap['clscl']
             }
     elif v_label == 'chikv_iouts_dates':
-        cmap = fun_colors.cmaps['iouts']
+        cmap = _fun_colors.cmaps['iouts']
         tile_dat['chikv_iouts_dates'] = {
                 'fun': fun_tiles.getTiles,
                 'dat': cmap['tran'](remove3_feb29(annualVectorA.iouts,dt['days'],dt['isFeb29'],tolist=False)[:-1,:,:]),
@@ -191,7 +191,7 @@ def load_tiles_dates(v_label,date0=None,date1=None):
                 'clscl': cmap['clscl']
             }
     elif v_label == 'chikv_pouts_dates':
-        cmap = fun_colors.cmaps['pouts']
+        cmap = _fun_colors.cmaps['pouts']
         tile_dat['chikv_pouts_dates'] = {
                 'fun': fun_tiles.getTiles,
                 'dat': cmap['tran'](remove3_feb29(annualVectorA.pouts,dt['days'],dt['isFeb29'],tolist=False)[:-1,:,:]),
@@ -210,7 +210,7 @@ def load_tiles_dates(v_label,date0=None,date1=None):
         if numpy.abs(numpy.sum(dt) - (date1-date0).days) > 7:
             return {'error': "Forecast dates do not match the request!"}
         #
-        cmap = fun_colors.cmaps['FuzzyLocV6']
+        cmap = _fun_colors.cmaps['FuzzyLocV6']
         tile_dat['colegg_fcast_dates'] = {
                 'fun': fun_tiles.getTiles,
                 'dat': cmap['tran'](forecastECMWF.colegg[:-1,:,dt]),
@@ -225,7 +225,7 @@ def load_tiles_dates(v_label,date0=None,date1=None):
         if numpy.abs(numpy.sum(dt) - (date1-date0).days) > 7:
             return {'error': "Forecast dates do not match the request!"}
         #
-        cmap = fun_colors.cmaps['larva']
+        cmap = _fun_colors.cmaps['larva']
         tile_dat['larva_fcast_dates'] = {
                 'fun': fun_tiles.getTiles,
                 'dat': cmap['tran'](forecastECMWF.coln2[:-1,:,dt]),
@@ -240,7 +240,7 @@ def load_tiles_dates(v_label,date0=None,date1=None):
         if numpy.abs(numpy.sum(dt) - (date1-date0).days) > 7:
             return {'error': "Forecast dates do not match the request!"}
         #
-        cmap = fun_colors.cmaps['iouts']
+        cmap = _fun_colors.cmaps['iouts']
         tile_dat['chikv_iouts_fcast_dates'] = {
                 'fun': fun_tiles.getTiles,
                 'dat': cmap['tran'](forecastECMWF.iouts[:-1,:,dt]),
@@ -255,7 +255,7 @@ def load_tiles_dates(v_label,date0=None,date1=None):
         if numpy.abs(numpy.sum(dt) - (date1-date0).days) > 7:
             return {'error': "Forecast dates do not match the request!"}
         #
-        cmap = fun_colors.cmaps['pouts']
+        cmap = _fun_colors.cmaps['pouts']
         tile_dat['chikv_pouts_fcast_dates'] = {
                 'fun': fun_tiles.getTiles,
                 'dat': cmap['tran'](forecastECMWF.pouts[:-1,:,dt]),
@@ -268,14 +268,22 @@ def load_tiles_dates(v_label,date0=None,date1=None):
     # 
     return {}
 
-def load_tiles():
+def load_tiles(v_label,date0=None,date1=None):
     global tile_dat
     #
     load_global_var()
     #
+    if ((date0 == None) or (date1 == None)):
+        dt = {}
+    else:
+        dt = get_dates(date0, date1=date1, ts=False)
+    #
+    if v_label in tile_dat:
+        pass
+    #
     if 'colegg' not in tile_dat:
         print("Loading tiles: colegg...",flush=True)
-        cmap = fun_colors.cmaps['FuzzyLocV6']
+        cmap = _fun_colors.cmaps['FuzzyLocV6']
         tile_dat['colegg'] = {
             'fun': fun_tiles.getTiles,
             'dat': cmap['tran'](annualVectorA.colegg[:-1,:,:]),
@@ -288,7 +296,7 @@ def load_tiles():
     #
     if 'larva' not in tile_dat:
         print("Loading tiles: larva...",flush=True)
-        cmap = fun_colors.cmaps['larva']
+        cmap = _fun_colors.cmaps['larva']
         tile_dat['larva'] = {
             'fun': fun_tiles.getTiles,
             'dat': cmap['tran'](annualVectorA.coln2[:-1,:,:]),
@@ -301,7 +309,7 @@ def load_tiles():
     #
     if 'chikv_iouts' not in tile_dat:
         print("Loading tiles: chikv_iouts...",flush=True)
-        cmap = fun_colors.cmaps['iouts']
+        cmap = _fun_colors.cmaps['iouts']
         tile_dat['chikv_iouts'] = {
             'fun': fun_tiles.getTiles,
             'dat': cmap['tran'](annualVectorA.iouts[:-1,:,:]),
@@ -314,7 +322,7 @@ def load_tiles():
     #
     if 'chikv_pouts' not in tile_dat:
         print("Loading tiles: chikv_pouts...",flush=True)
-        cmap = fun_colors.cmaps['pouts']
+        cmap = _fun_colors.cmaps['pouts']
         tile_dat['chikv_pouts'] = {
             'fun': fun_tiles.getTiles,
             'dat': cmap['tran'](annualVectorA.pouts[:-1,:,:]),
@@ -327,7 +335,7 @@ def load_tiles():
     #
     if "colegg_1980" not in tile_dat:
         print("Loading tiles: colegg_1980...",flush=True)
-        cmap = fun_colors.cmaps['FuzzyLocV6']
+        cmap = _fun_colors.cmaps['FuzzyLocV6']
         tile_dat["colegg_1980"] = {
             'fun': fun_tiles.getTiles,
             'dat': cmap['tran'](annualVectorA_1980.colegg[:-1,:,:]),
@@ -339,7 +347,7 @@ def load_tiles():
         }
     if "chikv_iouts_1980" not in tile_dat:
         print("Loading tiles: chikv_iouts_1980...",flush=True)
-        cmap = fun_colors.cmaps['iouts']
+        cmap = _fun_colors.cmaps['iouts']
         tile_dat["chikv_iouts_1980"] = {
             'fun': fun_tiles.getTiles,
             'dat': cmap['tran'](annualVectorA_1980.iouts[:-1,:,:]),
@@ -351,7 +359,7 @@ def load_tiles():
         }
     if "chikv_pouts_1980" not in tile_dat:
         print("Loading tiles: chikv_pouts_1980...",flush=True)
-        cmap = fun_colors.cmaps['pouts']
+        cmap = _fun_colors.cmaps['pouts']
         tile_dat["chikv_pouts_1980"] = {
             'fun': fun_tiles.getTiles,
             'dat': cmap['tran'](annualVectorA_1980.pouts[:-1,:,:]),
@@ -364,7 +372,7 @@ def load_tiles():
     #
     if "diff_colegg_1980" not in tile_dat:
         print("Loading tiles: diff_colegg_1980...",flush=True)
-        cmap = fun_colors.cmaps['diff_colegg']
+        cmap = _fun_colors.cmaps['diff_colegg']
         # Based on FuzzyLocV6
         tmp = numpy.log2(numpy.nanmean(annualVectorA.colegg[:-1,:,:],axis=2)/5.0)
         tmp[tmp<-4] = -4
@@ -385,7 +393,7 @@ def load_tiles():
         }
     if "diff_iouts_1980" not in tile_dat:
         print("Loading tiles: diff_iouts_1980...",flush=True)
-        cmap = fun_colors.cmaps['diff_iouts']
+        cmap = _fun_colors.cmaps['diff_iouts']
         tile_dat["diff_iouts_1980"] = {
             'fun': fun_tiles.getTiles,
             'dat': cmap['tran'](annualVectorA.iouts[:-1,:,:]-annualVectorA_1980.iouts[:-1,:,:]),
@@ -397,7 +405,7 @@ def load_tiles():
         }
     if "diff_pouts_1980" not in tile_dat:
         print("Loading tiles: diff_pouts_1980...",flush=True)
-        cmap = fun_colors.cmaps['diff_pouts']
+        cmap = _fun_colors.cmaps['diff_pouts']
         tile_dat["diff_pouts_1980"] = {
             'fun': fun_tiles.getTiles,
             'dat': cmap['tran'](annualVectorA.pouts[:-1,:,:]-annualVectorA_1980.pouts[:-1,:,:]),
@@ -411,7 +419,7 @@ def load_tiles():
     for ssp in ['ssp245','ssp585']:
         if "colegg_%s" %ssp not in tile_dat:
             print("Loading tiles: colegg_%s..." %ssp,flush=True)
-            cmap = fun_colors.cmaps['FuzzyLocV6']
+            cmap = _fun_colors.cmaps['FuzzyLocV6']
             tile_dat["colegg_%s" %ssp] = {
                 'fun': fun_tiles.getTiles,
                 'dat': cmap['tran'](annualNASA.colegg[ssp][:-1,:,:]),
@@ -423,7 +431,7 @@ def load_tiles():
             }
         if "iouts_%s" %ssp not in tile_dat:
             print("Loading tiles: iouts_%s..." %ssp,flush=True)
-            cmap = fun_colors.cmaps['iouts']
+            cmap = _fun_colors.cmaps['iouts']
             tile_dat["iouts_%s" %ssp] = {
                 'fun': fun_tiles.getTiles,
                 'dat': cmap['tran'](annualNASA.iouts[ssp][:-1,:,:]),
@@ -435,7 +443,7 @@ def load_tiles():
             }
         if "pouts_%s" %ssp not in tile_dat:
             print("Loading tiles: pouts_%s..." %ssp,flush=True)
-            cmap = fun_colors.cmaps['pouts']
+            cmap = _fun_colors.cmaps['pouts']
             tile_dat["pouts_%s" %ssp] = {
                 'fun': fun_tiles.getTiles,
                 'dat': cmap['tran'](annualNASA.pouts[ssp][:-1,:,:]),
@@ -447,7 +455,7 @@ def load_tiles():
             }
         if "diff_colegg_%s" %ssp not in tile_dat:
             print("Loading tiles: diff_colegg_%s..." %ssp,flush=True)
-            cmap = fun_colors.cmaps['diff_colegg']
+            cmap = _fun_colors.cmaps['diff_colegg']
             # Based on FuzzyLocV6
             tmp = numpy.log2(numpy.nanmean(annualNASA.colegg[ssp][:-1,:,:],axis=2)/5.0)
             tmp[tmp<-4] = -4
@@ -468,7 +476,7 @@ def load_tiles():
             }
         if "diff_iouts_%s" %ssp not in tile_dat:
             print("Loading tiles: diff_iouts_%s..." %ssp,flush=True)
-            cmap = fun_colors.cmaps['diff_iouts']
+            cmap = _fun_colors.cmaps['diff_iouts']
             tile_dat["diff_iouts_%s" %ssp] = {
                 'fun': fun_tiles.getTiles,
                 'dat': cmap['tran'](annualNASA.iouts[ssp][:-1,:,:]-annualVectorA.iouts[:-1,:,:]),
@@ -480,7 +488,7 @@ def load_tiles():
             }
         if "diff_pouts_%s" %ssp not in tile_dat:
             print("Loading tiles: diff_pouts_%s..." %ssp,flush=True)
-            cmap = fun_colors.cmaps['diff_pouts']
+            cmap = _fun_colors.cmaps['diff_pouts']
             tile_dat["diff_pouts_%s" %ssp] = {
                 'fun': fun_tiles.getTiles,
                 'dat': cmap['tran'](annualNASA.pouts[ssp][:-1,:,:]-annualVectorA.pouts[:-1,:,:]),
@@ -493,7 +501,7 @@ def load_tiles():
     #
     if 'pop' not in tile_dat:
         print("Loading tiles: pop...",flush=True)
-        cmap = fun_colors.cmaps['viridis.pop']
+        cmap = _fun_colors.cmaps['viridis.pop']
         tile_dat['pop'] = {
             'fun': fun_tiles.getTiles,
             'dat': cmap['tran'](popdens.pop[:-1,:]),
@@ -506,7 +514,7 @@ def load_tiles():
     #
     if 'presence' not in tile_dat:
         print("Loading tiles: presence...",flush=True)
-        cmap = fun_colors.cmaps['presence']
+        cmap = _fun_colors.cmaps['presence']
         tile_dat['presence'] = {
             'fun': fun_tiles.getTiles,
             'dat': cmap['tran'](presence.matrix[:-1,:]),
@@ -519,7 +527,7 @@ def load_tiles():
     #
     if 'albosurv' not in tile_dat:
         print("Loading tiles: albosurv...",flush=True)
-        cmap = fun_colors.cmaps['albosurv']
+        cmap = _fun_colors.cmaps['albosurv']
         tile_dat['albosurv'] = {
             'fun': fun_tiles.getTiles,
             'dat': cmap['tran'](albosurv.getMatrix()[:-1,:]),
@@ -533,7 +541,7 @@ def load_tiles():
     for prd in papatasi2015.shps:
         if 'papatasi_'+prd not in tile_dat:
             print("Loading tiles: papatasi_%s..." %prd,flush=True)
-            cmap = fun_colors.cmaps['papatasi']
+            cmap = _fun_colors.cmaps['papatasi']
             tile_dat['papatasi_'+prd] = {
                 'fun': fun_tiles.getShpTiles,
                 'dat': cmap['tran'](papatasi2015.shps[prd]).to_crs(fun_tiles.proj1),
@@ -583,8 +591,8 @@ def get_location_ERA5(lon, lat):
     if lon < 0.0:
         lon += 360.0
     #
-    loni = fun_clim.getIndex(lon, lwMaskERA5.longitude)
-    lati = fun_clim.getIndex(lat, lwMaskERA5.latitude)
+    loni = _fun_clim.getIndex(lon, lwMaskERA5.longitude)
+    lati = _fun_clim.getIndex(lat, lwMaskERA5.latitude)
     #
     lon = lwMaskERA5.longitude[loni]
     lat = lwMaskERA5.latitude[lati]
@@ -603,8 +611,8 @@ def get_location(lon, lat, lons, lats):
     if (min(lons) >= 0.0) and (max(lons) >= 180.0) and (lon < 0.0):
         lon += 360.0
     #
-    loni = fun_clim.getIndex(lon, lons)
-    lati = fun_clim.getIndex(lat, lats)
+    loni = _fun_clim.getIndex(lon, lons)
+    lati = _fun_clim.getIndex(lat, lats)
     #
     lon = lons[loni]
     lat = lats[lati]

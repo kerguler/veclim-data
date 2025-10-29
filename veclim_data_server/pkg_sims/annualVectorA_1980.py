@@ -1,0 +1,17 @@
+import numpy
+
+from ..environ import DIR_DATA
+from ..functions import xr_open_lazy
+
+decade = "1980-1989"
+dlabel = "1980_to_1989"
+
+dr = "%s/sims/vector08c_Q4.a100+1/ERA5_single_levels_decadal/%s" %(DIR_DATA,dlabel)
+colegg = xr_open_lazy("%s/sims_vector08c_Q4.a100+1_ERA5_single_levels_decadal_%s_colegg.nc" %(dr,dlabel))['colegg']
+colK = xr_open_lazy("%s/sims_vector08c_Q4.a100+1_ERA5_single_levels_decadal_%s_colK.nc" %(dr,dlabel))['colK']
+coln2 = xr_open_lazy("%s/sims_vector08c_Q4.a100+1_ERA5_single_levels_decadal_%s_coln2.nc" %(dr,dlabel))['coln2']
+coln4f = xr_open_lazy("%s/sims_vector08c_Q4.a100+1_ERA5_single_levels_decadal_%s_coln4f.nc" %(dr,dlabel))['coln4f']
+
+dr = "%s/sims/vector08c_Q4.a100+1_chikv_QI/ERA5_single_levels_decadal/p4000r100w60/%s" %(DIR_DATA,dlabel)
+iouts = xr_open_lazy("%s/sims_vector08c_Q4.a100+1_chikv_QI_ERA5_single_levels_decadal_p4000r100w60_%s_iouts.nc" %(dr,dlabel))['iouts']
+pouts = xr_open_lazy("%s/sims_vector08c_Q4.a100+1_chikv_QI_ERA5_single_levels_decadal_p4000r100w60_%s_pouts.nc" %(dr,dlabel))['pouts']

@@ -26,4 +26,4 @@ RUN bash perform_fixes.sh
 EXPOSE ${VEC_PORTE}
 
 # start app
-CMD [ "python3", "./veclim_data_server.veclim_python_server.py" ]
+CMD [ "bash", "start-server.sh" ]

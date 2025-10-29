@@ -26,5 +26,4 @@ RUN bash perform_fixes.sh
 EXPOSE ${VEC_PORTE}
 
 # start app
-# CMD [ "bash", "start-server.sh" ]
-CMD [ "bash" ]
+CMD [ "bash", "start-server.sh" ]

@@ -3,7 +3,7 @@
 # Example usage
  Run the server with the following:
 
- -   `python3 -m veclim_data_server.veclim_python_server.py &> log &`
+ -   `bash start-server.sh &> log &`
 
  Try the following requests:
 

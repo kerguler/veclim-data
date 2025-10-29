@@ -8,9 +8,9 @@ import pandas
 
 from datetime import datetime
 
-from environ import VEC_HOST, VEC_PORT
+from veclim_data_server.environ import VEC_HOST, VEC_PORT
 
-import fun_server
+import veclim_data_server.fun_server as fun_server
 
 fcast_time = None
 def set_fcast_time():

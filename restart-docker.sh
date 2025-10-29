@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source veclim-data-server/.env
+source veclim_data_server/.env
 
 docker build --build-arg VEC_PORTE=${VEC_PORTE} \
              -t ${VEC_NAME} \

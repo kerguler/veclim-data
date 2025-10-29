@@ -1,9 +1,9 @@
 import numpy
 import pandas
 
-import veclim_data_server.pkg_sims as pkg_sims
-import veclim_data_server.pkg_tiles as pkg_tiles
-import veclim_data_server.pkg_surv as pkg_surv
+import pkg_sims
+import pkg_tiles
+import pkg_surv
 
 from datetime import datetime
 Feb29 = datetime(2020,2,29).timetuple().tm_yday

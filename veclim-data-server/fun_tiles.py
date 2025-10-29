@@ -11,7 +11,7 @@ from io import BytesIO
 
 import os
 
-from environ import DIR_DATA
+from environ import DIR_TILE
 
 pxbounds = []
 imsize = 256
@@ -54,7 +54,7 @@ def plotCanvas(fig):
     }
 
 def saveTile(label, x, y, z, mat):
-    subpath = DIR_DATA
+    subpath = DIR_TILE
     for pth in ['tiles', label, str(z), str(x)]:
         subpath += "/"+pth
         if not os.path.exists(subpath):
@@ -67,7 +67,7 @@ def saveTile(label, x, y, z, mat):
     imwrite(file, mat, format='webp')
 
 def loadTile(label, x, y, z):
-    subpath = DIR_DATA
+    subpath = DIR_TILE
     for pth in ['tiles', label, str(z), str(x)]:
         subpath += "/"+pth
     #

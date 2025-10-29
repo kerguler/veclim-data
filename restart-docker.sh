@@ -3,11 +3,11 @@
 source veclim-data-server/.env
 
 docker build --build-arg VEC_PORTE=${VEC_PORTE} \
-             -t veclim-data-server \
+             -t ${VEC_NAME} \
              .
 docker run -d \
            -p ${VEC_PORTE}:${VEC_PORT} \
            --restart always \
-           --name veclim-data-server \
+           --name ${VEC_NAME} \
            -v ${VEC_DATA}:${DIR_DATA} \
-           veclim-data-server
+           ${VEC_NAME}

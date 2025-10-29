@@ -3,6 +3,8 @@ import numpy
 from ..environ import DIR_DATA
 from ..functions import xr_open_lazy, daylength
 
+print("Loading annual ERA5...",flush=True)
+
 decade = "2010-2019"
 dr = "%s/clim/ERA5/ERA5_single_levels_decadal/2010_to_2019" %(DIR_DATA)
 atemp = xr_open_lazy("%s/ERA5_ERA5_single_levels_decadal_2010_to_2019_2m_temperature.nc" %(dr))

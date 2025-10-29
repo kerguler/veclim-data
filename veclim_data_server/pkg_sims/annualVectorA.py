@@ -3,6 +3,8 @@ import numpy
 from ..environ import DIR_DATA
 from ..functions import xr_open_lazy
 
+print("Loading VectorA...",flush=True)
+
 decade = "2010-2019"
 dlabel = "2010_to_2019"
 dr = "%s/sims/vector08c_Q4.a100+1/ERA5_single_levels_decadal/%s" %(DIR_DATA,dlabel)

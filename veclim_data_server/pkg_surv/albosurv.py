@@ -10,6 +10,8 @@ from scipy.interpolate import interp1d
 
 from ..environ import DIR_DATA
 
+print("Loading multiple presence datasets...",flush=True)
+
 def approx(a,b,eps=1e-3):
     return (a>=b-eps) & (a<b+eps)
 

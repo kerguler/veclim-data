@@ -8,6 +8,8 @@ from ..functions import cache_npy
 from ..fun_tiles import getTiles
 from ..pkg_sims import annualVectorA
 
+print("Loading tiles colegg...",flush=True)
+
 clscl = ['#00000000', '#fbe590', '#fcc65a', '#f7a034', '#f47b2c', '#e85229', '#d82929', '#931b1f']
 clbins = [-4,-3,-2,-1,0,1,2,3,4]
 cllbl = ["1/16","1/8","1/4","1/2","1","2","4","8","16"]

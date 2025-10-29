@@ -3,6 +3,8 @@ import numpy
 from ..environ import DIR_DATA
 from ..functions import xr_open_lazy, cache_npy
 
+print("Loading NASA...",flush=True)
+
 models = ['ACCESS-CM2','ACCESS-ESM1-5','EC-Earth3']
 ssps = ['ssp245','ssp585']
 decade = "2090-2099"

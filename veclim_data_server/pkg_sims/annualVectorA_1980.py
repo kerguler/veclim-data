@@ -3,6 +3,8 @@ import numpy
 from ..environ import DIR_DATA
 from ..functions import xr_open_lazy
 
+print("Loading VectorA_1980...",flush=True)
+
 decade = "1980-1989"
 dlabel = "1980_to_1989"
 

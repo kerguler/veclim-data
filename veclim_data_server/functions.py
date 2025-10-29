@@ -3,7 +3,7 @@ import numpy
 import xarray
 
 def cache_npy(filename, func, *args, **kwargs):
-    if os.path_exists(filename):
+    if os.path.exists(filename):
         try:
             mat = numpy.load(filename,mmap_mode='r')
             return mat

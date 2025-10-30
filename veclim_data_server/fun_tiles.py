@@ -11,7 +11,7 @@ from io import BytesIO
 
 import os
 
-from environ import DIR_TILE
+from veclim_data_server.environ import DIR_TILE
 
 pxbounds = []
 imsize = 256

@@ -3,9 +3,11 @@ import pandas
 
 import veclim_data_server.pkg_sims as pkg_sims
 import veclim_data_server.pkg_tiles as pkg_tiles
-import veclim_data_server.pkg_surv as pkg_surv
+import pkg_surv as pkg_surv
 
-from datetime import datetime
+from veclim_data_server.functions import is_leap_year, getIndex
+
+from datetime import datetime, timedelta
 Feb29 = datetime(2020,2,29).timetuple().tm_yday
 
 veclist = ['albopictus', 'papatasi']
@@ -64,12 +66,12 @@ def get_dates(date0, date1=False, ts=False):
     ddates = []
     while date0 <= date1:
         ddates.append(date0)
-        idates.append(date0.timetuple().tm_yday-1 if fun_clim.is_leap_year(date0.year) and date0.timetuple().tm_yday>Feb29 else date0.timetuple().tm_yday)
+        idates.append(date0.timetuple().tm_yday-1 if is_leap_year(date0.year) and date0.timetuple().tm_yday>Feb29 else date0.timetuple().tm_yday)
         if date0.month==2 and date0.day==29:
             isFeb29.append(len(ddates)-1)
             ddates.append(date0)
             idates.append(Feb29-1)
-        date0 += fun_clim.timedelta(days=1)
+        date0 += timedelta(days=1)
     #
     ddates = numpy.array(ddates)
     idates = numpy.array(idates)
@@ -90,8 +92,8 @@ def get_location_ERA5(lon, lat):
     if lon < 0.0:
         lon += 360.0
     #
-    loni = fun_clim.getIndex(lon, lwMaskERA5.longitude)
-    lati = fun_clim.getIndex(lat, lwMaskERA5.latitude)
+    loni = getIndex(lon, lwMaskERA5.longitude)
+    lati = getIndex(lat, lwMaskERA5.latitude)
     #
     lon = lwMaskERA5.longitude[loni]
     lat = lwMaskERA5.latitude[lati]

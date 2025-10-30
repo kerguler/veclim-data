@@ -112,7 +112,7 @@ def get_meteo_days(loni, lati, idates, isFeb29):
     annualERA5 = pkg_sims.modules['annualERA5']
     popdens = pkg_sims.modules['popdens']
     return {
-        "photo": remove_feb29(isel(annualERA5.photo,lat=lati),idates,isFeb29),
+        "photo": remove_feb29(annualERA5.photo[lati,:],idates,isFeb29),
         "atemp": remove_feb29(isel(annualERA5.atemp,lat=lati,lon=loni),idates,isFeb29),
         "atmin": remove_feb29(isel(annualERA5.atmin,lat=lati,lon=loni),idates,isFeb29),
         "atmax": remove_feb29(isel(annualERA5.atmax,lat=lati,lon=loni),idates,isFeb29),

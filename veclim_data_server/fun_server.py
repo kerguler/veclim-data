@@ -166,18 +166,18 @@ def get_nasa_ssp245_days(loni, lati, idates, isFeb29):
     annualNASA = pkg_sims.modules['annualNASA']
     ssp = 'ssp245'
     return {
-        "colegg": remove_feb29(isel(annualNASA.colegg[ssp],lat=lati,lon=loni),idates,isFeb29),
-        "pouts": [a*100.0 for a in remove_feb29(isel(annualNASA.pouts[ssp],lat=lati,lon=loni),idates,isFeb29)],
-        "iouts": [a*4000.0 for a in remove_feb29(isel(annualNASA.iouts[ssp],lat=lati,lon=loni),idates,isFeb29)]
+        "colegg": remove_feb29(annualNASA.colegg[ssp][lati,loni,:],idates,isFeb29),
+        "pouts": [a*100.0 for a in remove_feb29(annualNASA.pouts[ssp][lati,loni,:],idates,isFeb29)],
+        "iouts": [a*4000.0 for a in remove_feb29(annualNASA.iouts[ssp][lati,loni,:],idates,isFeb29)]
     }
 
 def get_nasa_ssp585_days(loni, lati, idates, isFeb29):
     annualNASA = pkg_sims.modules['annualNASA']
     ssp = 'ssp585'
     return {
-        "colegg": remove_feb29(isel(annualNASA.colegg[ssp],lat=lati,lon=loni),idates,isFeb29),
-        "pouts": [a*100.0 for a in remove_feb29(isel(annualNASA.pouts[ssp],lat=lati,lon=loni),idates,isFeb29)],
-        "iouts": [a*4000.0 for a in remove_feb29(isel(annualNASA.iouts[ssp],lat=lati,lon=loni),idates,isFeb29)]
+        "colegg": remove_feb29(annualNASA.colegg[ssp][lati,loni,:],idates,isFeb29),
+        "pouts": [a*100.0 for a in remove_feb29(annualNASA.pouts[ssp][lati,loni,:],idates,isFeb29)],
+        "iouts": [a*4000.0 for a in remove_feb29(annualNASA.iouts[ssp][lati,loni,:],idates,isFeb29)]
     }
 
 def get_fcast_days(loni, lati, date0, date1):

@@ -24,6 +24,14 @@ def xr_open_lazy(path, engine=None, chunks="auto"):
         kw["engine"] = engine
     return xarray.open_dataset(path, **kw)
 
+def isel(nc,lon=None,lat=None):
+    kw = {}
+    if type(lon) != type(None):
+        kw['lon'] = lon
+    if type(lat) != type(None):
+        kw['lat'] = lat
+    return nc.isel(**kw).load().values
+
 def stdwarn(msg):
     print("ERROR",msg,flush=True)
 

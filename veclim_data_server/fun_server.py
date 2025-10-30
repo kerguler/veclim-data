@@ -119,7 +119,7 @@ def get_meteo_days(loni, lati, idates, isFeb29):
         "rehum": remove_feb29(isel(annualERA5.rehum,lat=lati,lon=loni),idates,isFeb29),
         "precp": remove_feb29(isel(annualERA5.precp,lat=lati,lon=loni),idates,isFeb29),
         "soilw": remove_feb29(isel(annualERA5.soilw,lat=lati,lon=loni),idates,isFeb29),
-        "pdens": isel(popdens.pop,lat=lati,lon=loni)
+        "pdens": popdens.pop[lati,loni]
     }
 
 def calc_cut(vec,lim,lab):

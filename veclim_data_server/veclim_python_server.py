@@ -10,7 +10,8 @@ from datetime import datetime
 
 from veclim_data_server.environ import VEC_HOST, VEC_PORT
 
-import veclim_data_server.fun_server as fun_server
+import veclim_data_server.pkg_sims as pkg_sims
+import veclim_data_server.pkg_models as pkg_models
 
 import veclim_data_server.response as response
 
@@ -20,7 +21,7 @@ def set_fcast_time():
     #
     now = pandas.Timestamp.today()
     if (fcast_time == None) or ((now - fcast_time).days > 0):
-        fun_server.pkg_sims.reload_forecast_var()
+        pkg_sims.reload_forecast_var()
         fcast_time = now
         print("Forecast updated",now)
 
@@ -70,7 +71,7 @@ def application(environ, start_response):
         vector = escape(parameters.get('vec', [''])[0])
     else:
         vector = 'albopictus'
-    if not (vector in fun_server.veclist):
+    if not (vector in pkg_models.modules):
         return response.returnResponse(start_response, response.empty_response)
     #
     if 'lon' in parameters:
@@ -124,13 +125,12 @@ def application(environ, start_response):
         'meteo_key'     : meteo_key,
         'sim_key'       : sim_key,
         'fcast_key'     : fcast_key,
-        'risk_key'      : risk_key,
-        'start_response': start_response
+        'risk_key'      : risk_key
     }
 
-    if vector in fun_server.pkg_models.modules:
+    if vector in pkg_models.modules:
         try:
-            return fun_server.pkg_models.modules[vector].respond(**kw)
+            return pkg_models.modules[vector].respond(start_response, kw)
         except:
             print("ERROR: Problem encountered with request to %s:" %vector, flush=True)
             print(kw, flush=True)

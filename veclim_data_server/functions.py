@@ -3,19 +3,22 @@ import numpy
 import pandas
 import xarray
 
+from veclim_data_server.environ import DIR_CACHE
+
 def cache_npy(filename, func, *args, **kwargs):
-    if os.path.exists(filename):
+    fildir = "%s/%s" %(DIR_CACHE,filename)
+    if os.path.exists(fildir):
         try:
-            mat = numpy.load(filename,mmap_mode='r')
+            mat = numpy.load(fildir,mmap_mode='r')
             return mat
         except:
             pass
     print("Caching %s" %filename, flush=True)
     try:
         mat = func(*args, **kwargs)
-        numpy.save(filename, mat)
+        numpy.save(fildir, mat)
     except:
-        print("Failed to create %s" %filename, flush=True)
+        print("ERROR: Failed to create %s" %filename, flush=True)
         return []
     return mat
 

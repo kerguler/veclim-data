@@ -26,7 +26,7 @@ def calc_date(dt):
                       tolist=False)[:-1,:,:]
     return numpy.log2(numpy.nanmean(x,axis=2)/5.0) # for '2010-2019' (corrected)
 
-dat = cache_npy("%s/tile_dat_%s.npy" %(annualVectorA.dr_vec,label), calc_dat)
+dat = cache_npy("tile_dat_%s.npy" %label, calc_dat)
 
 tile_dat = {
     'label': label,
@@ -43,7 +43,7 @@ def load_dates(date0,date1):
         return {}
     #
     dt = get_dates(date0, date1=date1, ts=False)
-    dat_dt = cache_npy("%s/tile_dat_%s_%s_%s.npy" %(annualVectorA.dr_vec,label,dt['date0'],dt['date1']), calc_date, dt)
+    dat_dt = cache_npy("tile_dat_%s_%s_%s.npy" %(label,dt['date0'],dt['date1']), calc_date, dt)
     #
     return {
         'fun': getTiles,

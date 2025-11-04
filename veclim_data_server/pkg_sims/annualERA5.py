@@ -20,4 +20,4 @@ soilw = xr_open_lazy("%s/ERA5_ERA5_single_levels_decadal_2010_to_2019_volumetric
 def calc_dat():
     return numpy.array([[daylength(lat, d) for d in numpy.arange(tf)] for lat in latitude])
 
-photo = cache_npy("%s/photoperiod_decadal_2010_to_2019.npy" %(dr),calc_dat)
+photo = cache_npy("photoperiod_decadal_2010_to_2019.npy",calc_dat)

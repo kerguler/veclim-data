@@ -30,17 +30,17 @@ def calc_pouts(ssp):
 
 dr = "%s/sims/vector08c_Q4.a100+1" %(DIR_DATA)
 colegg = {
-    ssp: cache_npy("%s/NASA_decadal_%s_colegg_%s.npy" %(dr,"_".join(models),ssp),calc_colegg,ssp)
+    ssp: cache_npy("NASA_decadal_%s_colegg_%s.npy" %("_".join(models),ssp),calc_colegg,ssp)
     for ssp in ssps
 }
 
 dr = "%s/sims/vector08c_Q4.a100+1_chikv_QI" %(DIR_DATA)
 iouts = {
-    ssp: cache_npy("%s/NASA_decadal_%s_iouts_%s.npy" %(dr,"_".join(models),ssp),calc_iouts,ssp)
+    ssp: cache_npy("NASA_decadal_%s_iouts_%s.npy" %("_".join(models),ssp),calc_iouts,ssp)
     for ssp in ssps
 }
 pouts = {
-    ssp: cache_npy("%s/NASA_decadal_%s_pouts_%s.npy" %(dr,"_".join(models),ssp),calc_pouts,ssp)
+    ssp: cache_npy("NASA_decadal_%s_pouts_%s.npy" %("_".join(models),ssp),calc_pouts,ssp)
     for ssp in ssps
 }
 

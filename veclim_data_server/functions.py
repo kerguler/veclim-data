@@ -83,6 +83,21 @@ def remove_feb29(vec,days,isFeb29,fill=0.0):
     else:
         return numpy.nan_to_num(numpy.delete(tmp,isFeb29),nan=fill).tolist()
 
+def remove2_feb29(mat,days,isFeb29):
+    tmp = mat[:,days-1]
+    if len(isFeb29) == 0:
+        return tmp
+    tmp[:,isFeb29+1] = 0.5*(tmp[:,isFeb29]+tmp[:,isFeb29+1])
+    return numpy.delete(tmp,isFeb29,axis=1).tolist()
+
+def remove3_feb29(mat,days,isFeb29,tolist=True):
+    tmp = mat[:,:,days-1]
+    if len(isFeb29) == 0:
+        return tmp
+    tmp[:,:,isFeb29+1] = 0.5*(tmp[:,:,isFeb29]+tmp[:,:,isFeb29+1])
+    tmp = numpy.delete(tmp,isFeb29,axis=2)
+    return tmp.tolist() if tolist else tmp
+
 from datetime import datetime, timedelta
 Feb29 = datetime(2020,2,29).timetuple().tm_yday
 

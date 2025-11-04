@@ -61,12 +61,11 @@ def respondTiles(start_response, kw):
     pr_v = kw['pr_v']
     #
     v_label = pr_v
-    #if ((date0 != None) and (date1 != None)):
-    #    v_label += '_dates'
-    #    ret = fun_server.load_tiles_dates(v_label,date0,date1)
-    #    if ret:
-    #        response_body = json.dumps(ret)
-    #        return returnResponse(start_response, response_body)
+    if ((date0 != None) and (date1 != None)):
+        ret = pkg_tiles.modules[v_label].load_dates(date0,date1)
+        if ret:
+            response_body = json.dumps(ret)
+            return returnResponse(start_response, response_body)
     #
     if ((pr_z == None) or 
         (pr_x == None) or 

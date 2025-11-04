@@ -4,7 +4,7 @@ print("Loading tiles: %s..." %label, flush=True)
 import numpy
 import matplotlib as mpl
 
-from ..functions import cache_npy
+from ..functions import get_dates, cache_npy, remove3_feb29
 from ..fun_tiles import getTiles
 from ..pkg_sims import annualVectorA
 
@@ -19,6 +19,13 @@ def calc_dat():
     x = annualVectorA.colegg[:-1,:,:]
     return numpy.log2(numpy.nanmean(x,axis=2)/5.0) # for '2010-2019' (corrected)
 
+def calc_date(dt):
+    x = remove3_feb29(annualVectorA.colegg,
+                      dt['days'],
+                      dt['isFeb29'],
+                      tolist=False)[:-1,:,:]
+    return numpy.log2(numpy.nanmean(x,axis=2)/5.0) # for '2010-2019' (corrected)
+
 dat = cache_npy("./%s.npy" %label, calc_dat)
 
 tile_dat = {
@@ -30,3 +37,20 @@ tile_dat = {
     'cllbl': cllbl,
     'clscl': clscl
 }
+
+def load_dates(date0,date1):
+    if ((date0 == None) or (date1 == None)):
+        return {}
+    #
+    dt = get_dates(date0, date1=date1, ts=False)
+    dat_dt = cache_npy("./%s_%s_%s.npy" %(label,dt['date0'],dt['date1']), calc_date, dt)
+    #
+    return {
+        'fun': getTiles,
+        'dat': dat_dt,
+        'cmap': cmap,
+        'norm': norm,
+        'label': '',
+        'cllbl': cllbl,
+        'clscl': clscl
+    }

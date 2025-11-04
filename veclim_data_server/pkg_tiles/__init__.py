@@ -9,6 +9,3 @@ for tile in modules:
     if tile in tile_dat:
         print("WARNING: Replacing %s!" %(tile))
     tile_dat[tile] = modules[tile].tile_dat
-
-print("tile_dat:",flush=True)
-print(tile_dat,flush=True)

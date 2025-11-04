@@ -64,8 +64,13 @@ def respondTiles(start_response, kw):
     if ((date0 != None) and (date1 != None)):
         ret = pkg_tiles.modules[v_label].load_dates(date0,date1)
         if ret:
-            response_body = json.dumps(ret)
-            return returnResponse(start_response, response_body)
+            buff = ret['fun'](ret['dat'], 
+                              pr_z, pr_x, pr_y, 
+                              cmap  = ret['cmap'], 
+                              norm  = ret['norm'],
+                              label = ret['label'])
+            response_body = buff
+            return returnResponsePNG(start_response, response_body)
     #
     if ((pr_z == None) or 
         (pr_x == None) or 

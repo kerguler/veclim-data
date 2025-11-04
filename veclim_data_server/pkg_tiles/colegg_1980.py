@@ -1,4 +1,4 @@
-label = "colegg"
+label = "colegg_1980"
 print("Loading tiles: %s..." %label, flush=True)
 
 import numpy
@@ -6,7 +6,7 @@ import matplotlib as mpl
 
 from ..functions import get_dates, cache_npy, remove_feb29
 from ..fun_tiles import getTiles
-from ..pkg_sims import annualVectorA
+from ..pkg_sims import annualVectorA_1980
 
 clscl = ['#00000000', '#fbe590', '#fcc65a', '#f7a034', '#f47b2c', '#e85229', '#d82929', '#931b1f']
 clbins = [-4,-3,-2,-1,0,1,2,3,4]
@@ -16,11 +16,11 @@ cmap = mpl.colors.ListedColormap([mpl.colors.to_rgba(c) for c in clscl])
 norm = mpl.colors.BoundaryNorm(clbins, cmap.N, clip=True, extend='neither')
 
 def calc_dat():
-    x = annualVectorA.colegg[:-1,:,:]
+    x = annualVectorA_1980.colegg[:-1,:,:]
     return numpy.log2(numpy.nanmean(x,axis=2)/5.0) # for '2010-2019' (corrected)
 
 def calc_date(dt):
-    x = annualVectorA.colegg[:-1,:,:]
+    x = annualVectorA_1980.colegg[:-1,:,:]
     x = remove_feb29(x,
                      dt['days'],
                      dt['isFeb29'],

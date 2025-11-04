@@ -1,4 +1,4 @@
-label = "colegg"
+label = "larva"
 print("Loading tiles: %s..." %label, flush=True)
 
 import numpy
@@ -8,24 +8,43 @@ from ..functions import get_dates, cache_npy, remove_feb29
 from ..fun_tiles import getTiles
 from ..pkg_sims import annualVectorA
 
-clscl = ['#00000000', '#fbe590', '#fcc65a', '#f7a034', '#f47b2c', '#e85229', '#d82929', '#931b1f']
-clbins = [-4,-3,-2,-1,0,1,2,3,4]
-cllbl = ["1/16","1/8","1/4","1/2","1","2","4","8","16"]
-
+clscl = numpy.array([
+         '#081d58',
+         '#253494',
+         '#225ea8',
+         '#1d91c0',
+         '#41b6c4',
+         '#7fcdbb',
+         '#fcc65a', 
+         '#f7a034', 
+         '#f47b2c', 
+         '#e85229', 
+         '#d82929',
+         '#b42125',
+         '#00000000',
+         ])[::-1].tolist()
+clbins = numpy.cumsum([0,1,30,28,31,30,31,30,31,31,30,31,30,31])
+cllbl = ["NA","Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
 cmap = mpl.colors.ListedColormap([mpl.colors.to_rgba(c) for c in clscl])
 norm = mpl.colors.BoundaryNorm(clbins, cmap.N, clip=True, extend='neither')
 
+def trann2(mat):
+    tmp = mat[:,:,:]>1.0
+    annmat = numpy.sum(numpy.cumsum(tmp[:,:,1:]>tmp[:,:,:-1],axis=2)==0,axis=2)+1
+    annmat[annmat==365] = 0
+    return annmat
+
 def calc_dat():
-    x = annualVectorA.colegg[:-1,:,:]
-    return numpy.log2(numpy.nanmean(x,axis=2)/5.0) # for '2010-2019' (corrected)
+    x = annualVectorA.coln2[:-1,:,:]
+    return trann2(x)
 
 def calc_date(dt):
-    x = annualVectorA.colegg[:-1,:,:]
+    x = annualVectorA.coln2[:-1,:,:]
     x = remove_feb29(x,
                      dt['days'],
                      dt['isFeb29'],
                      tolist=False)
-    return numpy.log2(numpy.nanmean(x,axis=2)/5.0) # for '2010-2019' (corrected)
+    return trann2(x)
 
 dat = cache_npy("tile_dat_%s.npy" %label, calc_dat)
 

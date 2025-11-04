@@ -1,4 +1,4 @@
-label = "colegg"
+label = "chikv_pouts_1980"
 print("Loading tiles: %s..." %label, flush=True)
 
 import numpy
@@ -6,26 +6,27 @@ import matplotlib as mpl
 
 from ..functions import get_dates, cache_npy, remove_feb29
 from ..fun_tiles import getTiles
-from ..pkg_sims import annualVectorA
+from ..pkg_sims import annualVectorA_1980
 
-clscl = ['#00000000', '#fbe590', '#fcc65a', '#f7a034', '#f47b2c', '#e85229', '#d82929', '#931b1f']
-clbins = [-4,-3,-2,-1,0,1,2,3,4]
-cllbl = ["1/16","1/8","1/4","1/2","1","2","4","8","16"]
-
+clscl = ['#00000000', '#fbe590', '#f7a034', '#e85229', '#931b1f']
+clbins = [0,0.01,0.05,0.1,0.2,0.5]
+cllbl = ["0","1","5","10","20","50"]
 cmap = mpl.colors.ListedColormap([mpl.colors.to_rgba(c) for c in clscl])
 norm = mpl.colors.BoundaryNorm(clbins, cmap.N, clip=True, extend='neither')
 
+tran = lambda x: numpy.nanmean(x,axis=2)
+
 def calc_dat():
-    x = annualVectorA.colegg[:-1,:,:]
-    return numpy.log2(numpy.nanmean(x,axis=2)/5.0) # for '2010-2019' (corrected)
+    x = annualVectorA_1980.pouts[:-1,:,:]
+    return tran(x)
 
 def calc_date(dt):
-    x = annualVectorA.colegg[:-1,:,:]
+    x = annualVectorA_1980.pouts[:-1,:,:]
     x = remove_feb29(x,
                      dt['days'],
                      dt['isFeb29'],
                      tolist=False)
-    return numpy.log2(numpy.nanmean(x,axis=2)/5.0) # for '2010-2019' (corrected)
+    return tran(x)
 
 dat = cache_npy("tile_dat_%s.npy" %label, calc_dat)
 

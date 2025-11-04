@@ -9,4 +9,4 @@ for tile in modules:
     for dat in modules[tile].tile_dat:
         if dat in tile_dat:
             print("WARNING: Replacing %s with version %s!" %(dat,tile))
-        tile_dat[dat] = modules[tile][dat]
+        tile_dat[dat] = modules[tile].tile_dat[dat]

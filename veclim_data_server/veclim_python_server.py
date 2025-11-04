@@ -67,6 +67,17 @@ def application(environ, start_response):
         date1 = None
         dates = None
     #
+    if pr_v != None:
+        kw = {
+            'date0'         : date0,
+            'date1'         : date1,
+            'pr_x'          : pr_x,
+            'pr_y'          : pr_y,
+            'pr_z'          : pr_z,
+            'pr_v'          : pr_v
+        }
+        return response.respondTiles(start_response, kw)
+    #
     if 'vec' in parameters:
         vector = escape(parameters.get('vec', [''])[0])
     else:

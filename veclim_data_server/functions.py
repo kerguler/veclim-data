@@ -17,7 +17,8 @@ def cache_npy(filename, func, *args, **kwargs):
     try:
         mat = func(*args, **kwargs)
         numpy.save(fildir, mat)
-    except:
+    except Exception as e:
+        print(e, flush=True)
         print("ERROR: Failed to create %s" %filename, flush=True)
         return []
     return mat

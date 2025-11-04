@@ -129,7 +129,11 @@ def application(environ, start_response):
     }
 
     if vector in fun_server.pkg_models.modules:
-        return fun_server.pkg_models.modules[vector].respond(**kw)
+        try:
+            return fun_server.pkg_models.modules[vector].respond(**kw)
+        except:
+            print("ERROR: Problem encountered with request to %s:" %vector, flush=True)
+            print(kw, flush=True)
 
     return response.returnResponse(start_response, response.empty_response)
 

@@ -6,7 +6,7 @@ for _, name, _ in pkgutil.iter_modules(__path__):
 
 tile_dat = {}
 for tile in modules:
-    for dat in modules[tile]:
+    for dat in modules[tile].tile_dat:
         if dat in tile_dat:
             print("WARNING: Replacing %s with version %s!" %(dat,tile))
         tile_dat[dat] = modules[tile][dat]

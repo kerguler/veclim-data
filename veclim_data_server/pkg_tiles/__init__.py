@@ -10,3 +10,6 @@ for tile in modules:
         if dat in tile_dat:
             print("WARNING: Replacing %s with version %s!" %(dat,tile))
         tile_dat[dat] = modules[tile].tile_dat[dat]
+
+print("tile_dat:",flush=True)
+print(tile_dat,flush=True)

@@ -72,8 +72,6 @@ def respondTiles(start_response, kw):
         (pr_x == None) or 
         (pr_y == None) or
         (v_label not in tile_dat)):
-            print("tile_dat:")
-            print(tile_dat)
             ret = {
                 key: {
                     'colors': tile_dat[key]['clscl'],

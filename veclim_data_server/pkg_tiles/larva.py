@@ -35,11 +35,11 @@ def trann2(mat):
     return annmat
 
 def calc_dat():
-    x = annualVectorA.coln2[:-1,:,:]
+    x = annualVectorA.coln2[:-1,:,:].load().values
     return trann2(x)
 
 def calc_date(dt):
-    x = annualVectorA.coln2[:-1,:,:]
+    x = annualVectorA.coln2[:-1,:,:].load().values
     x = remove3_feb29(x,
                      dt['days'],
                      dt['isFeb29'],

@@ -17,11 +17,11 @@ norm = mpl.colors.BoundaryNorm(clbins, cmap.N, clip=True, extend='neither')
 tran = lambda x: numpy.nanmean(x*4000,axis=2)
 
 def calc_dat():
-    x = annualVectorA_1980.iouts[:-1,:,:]
+    x = annualVectorA_1980.iouts[:-1,:,:].load().values
     return tran(x)
 
 def calc_date(dt):
-    x = annualVectorA_1980.iouts[:-1,:,:]
+    x = annualVectorA_1980.iouts[:-1,:,:].load().values
     x = remove3_feb29(x,
                      dt['days'],
                      dt['isFeb29'],

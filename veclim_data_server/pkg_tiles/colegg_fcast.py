@@ -17,7 +17,7 @@ cmap = mpl.colors.ListedColormap([mpl.colors.to_rgba(c) for c in clscl])
 norm = mpl.colors.BoundaryNorm(clbins, cmap.N, clip=True, extend='neither')
 
 def calc_date(dt):
-    x = forecastECMWF.colegg[:-1,:,dt]
+    x = forecastECMWF.colegg[:-1,:,dt].load().values
     return numpy.log2(numpy.nanmean(x,axis=2)/5.0) # for '2010-2019' (corrected)
 
 tile_dat = {}

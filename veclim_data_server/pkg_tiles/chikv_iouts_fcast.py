@@ -18,7 +18,7 @@ norm = mpl.colors.BoundaryNorm(clbins, cmap.N, clip=True, extend='neither')
 tran = lambda x: numpy.nanmean(x*4000,axis=2)
 
 def calc_date(dt):
-    x = forecastECMWF.iouts[:-1,:,dt]
+    x = forecastECMWF.iouts[:-1,:,dt].load().values
     return tran(x)
 
 tile_dat = {}

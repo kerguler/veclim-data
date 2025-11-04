@@ -36,7 +36,7 @@ def trann2(mat):
     return annmat
 
 def calc_date(dt):
-    x = forecastECMWF.coln2[:-1,:,dt]
+    x = forecastECMWF.coln2[:-1,:,dt].load().values
     return trann2(x)
 
 tile_dat = {}

@@ -12,6 +12,8 @@ from veclim_data_server.environ import VEC_HOST, VEC_PORT
 
 import veclim_data_server.fun_server as fun_server
 
+import veclim_data_server.response as response
+
 fcast_time = None
 def set_fcast_time():
     global fcast_time
@@ -21,50 +23,6 @@ def set_fcast_time():
         fun_server.pkg_sims.reload_forecast_var()
         fcast_time = now
         print("Forecast updated",now)
-
-empty_response = ''
-def returnResponse(start_response, response_body):
-    status = '200 OK'
-    response_headers = [
-        ('Access-Control-Allow-Origin', '*'),
-        ('Access-Control-Allow-Methods', 'GET'),
-        ('Access-Control-Max-Age', '3600'),
-        ('Access-Control-Allow-Headers',
-         'Content-Type, Content-Length, Access-Control-Allow-Headers, Authorization, X-Requested-With'),
-        ('Content-Type', 'application/json'),
-        ('Content-Length', str(len(response_body)))
-    ]
-    start_response(status, response_headers)
-    return [response_body.encode()]
-
-def respondAlbopictus(date0,date1,lon,lat,timeseries,meteo_key,sim_key,fcast_key,risk_key,start_response):
-    simclm = fun_server.get_decadal(lon,lat,date0,date1,ts=timeseries)
-    if not simclm:
-        return returnResponse(start_response, empty_response)
-    #
-    vec = fun_server.pkg_surv.modules['albosurv'].presence.search(lon,lat)
-    #
-    ret = {
-        'location': simclm['location'],
-        'date': simclm['date'],
-        'presence': {
-            'albopictus': vec
-        }
-    }
-    #
-    if (not simclm['location']['island']) or (not simclm['date']['valid']):
-        return returnResponse(start_response, json.dumps(ret))
-    #
-    ret[meteo_key] = simclm['clm']
-    ret[sim_key] = simclm['sim']
-    ret[fcast_key] = simclm['fcast']
-    ret[risk_key] = simclm['risk']
-    #
-    if 'surv' in simclm:
-        ret['surv-ts'] = simclm['surv']
-    #
-    response_body = json.dumps(ret)
-    return returnResponse(start_response, response_body)
 
 def application(environ, start_response):
     # Receive the request from the client (method = GET)
@@ -113,7 +71,7 @@ def application(environ, start_response):
     else:
         vector = 'albopictus'
     if not (vector in fun_server.veclist):
-        return returnResponse(start_response, empty_response)
+        return response.returnResponse(start_response, response.empty_response)
     #
     if 'lon' in parameters:
         lon = escape(parameters.get('lon', [''])[0])
@@ -130,7 +88,7 @@ def application(environ, start_response):
     if ((lon == None) or 
         (lat == None) or
         (('date' == None) and ('dates' == None))):
-        return returnResponse(start_response, empty_response)
+        return response.returnResponse(start_response, response.empty_response)
     #
     timeseries = False
     meteo_key = 'meteo-mean'
@@ -157,10 +115,23 @@ def application(environ, start_response):
     # Process request and respond properly
     # ------------------------------------
 
-    if vector == 'albopictus':
-        return respondAlbopictus(date0,date1,lon,lat,timeseries,meteo_key,sim_key,fcast_key,risk_key,start_response)
+    kw = {
+        'date0'         : date0,
+        'date1'         : date1,
+        'lon'           : lon,
+        'lat'           : lat,
+        'timeseries'    : timeseries,
+        'meteo_key'     : meteo_key,
+        'sim_key'       : sim_key,
+        'fcast_key'     : fcast_key,
+        'risk_key'      : risk_key,
+        'start_response': start_response
+    }
 
-    return returnResponse(start_response, empty_response)
+    if vector in fun_server.pkg_models.modules:
+        return fun_server.pkg_models.modules[vector].respond(**kw)
+
+    return response.returnResponse(start_response, response.empty_response)
 
 
 # Instantiate the server (add certfile and keyfile for SSL)

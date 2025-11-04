@@ -4,6 +4,7 @@ import pandas
 import veclim_data_server.pkg_sims as pkg_sims
 import veclim_data_server.pkg_tiles as pkg_tiles
 import veclim_data_server.pkg_surv as pkg_surv
+import veclim_data_server.pkg_models as pkg_models
 
 from veclim_data_server.functions import is_leap_year, getIndex, isel
 

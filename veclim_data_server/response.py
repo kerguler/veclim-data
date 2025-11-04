@@ -82,6 +82,7 @@ def respondTiles(start_response, kw):
                     'labels': tile_dat[key]['cllbl']
                 }
                 for key in tile_dat
+                if 'clscl' in tile_dat[key] and 'cllbl' in tile_dat[key]
             }
             response_body = json.dumps(ret)
             return returnResponse(start_response, response_body)                        

@@ -1,0 +1,15 @@
+services:
+  veclim:
+    container_name: "${VEC_NAME}"
+    build:
+      context: .
+      args:
+        VEC_PORTE: "${VEC_PORTE}"
+    image: "${VEC_NAME}"
+    restart: always
+    ports:
+      - "${VEC_PORTE}:${VEC_PORT}"
+    volumes:
+      - "${VEC_DATA}:${DIR_DATA}"
+    env_file:
+      - .env

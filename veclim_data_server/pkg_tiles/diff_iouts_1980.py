@@ -1,4 +1,4 @@
-label = "diff_colegg_1980"
+label = "diff_iouts_1980"
 print("Loading tiles: %s..." %label, flush=True)
 
 import numpy
@@ -9,42 +9,30 @@ from ..fun_tiles import getTiles
 from ..pkg_sims import annualVectorA, annualVectorA_1980
 
 clscl = ['#50c0ad','#8dcbc1','#c6e0ee','white','#f5d9b8','#e2988a','#f15a48']
-clbins = [-3,-2,-1,1,2,3]
-cllbl = ["1/16","1/8","1/4","1/2","2","4","8","16"]
+clbins = [-20.0,-10.0,-1.0,1.0,10.0,20.0]
+cllbl = ['-30','-20','-10','-1','1','10','20','30']
+
 cmap = mpl.colors.ListedColormap([mpl.colors.to_rgba(c) for c in clscl])
 norm = mpl.colors.BoundaryNorm(clbins, cmap.N, clip=False, extend='both')
 
+tran = lambda x: numpy.nanmean(x*4000,axis=2)
+
 def calc_dat():
-    x = annualVectorA.colegg[:-1,:,:].load().values
-    tmp = numpy.log2(numpy.nanmean(x,axis=2)/5.0)
-    tmp[tmp<-4] = -4
-    tmp[tmp>4] = 4
-    x = annualVectorA_1980.colegg[:-1,:,:].load().values
-    tmpf = numpy.log2(numpy.nanmean(x,axis=2)/5.0)
-    tmpf[tmpf<-4] = -4
-    tmpf[tmpf>4] = 4
-    tmp = tmp-tmpf
-    return tmp
+    x = (annualVectorA.iouts[:-1,:,:]-annualVectorA_1980.iouts[:-1,:,:]).load().values
+    return tran(x)
 
 def calc_date(dt):
-    x = annualVectorA.colegg[:-1,:,:].load().values
+    x = annualVectorA.iouts[:-1,:,:].load().values
     x = remove3_feb29(x,
                      dt['days'],
                      dt['isFeb29'],
                      tolist=False)
-    tmp = numpy.log2(numpy.nanmean(x,axis=2)/5.0)
-    tmp[tmp<-4] = -4
-    tmp[tmp>4] = 4
-    x = annualVectorA_1980.colegg[:-1,:,:].load().values
-    x = remove3_feb29(x,
+    y = annualVectorA_1980.iouts[:-1,:,:].load().values
+    y = remove3_feb29(y,
                      dt['days'],
                      dt['isFeb29'],
                      tolist=False)
-    tmpf = numpy.log2(numpy.nanmean(x,axis=2)/5.0)
-    tmpf[tmpf<-4] = -4
-    tmpf[tmpf>4] = 4
-    tmp = tmp-tmpf
-    return tmp
+    return tran(x-y)
 
 dat = cache_npy("tile_dat_%s.npy" %label, calc_dat)
 

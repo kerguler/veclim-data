@@ -1,4 +1,5 @@
-label = "diff_colegg_1980"
+ssp = "ssp245"
+label = "diff_colegg_%s" %ssp
 print("Loading tiles: %s..." %label, flush=True)
 
 import numpy
@@ -6,7 +7,7 @@ import matplotlib as mpl
 
 from ..functions import get_dates, cache_npy, remove3_feb29
 from ..fun_tiles import getTiles
-from ..pkg_sims import annualVectorA, annualVectorA_1980
+from ..pkg_sims import annualVectorA, annualNASA
 
 clscl = ['#50c0ad','#8dcbc1','#c6e0ee','white','#f5d9b8','#e2988a','#f15a48']
 clbins = [-3,-2,-1,1,2,3]
@@ -15,19 +16,19 @@ cmap = mpl.colors.ListedColormap([mpl.colors.to_rgba(c) for c in clscl])
 norm = mpl.colors.BoundaryNorm(clbins, cmap.N, clip=False, extend='both')
 
 def calc_dat():
-    x = annualVectorA.colegg[:-1,:,:].load().values
+    x = annualNASA.colegg[ssp][:-1,:,:].load().values
     tmp = numpy.log2(numpy.nanmean(x,axis=2)/5.0)
     tmp[tmp<-4] = -4
     tmp[tmp>4] = 4
-    x = annualVectorA_1980.colegg[:-1,:,:].load().values
-    tmpf = numpy.log2(numpy.nanmean(x,axis=2)/5.0)
+    y = annualVectorA.colegg[:-1,:,:].load().values
+    tmpf = numpy.log2(numpy.nanmean(y,axis=2)/5.0)
     tmpf[tmpf<-4] = -4
     tmpf[tmpf>4] = 4
     tmp = tmp-tmpf
     return tmp
 
 def calc_date(dt):
-    x = annualVectorA.colegg[:-1,:,:].load().values
+    x = annualNASA.colegg[ssp][:-1,:,:].load().values
     x = remove3_feb29(x,
                      dt['days'],
                      dt['isFeb29'],
@@ -35,12 +36,12 @@ def calc_date(dt):
     tmp = numpy.log2(numpy.nanmean(x,axis=2)/5.0)
     tmp[tmp<-4] = -4
     tmp[tmp>4] = 4
-    x = annualVectorA_1980.colegg[:-1,:,:].load().values
-    x = remove3_feb29(x,
+    y = annualVectorA.colegg[:-1,:,:].load().values
+    y = remove3_feb29(y,
                      dt['days'],
                      dt['isFeb29'],
                      tolist=False)
-    tmpf = numpy.log2(numpy.nanmean(x,axis=2)/5.0)
+    tmpf = numpy.log2(numpy.nanmean(y,axis=2)/5.0)
     tmpf[tmpf<-4] = -4
     tmpf[tmpf>4] = 4
     tmp = tmp-tmpf

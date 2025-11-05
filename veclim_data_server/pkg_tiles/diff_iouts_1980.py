@@ -18,8 +18,9 @@ norm = mpl.colors.BoundaryNorm(clbins, cmap.N, clip=False, extend='both')
 tran = lambda x: numpy.nanmean(x*4000,axis=2)
 
 def calc_dat():
-    x = (annualVectorA.iouts[:-1,:,:]-annualVectorA_1980.iouts[:-1,:,:]).load().values
-    return tran(x)
+    x = annualVectorA.iouts[:-1,:,:].load().values
+    y = annualVectorA_1980.iouts[:-1,:,:].load().values
+    return tran(x-y)
 
 def calc_date(dt):
     x = annualVectorA.iouts[:-1,:,:].load().values

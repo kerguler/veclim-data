@@ -19,8 +19,9 @@ norm = mpl.colors.BoundaryNorm(clbins, cmap.N, clip=False, extend='both')
 tran = lambda x: numpy.nanmean(x*4000,axis=2)
 
 def calc_dat():
-    x = (annualVectorA.iouts[:-1,:,:].load().values - annualNASA.iouts[ssp][:-1,:,:])
-    return tran(x)
+    x = annualVectorA.iouts[:-1,:,:].load().values
+    y = annualNASA.iouts[ssp][:-1,:,:]
+    return tran(y-x)
 
 def calc_date(dt):
     x = annualVectorA.iouts[:-1,:,:].load().values
@@ -33,7 +34,7 @@ def calc_date(dt):
                      dt['days'],
                      dt['isFeb29'],
                      tolist=False)
-    return tran(x-y)
+    return tran(y-x)
 
 dat = cache_npy("tile_dat_%s.npy" %label, calc_dat)
 

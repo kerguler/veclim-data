@@ -16,7 +16,7 @@ cmap = mpl.colors.ListedColormap([mpl.colors.to_rgba(c) for c in clscl])
 norm = mpl.colors.BoundaryNorm(clbins, cmap.N, clip=False, extend='both')
 
 def calc_dat():
-    x = annualNASA.colegg[ssp][:-1,:,:].load().values
+    x = annualNASA.colegg[ssp][:-1,:,:]
     tmp = numpy.log2(numpy.nanmean(x,axis=2)/5.0)
     tmp[tmp<-4] = -4
     tmp[tmp>4] = 4
@@ -28,7 +28,7 @@ def calc_dat():
     return tmp
 
 def calc_date(dt):
-    x = annualNASA.colegg[ssp][:-1,:,:].load().values
+    x = annualNASA.colegg[ssp][:-1,:,:]
     x = remove3_feb29(x,
                      dt['days'],
                      dt['isFeb29'],

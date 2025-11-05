@@ -19,7 +19,7 @@ norm = mpl.colors.BoundaryNorm(clbins, cmap.N, clip=False, extend='both')
 tran = lambda x: numpy.nanmean(x,axis=2)
 
 def calc_dat():
-    x = (annualVectorA.pouts[:-1,:,:]-annualNASA.pouts[ssp][:-1,:,:]).load().values
+    x = (annualVectorA.pouts[:-1,:,:].load().values - annualNASA.pouts[ssp][:-1,:,:])
     return tran(x)
 
 def calc_date(dt):
@@ -28,7 +28,7 @@ def calc_date(dt):
                      dt['days'],
                      dt['isFeb29'],
                      tolist=False)
-    y = annualNASA.pouts[ssp][:-1,:,:].load().values
+    y = annualNASA.pouts[ssp][:-1,:,:]
     y = remove3_feb29(y,
                      dt['days'],
                      dt['isFeb29'],

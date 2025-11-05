@@ -8,7 +8,7 @@ services:
     image: "${VEC_NAME}"
     restart: unless-stopped
     ports:
-      - "${VEC_PORTE}:80"
+      - "${VEC_PORTE}:${VEC_PORT}"
     volumes:
       - "${VEC_DATA}:${DIR_DATA}"
     env_file:

@@ -17,12 +17,9 @@ services:
   veclim-data-server-nginx:
     image: nginx:stable
     container_name: "${VEC_NAME}-nginx"
-    environment:
-      - VEC_PORT=${VEC_PORT}
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
       - nginx_cache:/var/cache/nginx
-    command: /bin/sh -c "envsubst < nginx.conf.template > nginx.conf && nginx -g 'daemon off;'"
     ports:
       - "${VEC_PORTX}:80"
     depends_on:

@@ -150,7 +150,7 @@ def application(environ, start_response):
 # Instantiate the server (add certfile and keyfile for SSL)
 httpd = wsgiserver.WSGIServer(application,
                               host="0.0.0.0",
-                              port="80")
+                              port=80)
 #
 print("Preparing the datasets...",flush=True)
 set_fcast_time()

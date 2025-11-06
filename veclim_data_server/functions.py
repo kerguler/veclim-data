@@ -13,7 +13,6 @@ def cache_npy(filename, func, *args, **kwargs):
             return mat
         except:
             pass
-    print("Caching %s" %filename, flush=True)
     try:
         mat = func(*args, **kwargs)
         numpy.save(fildir, mat)

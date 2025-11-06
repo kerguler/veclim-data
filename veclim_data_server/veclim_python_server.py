@@ -76,9 +76,6 @@ def application(environ, start_response):
             'pr_z'          : pr_z,
             'pr_v'          : pr_v
         }
-        #
-        print("LOG: responding to request:",kw,flush=True)
-        #
         return response.respondTiles(start_response, kw)
     #
     if 'vec' in parameters:

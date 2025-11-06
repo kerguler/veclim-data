@@ -64,9 +64,6 @@ def saveTile(label, x, y, z, mat):
                 pass
     #
     file = "%s/%d.webp" %(subpath, y)
-    #
-    print("LOG: Saving %s" %file, flush=True)
-    #
     imwrite(file, mat, format='webp')
 
 def loadTile(label, x, y, z):
@@ -76,9 +73,6 @@ def loadTile(label, x, y, z):
     #
     file = "%s/%d.webp" %(subpath, y)
     if os.path.exists(file):
-        #
-        print("LOG: Loading %s" %file, flush=True)
-        #
         return imread(file, extension='.webp')
     else:
         return []

@@ -1,0 +1,15 @@
+services:
+  veclim-data-server:
+    container_name: "${VEC_NAME}"
+    build:
+      context: .
+      args:
+        VEC_PORTE: "${VEC_PORTE}"
+    image: "${VEC_NAME}"
+    restart: unless-stopped
+    ports:
+      - "${VEC_PORTE}:80"
+    volumes:
+      - "${VEC_DATA}:${DIR_DATA}"
+    env_file:
+      - .env

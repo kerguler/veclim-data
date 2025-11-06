@@ -205,6 +205,9 @@ def get_decadal(lon, lat, date0, date1=False, ts=False):
     return ret
 
 def respond(start_response, kw):
+    #
+    print("LOG: Respondidng to",kw,flush=True)
+    #
     if not 'date0' in kw:
         return returnResponse(start_response, 'Missing argument: date0')
     date0 = kw['date0']

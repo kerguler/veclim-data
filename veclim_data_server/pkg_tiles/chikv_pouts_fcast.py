@@ -34,14 +34,17 @@ def load_dates(date0,date1):
     if numpy.abs(numpy.sum(dt) - (dt1-dt0).days) > 7:
         return {'error': "Forecast dates do not match the request!"}
     #
-    dat_dt = cache_npy("tile_dat_%s_%s_%s.npy" %(label,date0,date1), calc_date, dt)
+    dt0lab = dt0.strftime("%Y-%m-%d")
+    dt1lab = dt1.strftime("%Y-%m-%d")
+    #
+    dat_dt = cache_npy("tile_dat_%s_%s_%s.npy" %(label,dt0lab,dt1lab), calc_date, dt)
     #
     return {
         'fun': getTiles,
         'dat': dat_dt,
         'cmap': cmap,
         'norm': norm,
-        'label': '',
+        'label': "%s_%s_%s" %(label,dt0lab,dt1lab),
         'cllbl': cllbl,
         'clscl': clscl
     }

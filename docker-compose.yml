@@ -21,7 +21,7 @@ services:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
       - nginx_cache:/var/cache/nginx   # cache storage
     ports:
-      - "${VEC_PORTE}:80"
+      - "${VEC_PORTX}:80"
     depends_on:
       - veclim-data-server
 

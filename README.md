@@ -25,5 +25,4 @@ Please note that you will need to configure a .env file in the docker/VEClim dir
  - DIR_PYTHON=The dist-paackages directory of the python installation inside the docker image
  - VEC_DATA=The external data directory containing the environmental datasets and simulation outputs
  - VEC_HOST=Desired host IP of the python server
- - VEC_PORT=Desired internal port of the python server
  - VEC_PORTE=Desired external port of the python server

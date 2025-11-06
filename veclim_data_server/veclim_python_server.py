@@ -8,8 +8,6 @@ import pandas
 
 from datetime import datetime
 
-from veclim_data_server.environ import VEC_HOST, VEC_PORT
-
 import veclim_data_server.pkg_sims as pkg_sims
 import veclim_data_server.pkg_models as pkg_models
 
@@ -151,8 +149,8 @@ def application(environ, start_response):
 
 # Instantiate the server (add certfile and keyfile for SSL)
 httpd = wsgiserver.WSGIServer(application,
-                              host=VEC_HOST,
-                              port=int(VEC_PORT))
+                              host="0.0.0.0",
+                              port="80")
 #
 print("Preparing the datasets...",flush=True)
 set_fcast_time()

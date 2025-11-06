@@ -8,7 +8,7 @@ services:
     image: "${VEC_NAME}"
     restart: unless-stopped
     expose:
-      - "${VEC_PORT}"
+      - 80
     volumes:
       - "${VEC_DATA}:${DIR_DATA}"
     env_file:

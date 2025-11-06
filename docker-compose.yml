@@ -13,18 +13,3 @@ services:
       - "${VEC_DATA}:${DIR_DATA}"
     env_file:
       - .env
-
-  veclim-data-server-nginx:
-    image: nginx:stable-alpine
-    container_name: "${VEC_NAMEX}"
-    depends_on:
-      - veclim-data-server
-    ports:
-      - "${VEC_PORTX}:80"
-    volumes:
-      - "${VEC_TILE}:${DIR_TILE}:ro"
-      - ./nginx.conf:/etc/nginx/nginx.conf:ro
-    environment:
-      - CORS_ALLOW_ORIGIN=*
-    mem_limit: "512m"
-    restart: unless-stopped

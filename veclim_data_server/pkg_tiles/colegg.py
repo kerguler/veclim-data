@@ -44,6 +44,10 @@ def load_dates(date0,date1):
         return {}
     #
     dt = get_dates(date0, date1=date1, ts=False)
+    #
+    print(date0,date1)
+    print(dt)
+    #
     dat_dt = cache_npy("tile_dat_%s_%s_%s.npy" %(label,dt['date0'],dt['date1']), calc_date, dt)
     #
     return {

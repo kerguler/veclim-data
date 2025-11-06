@@ -34,7 +34,7 @@ def load_dates(date0,date1):
         return {'error': "Forecast dates do not match the request!"}
     #
     dt0lab = dt0.strftime("%Y-%m-%d")
-    dt1lab = dt0.strftime("%Y-%m-%d")
+    dt1lab = dt1.strftime("%Y-%m-%d")
     #
     dat_dt = cache_npy("tile_dat_%s_%s_%s.npy" %(label,dt0lab,dt1lab), calc_date, dt)
     #
@@ -43,7 +43,7 @@ def load_dates(date0,date1):
         'dat': dat_dt,
         'cmap': cmap,
         'norm': norm,
-        'label': "%s_%s_%s" %(label,dt['date0'],dt['date1']),
+        'label': "%s_%s_%s" %(label,dt0lab,dt1lab),
         'cllbl': cllbl,
         'clscl': clscl
     }

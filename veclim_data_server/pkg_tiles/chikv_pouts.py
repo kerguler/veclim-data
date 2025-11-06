@@ -52,7 +52,7 @@ def load_dates(date0,date1):
         'dat': dat_dt,
         'cmap': cmap,
         'norm': norm,
-        'label': '',
+        'label': "%s_%s_%s" %(label,dt['date0'],dt['date1']),
         'cllbl': cllbl,
         'clscl': clscl
     }

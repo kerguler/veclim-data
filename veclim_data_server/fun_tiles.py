@@ -55,7 +55,7 @@ def plotCanvas(fig):
 
 def saveTile(label, x, y, z, mat):
     subpath = DIR_TILE
-    for pth in ['tiles', label, str(z), str(x)]:
+    for pth in [label, str(z), str(x)]:
         subpath += "/"+pth
         if not os.path.exists(subpath):
             try:
@@ -68,7 +68,7 @@ def saveTile(label, x, y, z, mat):
 
 def loadTile(label, x, y, z):
     subpath = DIR_TILE
-    for pth in ['tiles', label, str(z), str(x)]:
+    for pth in [label, str(z), str(x)]:
         subpath += "/"+pth
     #
     file = "%s/%d.webp" %(subpath, y)

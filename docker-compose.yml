@@ -7,23 +7,9 @@ services:
         VEC_PORTE: "${VEC_PORTE}"
     image: "${VEC_NAME}"
     restart: unless-stopped
-    expose:
-      - 80
+    ports:
+      - "${VEC_PORTE}:80"
     volumes:
       - "${VEC_DATA}:${DIR_DATA}"
     env_file:
       - .env
-
-  veclim-data-server-nginx:
-    image: nginx:stable
-    container_name: "${VEC_NAME}-nginx"
-    volumes:
-      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
-      - nginx_cache:/var/cache/nginx
-    ports:
-      - "${VEC_PORTE}:80"
-    depends_on:
-      - veclim-data-server
-
-volumes:
-  nginx_cache:

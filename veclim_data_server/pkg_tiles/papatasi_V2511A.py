@@ -47,7 +47,7 @@ def load_dates(date0,date1):
     dat_dt = cache_npy("tile_dat_%s_%s_%s.npy" %(label,dt['date0'],dt['date1']), calc_date, dt)
     #
     return {
-        'fun': getTiles,
+        'fun': getCERRATiles,
         'dat': dat_dt,
         'cmap': cmap,
         'norm': norm,

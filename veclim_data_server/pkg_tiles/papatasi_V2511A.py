@@ -24,7 +24,7 @@ dat = cache_ncdf("tile_dat_%s.nc" %label, calc_dat)
 tile_dat = {
     'label': label,
     'fun': getCERRATiles,
-    'dat': dat['female_mn'],
+    'dat': dat,#['female_mn'],
     'cmap': cmap,
     'norm': norm,
     'cllbl': cllbl,

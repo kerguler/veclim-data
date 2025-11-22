@@ -2,6 +2,7 @@ label = "papatasi_V2511A"
 print("Loading tiles: %s..." %label, flush=True)
 
 import numpy
+import xarray
 import matplotlib as mpl
 
 from ..functions import cache_ncdf
@@ -17,7 +18,13 @@ norm = mpl.colors.BoundaryNorm(clbins, cmap.N, clip=True, extend='neither')
 
 def calc_dat():
     x = papatasi_V2511A.sand['female_mn'].mean(dim='time',skipna=True)
-    return numpy.log2(x/10000.0)
+    x2 = xarray.apply_ufunc(
+        lambda z: numpy.log2(z / 10000.0),
+        x,
+        dask="parallelized",
+        vectorize=True,
+    )
+    return x2
 
 dat = cache_ncdf("tile_dat_%s.nc" %label, calc_dat)
 

@@ -4,7 +4,7 @@ print("Loading tiles: %s..." %label, flush=True)
 import numpy
 import matplotlib as mpl
 
-from ..functions import get_dates, cache_ncdf, remove3_feb29
+from ..functions import cache_ncdf
 from ..fun_tiles import getCERRATiles
 from ..pkg_sims import papatasi_V2511A
 

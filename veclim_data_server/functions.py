@@ -22,6 +22,31 @@ def cache_npy(filename, func, *args, **kwargs):
         return []
     return mat
 
+def cache_ncdf(filename, func, *args, **kwargs):
+    fildir = "%s/%s" %(DIR_CACHE,filename)
+    if os.path.exists(fildir):
+        try:
+            mat = xr_open_lazy(fildir)
+            return mat
+        except:
+            pass
+    try:
+        mat = func(*args, **kwargs)
+        mat.to_netcdf(fildir,
+                engine="netcdf4", 
+                compute=True,
+                encoding={
+                    key: {
+                        "zlib": True, 
+                        "complevel": 9
+                    } for key in mat.data_vars
+                })
+    except Exception as e:
+        print(e, flush=True)
+        print("ERROR: Failed to create %s" %filename, flush=True)
+        return []
+    return mat
+
 def xr_open_lazy(path, engine=None, chunks="auto"):
     kw = {"chunks": chunks}
     if engine:

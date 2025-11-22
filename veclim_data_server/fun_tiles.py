@@ -18,6 +18,7 @@ imsize = 256
 fig_dpi = 100
 proj0 = cartopy.crs.PlateCarree(central_longitude=180.0-0.125)
 proj0s = cartopy.crs.epsg(3035)
+proj0pcm = cartopy.crs.PlateCarree()
 proj1 = cartopy.crs.Mercator.GOOGLE
 # proj1 = cartopy.crs.epsg(3857)
 extbound = [-180, 180, -90+0.125, 90+0.125]
@@ -83,7 +84,7 @@ def buffArray(mat):
     buff.seek(0)
     return buff.read()
 
-def getTiles(dat, pr_z, pr_x, pr_y, cmap=None, norm=None, label=''):
+def getRawTiles(grd, dat, pr_z, pr_x, pr_y, cmap=None, norm=None, label=''):
     if label:
         carray = loadTile(label,pr_x,pr_y,pr_z)
         if len(carray) > 0:
@@ -108,13 +109,36 @@ def getTiles(dat, pr_z, pr_x, pr_y, cmap=None, norm=None, label=''):
     # Note: This has to come after setting the axis limits
     # Note: vmin and vmax should be set (not left as None)
     try:
-        submap['ax'].imshow(dat,
+        if grd == 'ERA5':
+            submap['ax'].imshow(dat,
                             origin="upper",
                             interpolation='none',
                             transform=proj0,
                             cmap=cmap,
                             norm=norm,
                             extent=extbound)
+        elif grd == 'CERRA':
+            submap['ax'].pcolormesh(
+                (dat['longitude']+180)%360-180, 
+                dat['latitude'], 
+                dat,
+                cmap=cmap,
+                norm=norm,
+                shading="none",
+                transform=proj0pcm)
+            submap['ax'].set_xlim([pxbounds[0], pxbounds[2]])
+            submap['ax'].set_ylim([pxbounds[1], pxbounds[3]])
+        elif grd == 'shp':
+            if cmap == None and norm == None:
+                dat.plot(edgecolor=dat['edgecolor'], 
+                         facecolor=dat['facecolor'],
+                         linewidth=2,
+                         ax=submap['ax'])
+            else:
+                dat.plot(column='mean',
+                         cmap=cmap,
+                         norm=norm,
+                         ax=submap['ax'])
     except Exception as e:
         pass
     #
@@ -127,50 +151,11 @@ def getTiles(dat, pr_z, pr_x, pr_y, cmap=None, norm=None, label=''):
     #
     return buffr
 
-# TO DO
-# -----
-# This needs to be combined with getTiles 
-# -----
-def getShpTiles(shp, pr_z, pr_x, pr_y, cmap=None, norm=None, label=''):
-    if label:
-        carray = loadTile(label,pr_x,pr_y,pr_z)
-        if len(carray) > 0:
-            return buffArray(carray)
-    #
-    submap = initSubmap()
-    #
-    npieces = 2**pr_z
-    pxbounds = submap['pxb']
-    xw = (pxbounds[2] - pxbounds[0])/npieces
-    yh = (pxbounds[3] - pxbounds[1])/npieces
-    pxbounds = [
-        pxbounds[0] + pr_x*xw,
-        pxbounds[3] - (pr_y+1)*yh,
-        pxbounds[0] + (pr_x+1)*xw,
-        pxbounds[3] - pr_y*yh,
-    ]
-    #
-    submap['ax'].set_xlim([pxbounds[0], pxbounds[2]])
-    submap['ax'].set_ylim([pxbounds[1], pxbounds[3]])
-    #
-    # Note: This has to come after setting the axis limits
-    # Note: vmin and vmax should be set (not left as None)
-    if cmap == None and norm == None:
-        shp.plot(edgecolor=shp['edgecolor'], 
-                 facecolor=shp['facecolor'],
-                 linewidth=2,
-                 ax=submap['ax'])
-    else:
-        shp.plot(column='mean',
-                 cmap=cmap,
-                 norm=norm,
-                 ax=submap['ax'])
-    #
-    canvas = plotCanvas(submap['fig'])
-    buffr = buffArray(canvas['array'])
-    plt.close(submap['fig'])
-    #
-    if label:
-        saveTile(label,pr_x,pr_y,pr_z,canvas['array'])
-    #
-    return buffr
+def getTiles(dat, pr_z, pr_x, pr_y, cmap=None, norm=None, label=''):
+    return getRawTiles('ERA5', dat, pr_z, pr_x, pr_y, cmap=cmap, norm=norm, label=label)
+
+def getShpTiles(dat, pr_z, pr_x, pr_y, cmap=None, norm=None, label=''):
+    return getRawTiles('shp', dat, pr_z, pr_x, pr_y, cmap=cmap, norm=norm, label=label)
+
+def getCERRATiles(dat, pr_z, pr_x, pr_y, cmap=None, norm=None, label=''):
+    return getRawTiles('CERRA', dat, pr_z, pr_x, pr_y, cmap=cmap, norm=norm, label=label)

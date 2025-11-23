@@ -5,6 +5,17 @@ import xarray
 
 from veclim_data_server.environ import DIR_CACHE
 
+from datetime import datetime, timedelta
+Feb29 = datetime(2020,2,29).timetuple().tm_yday
+
+not_clim_keys = [
+    "inv",
+    "lon",
+    "lat",
+    "day0",
+    "day1",
+]
+
 def cache_npy(filename, func, *args, **kwargs):
     fildir = "%s/%s" %(DIR_CACHE,filename)
     if os.path.exists(fildir):
@@ -133,17 +144,6 @@ def remove3_feb29(mat,days,isFeb29,tolist=True):
     tmp[:,:,isFeb29+1] = 0.5*(tmp[:,:,isFeb29]+tmp[:,:,isFeb29+1])
     tmp = numpy.delete(tmp,isFeb29,axis=2)
     return tmp.tolist() if tolist else tmp
-
-from datetime import datetime, timedelta
-Feb29 = datetime(2020,2,29).timetuple().tm_yday
-
-not_clim_keys = [
-    "inv",
-    "lon",
-    "lat",
-    "day0",
-    "day1",
-]
 
 def calc_list(clms):
     return {

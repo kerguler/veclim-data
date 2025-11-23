@@ -20,13 +20,13 @@ def get_location(lon, lat):
         'island': int(island > 0.1)
     }
 
-def get_papatasi_days(loni, lati, idates, isFeb29):
+def get_papatasi_days(loni, lati, idates, isFeb29, ts=True):
     papatasi = pkg_sims.modules['papatasi_V2511A']
     #
     return {
-        "simL": remove_feb29(isel(papatasi.female_lo,x=loni,y=lati),idates,isFeb29),
-        "simH": remove_feb29(isel(papatasi.female_hi,x=loni,y=lati),idates,isFeb29),
-        "simM": remove_feb29(isel(papatasi.female_mn,x=loni,y=lati),idates,isFeb29)
+        "simL": remove_feb29(isel(papatasi.female_lo['female_lo'],x=loni,y=lati),idates,isFeb29),
+        "simH": remove_feb29(isel(papatasi.female_hi['female_hi'],x=loni,y=lati),idates,isFeb29),
+        "simM": remove_feb29(isel(papatasi.female_mn['female_mn'],x=loni,y=lati),idates,isFeb29)
     }
 
 def get_sandfly(lon, lat, date0, date1=False, ts=False):

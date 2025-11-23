@@ -53,12 +53,16 @@ def xr_open_lazy(path, engine=None, chunks="auto"):
         kw["engine"] = engine
     return xarray.open_dataset(path, **kw)
 
-def isel(nc,lon=None,lat=None):
+def isel(nc,lon=None,lat=None,x=None,y=None):
     kw = {}
     if type(lon) != type(None):
         kw['lon'] = lon
     if type(lat) != type(None):
         kw['lat'] = lat
+    if type(x) != type(None):
+        kw['x'] = x
+    if type(y) != type(None):
+        kw['y'] = y
     try:
         return nc.isel(**kw).load().values
     except:

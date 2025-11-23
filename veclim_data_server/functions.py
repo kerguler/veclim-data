@@ -59,7 +59,11 @@ def isel(nc,lon=None,lat=None):
         kw['lon'] = lon
     if type(lat) != type(None):
         kw['lat'] = lat
-    return nc.isel(**kw).load().values
+    try:
+        return nc.isel(**kw).load().values
+    except:
+        kw['method'] = "nearest"
+        return nc.sel(**kw).load().values
 
 def stdwarn(msg):
     print("ERROR",msg,flush=True)

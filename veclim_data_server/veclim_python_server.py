@@ -140,7 +140,8 @@ def application(environ, start_response):
     if vector in pkg_models.modules:
         try:
             return pkg_models.modules[vector].respond(start_response, kw)
-        except:
+        except Exception as e:
+            print(e, flush=True)
             print("ERROR: Problem encountered with request to %s:" %vector, flush=True)
             print(kw, flush=True)
 

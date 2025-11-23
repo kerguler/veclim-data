@@ -24,9 +24,9 @@ def get_papatasi_days(loni, lati, idates, isFeb29):
     papatasi = pkg_sims.modules['papatasi_V2511A']
     #
     return {
-        "simL": remove_feb29(papatasi.sand['female_lo'].isel(x=loni,y=lati),idates,isFeb29),
-        "simH": remove_feb29(papatasi.sand['female_hi'].isel(x=loni,y=lati),idates,isFeb29),
-        "simM": remove_feb29(papatasi.sand['female_mn'].isel(x=loni,y=lati),idates,isFeb29)
+        "simL": remove_feb29(papatasi.female_lo.isel(x=loni,y=lati),idates,isFeb29),
+        "simH": remove_feb29(papatasi.female_hi.isel(x=loni,y=lati),idates,isFeb29),
+        "simM": remove_feb29(papatasi.female_mn.isel(x=loni,y=lati),idates,isFeb29)
     }
 
 def get_sandfly(lon, lat, date0, date1=False, ts=False):

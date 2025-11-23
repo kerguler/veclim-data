@@ -17,7 +17,7 @@ cmap = mpl.colors.ListedColormap([mpl.colors.to_rgba(c) for c in clscl])
 norm = mpl.colors.BoundaryNorm(clbins, cmap.N, clip=True, extend='neither')
 
 def calc_dat():
-    x = papatasi_V2511A.female_mn.mean(dim='time',skipna=True)
+    x = papatasi_V2511A.female_md.mean(dim='time',skipna=True)
     x2 = xarray.apply_ufunc(
         lambda z: numpy.log2(z / 10000.0),
         x,
@@ -31,7 +31,7 @@ dat = cache_ncdf("tile_dat_%s.nc" %label, calc_dat)
 tile_dat = {
     'label': label,
     'fun': getCERRATiles,
-    'dat': dat['female_mn'],
+    'dat': dat['female_md'],
     'cmap': cmap,
     'norm': norm,
     'cllbl': cllbl,

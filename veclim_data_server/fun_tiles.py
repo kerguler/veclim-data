@@ -124,7 +124,7 @@ def getRawTiles(grd, dat, pr_z, pr_x, pr_y, cmap=None, norm=None, label=''):
                 dat,
                 cmap=cmap,
                 norm=norm,
-                shading="none",
+                shading="auto",
                 transform=proj0pcm)
             submap['ax'].set_xlim([pxbounds[0], pxbounds[2]])
             submap['ax'].set_ylim([pxbounds[1], pxbounds[3]])

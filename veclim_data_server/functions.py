@@ -64,7 +64,7 @@ def xr_open_lazy(path, engine=None, chunks="auto"):
         kw["engine"] = engine
     return xarray.open_dataset(path, **kw)
 
-def isel(nc,lon=None,lat=None,x=None,y=None):
+def isel(nc,lon=None,lat=None,x=None,y=None,ret_df=False):
     kw = {}
     if type(lon) != type(None):
         kw['lon'] = lon
@@ -75,10 +75,12 @@ def isel(nc,lon=None,lat=None,x=None,y=None):
     if type(y) != type(None):
         kw['y'] = y
     try:
-        return nc.isel(**kw).load().values
+        tmp = nc.isel(**kw).load()
+        return tmp if ret_df else tmp.values
     except:
         kw['method'] = "nearest"
-        return nc.sel(**kw).load().values
+        tmp = nc.sel(**kw).load()
+        return tmp if ret_df else tmp.values
 
 def stdwarn(msg):
     print("ERROR",msg,flush=True)

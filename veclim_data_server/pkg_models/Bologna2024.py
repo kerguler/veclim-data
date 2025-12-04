@@ -18,7 +18,7 @@ def respond(start_response, kw):
     lat = kw['lat']
     #
     simclm = {
-        model: isel(sims.ncs[model].eggs,lon=lon,lat=lat)
+        model: isel(sims.ncs[model].eggs,lon=lon,lat=lat).tolist()
         for model in sims.models
     }
     #
@@ -27,7 +27,7 @@ def respond(start_response, kw):
     #
     tmp = isel(surv.surv.eggs,lon=lon,lat=lat,ret_df=True)
     survclm = {
-        'eggs': tmp.values
+        'eggs': tmp.tolist()
     }
     #
     if not survclm:
@@ -35,7 +35,7 @@ def respond(start_response, kw):
     #
     ret = {
         'location': {'lon': float(tmp.lon), 'lat': float(tmp.lat)},
-        'date': sims.dates,
+        'date': sims.dates.tolist(),
         'models': simclm,
         'surv': survclm
     }

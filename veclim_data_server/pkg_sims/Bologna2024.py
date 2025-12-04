@@ -13,11 +13,11 @@ models = [
     "Stacked Machine Learning"
 ]
 
-ncs = [
-    xr_open_lazy("%s/sims/Bologna2024/sims_Bologna2024_%d_%s.nc" %(DIR_DATA,id,model))
+ncs = {
+    model: xr_open_lazy("%s/sims/Bologna2024/sims_Bologna2024_%d_%s.nc" %(DIR_DATA,id,model))
     for id, model in enumerate(models)
-]
+}
 
-lons = ncs[0].lon.load().values
-lats = ncs[0].lat.load().values
-dates = ncs[0].yrwk.load().values
+lons = ncs[models[0]].lon.load().values
+lats = ncs[models[0]].lat.load().values
+dates = ncs[models[0]].yrwk.load().values

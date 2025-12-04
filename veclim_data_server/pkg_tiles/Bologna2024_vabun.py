@@ -1,6 +1,7 @@
 label = "Bologna2024_vabun"
 print("Loading tiles: %s..." %label, flush=True)
 
+import numpy
 import matplotlib as mpl
 
 from ..functions import cache_npy
@@ -15,7 +16,7 @@ norm = mpl.colors.BoundaryNorm(clbins, cmap.N, clip=True, extend='neither')
 
 def calc_dat():
     x = Bologna2024.surv.eggs.load().values > 0.0
-    return x
+    return numpy.array(x,dtype=numpy.float64)
 
 dat = cache_npy("tile_dat_Bologna2024.npy", calc_dat)
 

@@ -8,7 +8,7 @@ from ..environ import DIR_DATA
 from ..fun_tiles import getTiles
 
 model = 0
-mlbl = 'albopictus (sPop)'
+mlbl = "albopictus\ (sPop)"
 
 clscl = ['#00000000', '#fbe590', '#fcc65a', '#f7a034', '#f47b2c', '#e85229', '#d82929', '#931b1f']
 clbins = [-4,-3,-2,-1,0,1,2,3,4]

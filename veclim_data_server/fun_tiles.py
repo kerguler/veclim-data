@@ -139,6 +139,17 @@ def getRawTiles(grd, dat, pr_z, pr_x, pr_y, cmap=None, norm=None, label=''):
                          cmap=cmap,
                          norm=norm,
                          ax=submap['ax'])
+        elif grd == 'Bologna2024':
+            bolbounds = [0.95, 20.05, 40, 49.05]
+            submap['ax'].set_extent(bolbounds, crs=proj0pcm)
+            submap['ax'].imshow(dat,
+                                origin="upper",
+                                interpolation='none',
+                                transform=proj0pcm,
+                                cmap=cmap,
+                                norm=norm,
+                                regrid_shape=dat.shape,
+                                extent=bolbounds)
     except Exception as e:
         pass
     #
@@ -159,3 +170,6 @@ def getShpTiles(dat, pr_z, pr_x, pr_y, cmap=None, norm=None, label=''):
 
 def getCERRATiles(dat, pr_z, pr_x, pr_y, cmap=None, norm=None, label=''):
     return getRawTiles('CERRA', dat, pr_z, pr_x, pr_y, cmap=cmap, norm=norm, label=label)
+
+def getBologna2024Tiles(dat, pr_z, pr_x, pr_y, cmap=None, norm=None, label=''):
+    return getRawTiles('Bologna2024', dat, pr_z, pr_x, pr_y, cmap=cmap, norm=norm, label=label)

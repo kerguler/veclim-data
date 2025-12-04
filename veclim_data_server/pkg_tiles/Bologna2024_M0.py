@@ -5,7 +5,7 @@ import numpy
 import matplotlib as mpl
 
 from ..environ import DIR_DATA
-from ..fun_tiles import getTiles
+from ..fun_tiles import getBologna2024Tiles
 
 model = 0
 mlbl = 'albopictus (sPop)'
@@ -21,7 +21,7 @@ dat = numpy.load("%s/sims/Bologna2024/tile_dat_Bologna2024_%d_%s.npy" %(DIR_DATA
 
 tile_dat = {
     'label': label,
-    'fun': getTiles,
+    'fun': getBologna2024Tiles,
     'dat': dat,
     'cmap': cmap,
     'norm': norm,

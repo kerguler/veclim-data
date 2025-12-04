@@ -4,7 +4,7 @@ print("Loading tiles: %s..." %label, flush=True)
 import matplotlib as mpl
 
 from ..functions import cache_npy
-from ..fun_tiles import getTiles
+from ..fun_tiles import getBologna2024Tiles
 from ..pkg_surv import Bologna2024
 
 clscl = ['#00000000', '#f15a48']
@@ -21,7 +21,7 @@ dat = cache_npy("tile_dat_Bologna2024.npy", calc_dat)
 
 tile_dat = {
     'label': label,
-    'fun': getTiles,
+    'fun': getBologna2024Tiles,
     'dat': dat,
     'cmap': cmap,
     'norm': norm,

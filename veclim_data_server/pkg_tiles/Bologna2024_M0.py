@@ -17,7 +17,7 @@ cllbl = ["1/16 (%s)" %(mlbl),"1/8","1/4","1/2","1","2","4","8","16"]
 cmap = mpl.colors.ListedColormap([mpl.colors.to_rgba(c) for c in clscl])
 norm = mpl.colors.BoundaryNorm(clbins, cmap.N, clip=True, extend='neither')
 
-dat = numpy.array([]) # numpy.load("%s/sims/Bologna2024/tile_dat_%d_%s.npy" %(DIR_DATA,model,mlbl),mmap_mode='r')
+dat = numpy.load("%s/sims/Bologna2024/tile_dat_Bologna2024_%d_%s.npy" %(DIR_DATA,model,mlbl),mmap_mode='r')
 
 tile_dat = {
     'label': label,

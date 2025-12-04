@@ -27,7 +27,7 @@ def respond(start_response, kw):
     #
     tmp = isel(surv.surv.eggs,lon=lon,lat=lat,ret_df=True)
     survclm = {
-        'eggs': tmp.tolist()
+        'eggs': tmp.values.tolist()
     }
     #
     if not survclm:

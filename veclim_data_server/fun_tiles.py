@@ -141,7 +141,7 @@ def getRawTiles(grd, dat, pr_z, pr_x, pr_y, cmap=None, norm=None, label=''):
                          ax=submap['ax'])
         elif grd == 'Bologna2024':
             bolbounds = [0.95, 20.05, 40, 49.05]
-            submap['ax'].set_extent(bolbounds, crs=proj0pcm)
+            # submap['ax'].set_extent(bolbounds, crs=proj0pcm)
             submap['ax'].imshow(dat,
                                 origin="upper",
                                 interpolation='none',

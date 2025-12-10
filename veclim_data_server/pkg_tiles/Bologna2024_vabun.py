@@ -10,7 +10,7 @@ from ..pkg_surv import Bologna2024
 
 clscl = ['#00000000', '#fbe590', '#f7a034', '#e85229', '#931b1f']
 clbins = [0,1,2,3,4,5]
-cllbl = ["Unknown/absent", "VectAbundance (2019-2022) - 1 year", "VectAbundance (2019-2022) - 2 years", "VectAbundance (2019-2022) - 3 years", "VectAbundance (2019-2022) - 4 years"]
+cllbl = ["Unknown/absent", "1 year", "2 years", "3 years", "4 years"]
 
 cmap = mpl.colors.ListedColormap([mpl.colors.to_rgba(c) for c in clscl])
 norm = mpl.colors.BoundaryNorm(clbins, cmap.N, clip=True, extend='neither')

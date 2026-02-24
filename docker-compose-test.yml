@@ -1,11 +1,11 @@
 services:
   veclim-data-server-test:
-    container_name: "${VEC_NAME}"
+    container_name: veclim-data-server-test
     build:
       context: .
       args:
         VEC_PORTE: "${VEC_PORTE}"
-    image: "${VEC_NAME}"
+    image: veclim-data-server-test
     restart: unless-stopped
     expose:
       - 80
@@ -16,14 +16,14 @@ services:
 
   veclim-data-server-test-nginx:
     image: nginx:stable
-    container_name: "${VEC_NAME}-nginx"
+    container_name: veclim-data-server-test-nginx
     volumes:
       - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
-      - nginx_cache-test:/var/cache/nginx
+      - nginx_cache_test:/var/cache/nginx
     ports:
       - "${VEC_PORTE}:80"
     depends_on:
       - veclim-data-server-test
 
 volumes:
-  nginx_cache-test:
+  nginx_cache_test:

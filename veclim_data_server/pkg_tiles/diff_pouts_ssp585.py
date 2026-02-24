@@ -5,7 +5,7 @@ print("Loading tiles: %s..." %label, flush=True)
 import numpy
 import matplotlib as mpl
 
-from ..functions import get_dates, cache_npy, remove3_feb29
+from ..functions import get_dates, cache_npy, remove_feb29
 from ..fun_tiles import getTiles
 from ..pkg_sims import annualVectorA, annualNASA
 
@@ -25,12 +25,12 @@ def calc_dat():
 
 def calc_date(dt):
     x = annualVectorA.pouts[:-1,:,:].load().values
-    x = remove3_feb29(x,
+    x = remove_feb29(x,
                      dt['days'],
                      dt['isFeb29'],
                      tolist=False)
     y = annualNASA.pouts[ssp][:-1,:,:]
-    y = remove3_feb29(y,
+    y = remove_feb29(y,
                      dt['days'],
                      dt['isFeb29'],
                      tolist=False)

@@ -1,0 +1,118 @@
+import json
+import numpy
+
+from ..response import returnResponse
+from ..functions import get_dates, remove_feb29
+import veclim_data_server.pkg_sims as pkg_sims
+
+def get_papatasi_days(loni, lati, idates, isFeb29, ts=True):
+    papatasi = pkg_sims.modules['papatasi_V2511A']
+    #
+    return {
+        "simL": remove_feb29(isel(papatasi.female_lo['female_lo'],x=loni,y=lati),idates,isFeb29),
+        "simH": remove_feb29(isel(papatasi.female_hi['female_hi'],x=loni,y=lati),idates,isFeb29),
+        "simM": remove_feb29(isel(papatasi.female_md['female_md'],x=loni,y=lati),idates,isFeb29)
+    }
+
+def get_sandfly(lon, lat, date0, date1=False, ts=False):
+    papatasi = pkg_sims.modules['papatasi_V2511A_PRT']
+    ret = {
+        'location': {
+            'lon': lon,
+            'lat': lat,
+            'pid': None,
+            'name': None,
+            'island': 0
+        },
+        'date': {}
+    }
+    #
+    prop = papatasi.getPolyProp(papatasi.db.polys,lon,lat)
+    if prop is None:
+        return ret
+    pid = prop['Official_Co'].iloc[0]
+    name = prop['Official_Na'].iloc[0]
+    ret['location']['pid'] = pid
+    ret['location']['name'] = name
+    ret['location']['island'] = 1
+    #
+    dats = get_dates(date0, date1=date1, ts=ts)
+    ret['date'] = {key:dats[key] for key in ['date0','date1','days','valid']}
+    ret['date']['days'] = ret['date']['days'][[0,-1]].tolist()
+    if not ret['date']['valid']:
+        return ret
+    #
+    val = remove_feb29(papatasi.db.mat[papatasi.db.var].sel(poly=pid),
+                       dats['days'], dats['isFeb29'], fill=None, mean=True)
+    #
+    up = papatasi.up_times[pid]
+    down = papatasi.down_times[pid]
+    peak_up = papatasi.peak_up_times[pid]
+    peak_down = papatasi.peak_down_times[pid]
+    #
+    risk = papatasi.classify_risk(dats['days']+1, 
+                                  up, 
+                                  down, 
+                                  peak_up, 
+                                  peak_down)
+    #
+    ret['sim'] = {
+        'V2511A_PRT': val.tolist()
+    }
+    #
+    ret['risk'] = {
+        'V2511A_PRT': {
+            'up': up.tolist(),
+            'down': down.tolist(),
+            'peak_up': peak_up.tolist(),
+            'peak_down': peak_down.tolist(),
+            'risk': risk.tolist()
+        }
+    }
+    #
+    return ret
+
+def respond(start_response, kw):
+    if not 'date0' in kw:
+        return returnResponse(start_response, 'Missing argument: date0')
+    date0 = kw['date0']
+    #
+    if not 'date1' in kw:
+        return returnResponse(start_response, 'Missing argument: date1')
+    date1 = kw['date1']
+    #
+    if not 'lon' in kw:
+        return returnResponse(start_response, 'Missing argument: lon')
+    lon = kw['lon']
+    #
+    if not 'lat' in kw:
+        return returnResponse(start_response, 'Missing argument: lat')
+    lat = kw['lat']
+    #
+    if not 'timeseries' in kw:
+        return returnResponse(start_response, 'Missing argument: timeseries')
+    timeseries = kw['timeseries']
+    #
+    if not 'sim_key' in kw:
+        return returnResponse(start_response, 'Missing argument: sim_key')
+    sim_key = kw['sim_key']
+    #
+    if not 'risk_key' in kw:
+        return returnResponse(start_response, 'Missing argument: risk_key')
+    risk_key = kw['risk_key']
+    #
+    simclm = get_sandfly(lon,lat,date0,date1,ts=timeseries)
+    if ((not simclm) or
+        (not simclm['location']['island']) or 
+        (not simclm['date']['valid'])):
+        return returnResponse(start_response, json.dumps(simclm))
+    #
+    ret = {
+        'location': simclm['location'],
+        'date': simclm['date']
+    }
+    ret[sim_key] = simclm['sim']
+    ret[risk_key] = simclm['risk']
+    #
+    response_body = json.dumps(ret)
+    return returnResponse(start_response, response_body)

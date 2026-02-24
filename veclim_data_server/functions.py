@@ -119,33 +119,30 @@ def calc_cut(vec,lim,lab):
         return pandas.cut(vec, bins=lim, include_lowest=False, right=False, labels=lab).tolist()
     return lab[numpy.where(numpy.array(lim) > vec)[0][0] - 1]
 
-def remove_feb29(vec,days,isFeb29,fill=0.0):
-    tmp = vec[days-1]
-    if len(isFeb29) == 0:
-        if fill == None:
-            return [None if numpy.isnan(a) else a for a in tmp]
-        else:
-            return numpy.nan_to_num(tmp,nan=fill).tolist()
-    tmp[isFeb29+1] = 0.5*(tmp[isFeb29]+tmp[isFeb29+1])
-    if fill == None:
-        return [None if numpy.isnan(a) else a for a in numpy.delete(tmp,isFeb29)]
-    else:
-        return numpy.nan_to_num(numpy.delete(tmp,isFeb29),nan=fill).tolist()
-
-def remove2_feb29(mat,days,isFeb29):
-    tmp = mat[:,days-1]
-    if len(isFeb29) == 0:
-        return tmp
-    tmp[:,isFeb29+1] = 0.5*(tmp[:,isFeb29]+tmp[:,isFeb29+1])
-    return numpy.delete(tmp,isFeb29,axis=1).tolist()
-
-def remove3_feb29(mat,days,isFeb29,tolist=True):
-    tmp = mat[:,:,days-1]
-    if len(isFeb29) == 0:
-        return tmp
-    tmp[:,:,isFeb29+1] = 0.5*(tmp[:,:,isFeb29]+tmp[:,:,isFeb29+1])
-    tmp = numpy.delete(tmp,isFeb29,axis=2)
-    return tmp.tolist() if tolist else tmp
+def remove_feb29(vec, days, isFeb29, fill=0.0, mean=True):
+    vec = numpy.asarray(vec, dtype=float)
+    days = numpy.asarray(days, dtype=int)
+    isFeb29 = numpy.asarray(isFeb29, dtype=int)
+    # Build output by indexing vec with day indices (days is 0-based)
+    tmp = numpy.take(vec, indices=days, axis=-1)
+    #
+    if isFeb29.size:
+        if mean:
+            # For Feb29 positions, days[pos] is the collapsed Feb28 index
+            feb28_idx = days[isFeb29]
+            mar01_idx = numpy.clip(feb28_idx + 1, 0, vec.shape[-1] - 1)
+            #
+            feb28_vals = numpy.take(vec, indices=feb28_idx, axis=-1)
+            mar01_vals = numpy.take(vec, indices=mar01_idx, axis=-1)
+            #
+            tmp[..., isFeb29] = 0.5 * (feb28_vals + mar01_vals)
+            #
+    if fill is not None:
+        return numpy.nan_to_num(tmp, nan=fill).tolist()
+        #
+    flat = tmp.reshape(-1)
+    flat = pandas.Series(flat).where(~numpy.isnan(flat), None).to_numpy()
+    return flat.reshape(tmp.shape).tolist()
 
 def calc_list(clms):
     return {
@@ -169,33 +166,47 @@ def get_clim(get_days, loni, lati, pr0, pr1, ts=False):
     #
     return ret
 
-def get_dates(date0, date1=False, ts=False):
-    valid = True
-    if (not date1) or (date1 < date0):
+def get_dates(date0, date1=None):
+    """
+    Datetime-based date generator.
+
+    Returns
+    -------
+    dict with:
+        dates : numpy array of datetime.datetime
+        day_index_365 : numpy int array (0..364)
+        isFeb29 : numpy int array (positions in date list)
+        date0 : ISO string
+        date1 : ISO string
+        valid : int
+    """
+    date0 = pandas.Timestamp(date0)
+    date1 = pandas.Timestamp(date1) if date1 is not None else None
+    #
+    valid = 1
+    if date1 is None or date1 < date0:
         date1 = date0
-        valid = False
+        valid = 0
+    # Internal pandas index
+    dates_index = pandas.date_range(start=date0, end=date1, freq="D")
+    # 1..366
+    dayofyear = dates_index.dayofyear.to_numpy()
+    # Leap year mask (already numpy array)
+    is_leap = dates_index.is_leap_year
+    # Collapse leap years to 365-day calendar
+    day_365 = dayofyear.copy()
+    day_365[is_leap & (dayofyear >= 60)] -= 1
+    days = day_365 - 1  # convert to 0-based index
     #
-    isFeb29 = []
-    idates = []
-    ddates = []
-    while date0 <= date1:
-        ddates.append(date0)
-        idates.append(date0.timetuple().tm_yday-1 if is_leap_year(date0.year) and date0.timetuple().tm_yday>Feb29 else date0.timetuple().tm_yday)
-        if date0.month==2 and date0.day==29:
-            isFeb29.append(len(ddates)-1)
-            ddates.append(date0)
-            idates.append(Feb29-1)
-        date0 += timedelta(days=1)
-    #
-    ddates = numpy.array(ddates)
-    idates = numpy.array(idates)
-    isFeb29 = numpy.array(isFeb29)
+    isFeb29 = numpy.flatnonzero((dates_index.month == 2) & (dates_index.day == 29))
+    # Convert to datetime.datetime objects (NOT numpy datetime64)
+    dates = dates_index.to_pydatetime()
     #
     return {
-        "dates": ddates,
-        "days": idates,
-        "isFeb29": isFeb29,
-        "date0": ddates[0].strftime("%Y-%m-%d"),
-        "date1": ddates[-1].strftime("%Y-%m-%d"),
-        "valid": int(valid)
+        "dates": numpy.array(dates, dtype=object),
+        "days": days.astype(numpy.int32),
+        "isFeb29": isFeb29.astype(numpy.int32),
+        "date0": dates[0].strftime("%Y-%m-%d"),
+        "date1": dates[-1].strftime("%Y-%m-%d"),
+        "valid": int(valid),
     }

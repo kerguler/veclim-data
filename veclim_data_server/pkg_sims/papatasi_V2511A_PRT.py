@@ -55,14 +55,21 @@ def mergeClose(up_times, down_times, sep):
     return new_up_times, new_down_times
 
 def crossings_to_dict(cross_bool):
-    stacked = cross_bool.stack(evt=("poly", "time"))
-    stacked = stacked.where(stacked, drop=True)
-    mi = stacked.indexes["evt"]  # MultiIndex (poly, time)
-    out = {}
-    for poly in mi.levels[0]:
-        # select times for this poly (might be empty)
-        times = mi[mi.get_level_values("poly") == poly].get_level_values("time").to_list()
-        out[poly] = times
+    # Stack poly/time -> a 1D MultiIndex and convert to a pandas Series (this computes)
+    s = cross_bool.stack(evt=("poly", "time")).to_series()
+    # Keep only True entries
+    s = s[s]
+    # Group by poly level and collect time values
+    out = (
+        s.index.to_frame(index=False)
+         .groupby("poly")["time"]
+         .apply(list)
+         .to_dict()
+    )
+    # Ensure all polys are present (even if no crossings)
+    # (if you truly want every poly key)
+    for poly in cross_bool["poly"].values:
+        out.setdefault(poly, [])
     return out
 
 def getCrossings(da,thresh=1.0,sep=0.0):

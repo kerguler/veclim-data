@@ -166,7 +166,7 @@ def get_clim(get_days, loni, lati, pr0, pr1, ts=False):
     #
     return ret
 
-def get_dates(date0, date1=None):
+def get_dates(date0, date1=None, ts=True):
     """
     Datetime-based date generator.
 

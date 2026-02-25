@@ -5,15 +5,6 @@ from ..response import returnResponse
 from ..functions import get_dates, remove_feb29
 import veclim_data_server.pkg_sims as pkg_sims
 
-def get_papatasi_days(loni, lati, idates, isFeb29, ts=True):
-    papatasi = pkg_sims.modules['papatasi_V2511A']
-    #
-    return {
-        "simL": remove_feb29(isel(papatasi.female_lo['female_lo'],x=loni,y=lati),idates,isFeb29),
-        "simH": remove_feb29(isel(papatasi.female_hi['female_hi'],x=loni,y=lati),idates,isFeb29),
-        "simM": remove_feb29(isel(papatasi.female_md['female_md'],x=loni,y=lati),idates,isFeb29)
-    }
-
 def get_sandfly(lon, lat, date0, date1=False, ts=False):
     papatasi = pkg_sims.modules['papatasi_V2511A_PRT']
     ret = {

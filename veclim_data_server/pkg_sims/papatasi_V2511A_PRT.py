@@ -264,7 +264,7 @@ class dbPortugal:
         return means, grids
 
 db = dbPortugal("newegg",
-                filename="%s/sims/ISMED-CLIM/V2511A_PRT/sims_model_V2511A_Portugal_newegg_poly.nc" %DIR_DATA,
+                filename="%s/sims/ISMED-CLIM/V2511A_PRT/sims_model_V2511A_Portugal_newegg_mean_poly.nc" %DIR_DATA,
                 shapefile="%s/sims/ISMED-CLIM/V2511A_PRT/georef-portugal-concelho-millesime.shp" %DIR_DATA,
                 verbose=False)
 

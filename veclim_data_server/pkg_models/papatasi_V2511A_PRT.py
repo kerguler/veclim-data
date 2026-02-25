@@ -68,6 +68,9 @@ def respond(start_response, kw):
         return returnResponse(start_response, 'Missing argument: date0')
     date0 = kw['date0']
     #
+    if date0 is None:
+        return returnResponse(start_response, 'Missing argument: date0')
+    #
     if not 'date1' in kw:
         return returnResponse(start_response, 'Missing argument: date1')
     date1 = kw['date1']

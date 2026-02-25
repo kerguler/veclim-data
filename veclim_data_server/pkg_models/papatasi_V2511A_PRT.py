@@ -41,23 +41,23 @@ def get_sandfly(lon, lat, date0, date1=False, ts=False):
     peak_up = papatasi.peak_up_times[pid]
     peak_down = papatasi.peak_down_times[pid]
     #
-    risk = papatasi.classify_risk(dats['days']+1, 
+    risk = papatasi.classify_days(dats['days']+1, 
                                   up, 
                                   down, 
                                   peak_up, 
                                   peak_down)
     #
     ret['sim'] = {
-        'V2511A_PRT': val.tolist()
+        'V2511A_PRT': val
     }
     #
     ret['risk'] = {
         'V2511A_PRT': {
-            'up': up.tolist(),
-            'down': down.tolist(),
-            'peak_up': peak_up.tolist(),
-            'peak_down': peak_down.tolist(),
-            'risk': risk.tolist()
+            'up': up,
+            'down': down,
+            'peak_up': peak_up,
+            'peak_down': peak_down,
+            'risk': risk
         }
     }
     #

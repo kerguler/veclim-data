@@ -194,15 +194,15 @@ def classify_days(
     for day in days:
         if not (1 <= day <= ndays):
             raise ValueError(f"Day {day} outside 1..{ndays}")
-
+            #
         in_peak = _in_any_interval(day, peak_up, peak_down, ndays=ndays)
         if in_peak:
             out.append(2)
             continue
-
+            #
         in_active = _in_any_interval(day, up, down, ndays=ndays)
         out.append(1 if in_active else 0)
-
+        #
     return out
 
 class dbPortugal:

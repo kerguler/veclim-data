@@ -21,8 +21,8 @@ def get_sandfly(lon, lat, date0, date1=False, ts=False):
     prop = papatasi.getPolyProp(papatasi.db.polys,lon,lat)
     if prop is None:
         return ret
-    pid = prop['Official_Co'].iloc[0]
-    name = prop['Official_Na'].iloc[0]
+    pid = prop['Official_Co']
+    name = prop['Official_Na']
     ret['location']['pid'] = pid
     ret['location']['name'] = name
     ret['location']['island'] = 1

@@ -209,7 +209,7 @@ class dbPortugal:
         #
         self.polys = gpd.read_file(self.shapefile)
         self.polys = self.polys.to_crs("EPSG:4326")
-        self.poly_ids = self.polys['Official_Co'].iloc[:,0]
+        self.poly_ids = self.polys['Official_Co']
         #
         if self.filename == "":
             self.mat, self.encoding = panelCube(self.nc,self.poly_ids)

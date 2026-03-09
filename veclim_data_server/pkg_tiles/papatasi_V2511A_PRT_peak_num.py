@@ -1,7 +1,8 @@
-label = "papatasi_V2511A_PRT_newegg"
+label = "papatasi_V2511A_PRT_peak_num"
 print("Loading tiles: %s..." %label, flush=True)
 
 import numpy
+import datetime
 import matplotlib as mpl
 
 from ..functions import cache_npy
@@ -10,13 +11,13 @@ from ..pkg_sims import papatasi_V2511A_PRT
 
 def calc_dat():
     dat = papatasi_V2511A_PRT.db.polys.copy()
-    unit_scale = 1e4
-    dat['mean'] = dat['Means'] / unit_scale
+    up_times = papatasi_V2511A_PRT.peak_up_times
+    dat['mean'] = [len(up_times[a]) for a in up_times]
     return dat.to_crs(proj1)
 
 dat = cache_npy("tile_dat_%s.npy" %label, calc_dat)
 
-clbins = numpy.arange(dat['mean'].min(),dat['mean'].max())
+clbins = numpy.arange(5)
 cllbl = [f"{b}" for b in clbins]
 
 cmap = mpl.colormaps["YlOrRd"].resampled(len(clbins) - 1)

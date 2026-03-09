@@ -15,13 +15,10 @@ from shapely.geometry import Point
 from shapely import points
 
 def mergeClose(up_times, down_times, sep):
-    cmp = lambda gap: gap < sep
-    #
     new_up_times = {}
     new_down_times = {}
     #
-    ids = list(up_times.keys())
-    for poly in ids:
+    for poly in up_times.keys():
         ups = list(up_times.get(poly, []))
         downs = list(down_times.get(poly, []))
         #
@@ -30,27 +27,25 @@ def mergeClose(up_times, down_times, sep):
             new_down_times[poly] = []
             continue
         #
-        keep_up = [ups[0]]
-        keep_down = []
-        #
+        merged_up = [ups[0]]
+        merged_down = []
         cur_down = downs[0]
         #
         for u, d in zip(ups[1:], downs[1:]):
-            gap = u - cur_down
-            #
-            if cmp(gap):
-                # merge: drop this up, extend current down
+            if u - cur_down < sep:
                 cur_down = max(cur_down, d)
             else:
-                # close current peak, start new one
-                keep_down.append(cur_down)
-                keep_up.append(u)
+                merged_down.append(cur_down)
+                merged_up.append(u)
                 cur_down = d
         #
-        keep_down.append(cur_down)
+        merged_down.append(cur_down)
         #
-        new_up_times[poly] = keep_up
-        new_down_times[poly] = keep_down
+        # remove peaks with width < sep
+        keep = [(u, d) for u, d in zip(merged_up, merged_down) if (d - u) >= sep]
+        #
+        new_up_times[poly] = [u for u, d in keep]
+        new_down_times[poly] = [d for u, d in keep]
         #
     return new_up_times, new_down_times
 
@@ -280,5 +275,5 @@ up_times, down_times = getCrossings(db.mat["newegg"],
                                     sep=14.0)
 
 peak_up_times, peak_down_times = getCrossings(db.mat["newegg"], 
-                                              thresh=1000.0, 
+                                              thresh=10000.0, 
                                               sep=14.0)

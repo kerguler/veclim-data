@@ -36,6 +36,7 @@ def get_sandfly(lon, lat, date0, date1=False, ts=False):
     val = remove_feb29(papatasi.db.mat[papatasi.db.var].sel(poly=pid),
                        dats['days'], dats['isFeb29'], fill=None, mean=True)
     #
+    # times: 0..364
     up = papatasi.up_times[pid]
     down = papatasi.down_times[pid]
     peak_up = papatasi.peak_up_times[pid]

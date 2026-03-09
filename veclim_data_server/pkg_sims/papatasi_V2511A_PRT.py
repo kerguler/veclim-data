@@ -62,14 +62,14 @@ def crossings_to_dict(cross_bool):
     # Group by poly level and collect time values
     out = (
         s.index.to_frame(index=False)
-         .groupby("poly")["time"]
+         .groupby("poly", sort=False)["time"]
          .apply(list)
          .to_dict()
     )
     # Ensure all polys are present (even if no crossings)
     # (if you truly want every poly key)
-    for poly in cross_bool["poly"].values:
-        out.setdefault(poly, [])
+    out = {str(poly): out.get(poly, []) for poly in cross_bool["poly"].values}
+    #
     return out
 
 def getCrossings(da,thresh=1.0,sep=0.0):

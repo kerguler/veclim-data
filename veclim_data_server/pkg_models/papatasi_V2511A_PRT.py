@@ -4,9 +4,11 @@ import numpy
 from ..response import returnResponse
 from ..functions import get_dates, remove_feb29
 import veclim_data_server.pkg_sims as pkg_sims
+import veclim_data_server.pkg_surv as pkg_surv
 
 def get_sandfly(lon, lat, date0, date1=False, ts=False):
     papatasi = pkg_sims.modules['papatasi_V2511A_PRT']
+    surv = pkg_surv.modules['papatasi_V2511A_PRT']
     ret = {
         'location': {
             'lon': lon,
@@ -48,6 +50,10 @@ def get_sandfly(lon, lat, date0, date1=False, ts=False):
                                   peak_up, 
                                   peak_down)
     #
+    srv = []
+    if pid in surv.surv:
+        srv = surv.surv[pid]
+    #
     ret['sim'] = {
         'V2511A_PRT': {
             papatasi.db.var: val
@@ -62,6 +68,10 @@ def get_sandfly(lon, lat, date0, date1=False, ts=False):
             'peak_down': peak_down,
             'risk': risk
         }
+    }
+    #
+    ret['surv'] = {
+        'adult_norm': srv
     }
     #
     return ret

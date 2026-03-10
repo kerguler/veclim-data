@@ -52,7 +52,7 @@ def get_sandfly(lon, lat, date0, date1=False, ts=False):
     #
     srv = []
     if pid in surv.surv:
-        srv = surv.surv[pid]
+        srv = [surv.surv[pid][doy] for doy in dats['days']]
     #
     ret['sim'] = {
         'V2511A_PRT': {

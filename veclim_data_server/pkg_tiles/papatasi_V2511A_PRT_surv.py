@@ -19,7 +19,7 @@ def calc_dat():
 
 dat = cache_npy("tile_dat_%s.npy" %label, calc_dat)
 
-clbins = [0,1,2]
+clbins = numpy.array([0,1,2])
 cllbl = ["Unknown/Absent", "Reported (EDENext)"]
 
 cmap = mpl.colormaps["YlOrRd"].resampled(len(clbins) - 1)

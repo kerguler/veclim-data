@@ -14,7 +14,7 @@ def calc_dat():
     srv = surv_PRT.surv
     dat['mean'] = 0
     for key in srv:
-        dat.loc[dat['Official_Co'].iloc[:,0]==key,'mean'] = 1
+        dat.loc[dat['Official_Co']==key,'mean'] = 1
     return dat.to_crs(proj1)
 
 dat = cache_npy("tile_dat_%s.npy" %label, calc_dat)

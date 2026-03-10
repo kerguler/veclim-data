@@ -49,7 +49,9 @@ def get_sandfly(lon, lat, date0, date1=False, ts=False):
                                   peak_down)
     #
     ret['sim'] = {
-        'V2511A_PRT': val
+        'V2511A_PRT': {
+            papatasi.db.var: val
+        }
     }
     #
     ret['risk'] = {

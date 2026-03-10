@@ -18,7 +18,7 @@ def calc_dat():
 dat = cache_npy("tile_dat_%s.npy" %label, calc_dat)
 
 clbins = numpy.arange(5)
-cllbl = [f"{b}" for b in clbins]
+cllbl = [f"{b}" for b in clbins[:-1]]
 
 cmap = mpl.colormaps["YlOrRd"].resampled(len(clbins) - 1)
 norm = mpl.colors.BoundaryNorm(clbins, cmap.N)

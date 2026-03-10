@@ -6,11 +6,12 @@ import matplotlib as mpl
 
 from ..functions import cache_npy
 from ..fun_tiles import getShpTiles, proj1
-from ..pkg_surv import papatasi_V2511A_PRT
+from ..pkg_sims import papatasi_V2511A_PRT as sims_PRT
+from ..pkg_surv import papatasi_V2511A_PRT as surv_PRT
 
 def calc_dat():
-    dat = papatasi_V2511A_PRT.db.polys.copy()
-    srv = papatasi_V2511A_PRT.surv
+    dat = sims_PRT.db.polys.copy()
+    srv = surv_PRT.surv
     dat['mean'] = 0
     for key in srv:
         dat.loc[dat['Official_Co'].iloc[:,0]==key,'mean'] = 1

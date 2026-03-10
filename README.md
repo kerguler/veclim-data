@@ -1,5 +1,10 @@
 # VEClim's data server
 
+# Building and running the server
+In the root directory of the server, run the following:
+
+- `docker-compose -p veclim-data -f docker-compose.yml up -d --build`
+
 # Example usage
  Run the server with the following:
 

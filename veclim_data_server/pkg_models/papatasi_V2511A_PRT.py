@@ -120,7 +120,9 @@ def respond(start_response, kw):
     }
     ret[sim_key] = simclm['sim']
     ret[risk_key] = simclm['risk']
-    ret['surv'] = simclm['surv']
+    #
+    if 'surv' in simclm:
+        ret['surv-ts'] = simclm['surv']
     #
     response_body = json.dumps(ret)
     return returnResponse(start_response, response_body)

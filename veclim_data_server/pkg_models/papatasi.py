@@ -49,7 +49,7 @@ def get_sandfly(lon, lat, date0, date1=False, ts=False):
     ret['date']['days'] = ret['date']['days'][[0,-1]].tolist()
     if ((not ret['location']['island']) or 
         (not ret['date']['valid']) or 
-        numpy.any([d < 90 for d in dats['days']]) or
+        numpy.any([d < 89 for d in dats['days']]) or
         numpy.any([d.year != 2015 for d in dats['dates']])):
         return ret
     #

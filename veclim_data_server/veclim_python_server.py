@@ -97,7 +97,7 @@ def application(environ, start_response):
     #
     if ((lon == None) or 
         (lat == None) or
-        (('date' == None) and ('dates' == None))):
+        ((date0 == None) and (date1 == None) and (dates == None))):
         return response.returnResponse(start_response, response.empty_response)
     #
     timeseries = False

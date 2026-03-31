@@ -1,5 +1,6 @@
 import json
 import numpy
+from datetime import datetime
 
 from ..response import empty_response, returnResponse
 from ..functions import get_dates, get_clim, getIndex, remove_feb29
@@ -38,6 +39,9 @@ def get_papatasi_days(loni, lati, idates, isFeb29):
 def get_sandfly(lon, lat, date0, date1=False, ts=False):
     papatasi2015 = pkg_sims.modules['papatasi2015']
     #
+    ts = True
+    date0 = datetime(2015,4,1)
+    date1 = datetime(2015,12,31)
     dats = get_dates(date0, date1=date1, ts=ts)
     ret = {
         'location': get_location(lon, lat, papatasi2015.longitude, papatasi2015.latitude),

@@ -224,6 +224,40 @@ Example:
 
 ---
 
+## `alert-ts`
+
+Customised communication panel for ISMED-CLIM's Zoonotic Living Lab (LL4)
+
+| field | description |
+| ---- | ----------- |
+| `Season length (days)` | Duration of the active season in days. |
+| `Number of peaks` | Number of high-risk periods. |
+| `Season start(s) (S0->S1)` | Date(s) when the active season starts. |
+| `Season end(s) (S1->S0)` | Date(s) when the active season ends. |
+| `Peak start(s) (S1->S2)` | Date(s) when the peak season starts. |
+| `Peak end(s) (S2->S1)` | Date(s) when the peak season ends. |
+| `Pre-season alert` | Notification before the first active season starts. |
+| `Start-of-season alert` | Notification before the peak season starts. |
+| `Low activity alert` | Notification when the peak activity ends. |
+| `End-of-season alert` | Notification after the final active season ends. |
+
+Example:
+
+```json
+"alert-ts": {
+  'Season length (days)': 192, 
+  'Number of peaks': 1, 
+  'Season start(s) (S0->S1)': '19/05/2026', 
+  'Season end(s) (S1->S0)': '27/11/2026', 
+  'Peak start(s) (S1->S2)': '08/07/2026', 
+  'Peak end(s) (S2->S1)': '22/10/2026', 
+  'Pre-season alert': '05/05/2026', 
+  'Start-of-season alert': '24/06/2026', 
+  'Low activity alert': '22/10/2026', 
+  'End-of-season alert': '11/12/2026'
+}
+```
+
 # Notes
 
 * Coordinates are automatically mapped to the nearest spatial unit in the VEClim database.

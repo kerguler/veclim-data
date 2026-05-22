@@ -50,6 +50,8 @@ def get_sandfly(lon, lat, date0, date1=False, ts=False):
                                   peak_up, 
                                   peak_down)
     #
+    notify = papatasi.getWarning(pid)
+    #
     srv = []
     if pid in surv.surv:
         srv = [surv.surv[pid][doy] for doy in dats['days']]
@@ -73,6 +75,8 @@ def get_sandfly(lon, lat, date0, date1=False, ts=False):
     ret['surv'] = {
         'adult_norm': srv
     }
+    #
+    ret['alert'] = notify
     #
     return ret
 
@@ -123,6 +127,9 @@ def respond(start_response, kw):
     #
     if 'surv' in simclm:
         ret['surv-ts'] = simclm['surv']
+    #
+    if 'alert' in simclm:
+        ret['alert-ts'] = simclm['alert']
     #
     response_body = json.dumps(ret)
     return returnResponse(start_response, response_body)

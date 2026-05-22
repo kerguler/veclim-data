@@ -14,6 +14,9 @@ from shapely.prepared import prep
 from shapely.geometry import Point
 from shapely import points
 
+import datetime
+import calendar
+
 def mergeClose(up_times, down_times, sep):
     new_up_times = {}
     new_down_times = {}
@@ -200,6 +203,74 @@ def classify_days(
         #
     return out
 
+def times_to_dates(dict_times):
+    year = datetime.date.today().year
+    is_leap = calendar.isleap(year)
+    out = {}
+    for pid, times in dict_times.items():
+        dates = []
+        for doy in times:
+            # shift by +1 day after Feb 28 in leap years
+            if is_leap and doy >= 59:  # 59 = Feb 28 in 0-based index
+                doy_shifted = doy + 1
+            else:
+                doy_shifted = doy
+            date = datetime.datetime(year, 1, 1) + datetime.timedelta(days=int(doy_shifted))
+            dates.append(date)
+        out[pid] = dates
+    return out
+
+def getWarning(pid):
+    ret = {
+        'Season length (days)': (down_times[pid][-1]-up_times[pid][0]) if len(up_times[pid])>0 else numpy.nan,
+        'Number of peaks': len(up_times[pid]),
+        'Season start(s) (S0->S1)': "%s" %(", ".join(["%s" %(up_dates[pid][i].strftime("%d/%m/%Y")) for i in range(len(up_dates[pid]))])) if len(up_dates[pid])>0 else '',
+        'Season end(s) (S1->S0)': "%s" %(", ".join(["%s" %(down_dates[pid][i].strftime("%d/%m/%Y")) for i in range(len(down_dates[pid]))])) if len(down_dates[pid])>0 else '',
+        'Peak start(s) (S1->S2)': "%s" %(", ".join(["%s" %(peak_up_dates[pid][i].strftime("%d/%m/%Y")) for i in range(len(peak_up_dates[pid]))])) if len(peak_up_dates[pid])>0 else '',
+        'Peak end(s) (S2->S1)': "%s" %(", ".join(["%s" %(peak_down_dates[pid][i].strftime("%d/%m/%Y")) for i in range(len(peak_down_dates[pid]))])) if len(peak_down_dates[pid])>0 else '',
+        'Pre-season alert': "%s" %(", ".join(["%s" %((up_dates[pid][i] + datetime.timedelta(days=int(-14))).strftime("%d/%m/%Y")) for i in [0]])) if len(up_dates[pid])>0 else '',
+        'Start-of-season alert': "%s" %(", ".join(["%s" %((peak_up_dates[pid][i] + datetime.timedelta(days=int(-14))).strftime("%d/%m/%Y")) for i in [0]])) if len(peak_up_dates[pid])>0 else '',
+        'Low activity alert': "%s" %(", ".join(["%s" %((peak_down_dates[pid][i] + datetime.timedelta(days=int(0))).strftime("%d/%m/%Y")) for i in [-1]])) if len(peak_down_dates[pid])>0 else '',
+        'End-of-season alert': "%s" %(", ".join(["%s" %((down_dates[pid][i] + datetime.timedelta(days=int(14))).strftime("%d/%m/%Y")) for i in [-1]])) if len(down_dates[pid])>0 else '',
+        'Legend': """
+<div class="legend">
+  <h3>Legend</h3>
+
+  <p>
+    This output summarises the predicted seasonal dynamics of vector activity at a given location
+    (longitude, latitude, area code, and area name). The season length (in days) denotes the total
+    duration of the active period, while the number of peaks indicates how many high-activity
+    periods occur within the season.
+  </p>
+
+  <p><strong>Seasonal phases are defined using discrete risk levels:</strong></p>
+  <ul>
+    <li><strong>S0:</strong> low risk</li>
+    <li><strong>S1:</strong> moderate risk</li>
+    <li><strong>S2:</strong> high risk</li>
+  </ul>
+
+  <p><strong>Transitions between these states define key dates:</strong></p>
+  <ul>
+    <li><strong>Season start (S0 &rarr; S1):</strong> onset of the active season</li>
+    <li><strong>Season end (S1 &rarr; S0):</strong> termination of the active season</li>
+    <li><strong>Peak start (S1 &rarr; S2):</strong> beginning of high-risk period</li>
+    <li><strong>Peak end (S2 &rarr; S1):</strong> return from high to moderate risk</li>
+  </ul>
+
+  <p>
+    Each transition is accompanied by notification dates designed to provide staged early warnings
+    of seasonal changes: a pre-season alert is issued two weeks before the first season start
+    (S0 &rarr; S1), followed by a start-of-season alert two weeks before the peak season onset
+    (if applicable). A low-activity alert is issued at the end of the peak period
+    (S2 &rarr; S1), if applicable, and an end-of-season alert is given two weeks after the final
+    transition back to no-risk conditions (S1 &rarr; S0).
+  </p>
+</div>
+"""
+    }
+    return ret
+
 class dbPortugal:
     def __init__(self,var,filename="",nc=None,shapefile="",verbose=False):
         self.var = var
@@ -273,7 +344,11 @@ db = dbPortugal("newegg",
 up_times, down_times = getCrossings(db.mat["newegg"], 
                                     thresh=1.0, 
                                     sep=14.0)
+up_dates = times_to_dates(up_times)
+down_dates = times_to_dates(down_times)
 
 peak_up_times, peak_down_times = getCrossings(db.mat["newegg"], 
                                               thresh=10000.0, 
                                               sep=14.0)
+peak_up_dates = times_to_dates(peak_up_times)
+peak_down_dates = times_to_dates(peak_down_times)

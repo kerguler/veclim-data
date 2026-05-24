@@ -271,7 +271,7 @@ def getWarning_v1(pid):
     }
     return ret
 
-def get_warning(pid):
+def getWarning(pid):
     DATE_START             = up_dates[pid][0] if len(up_dates[pid])>0 else None
     DATE_END               = down_dates[pid][-1] if len(down_dates[pid])>0 else None
     DATE_PEAK_START        = peak_up_dates[pid][0] if len(peak_up_dates[pid])>0 else None

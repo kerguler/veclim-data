@@ -220,7 +220,7 @@ def times_to_dates(dict_times):
         out[pid] = dates
     return out
 
-def getWarning(pid):
+def getWarning_v1(pid):
     ret = {
         'Season length (days)': (down_times[pid][-1]-up_times[pid][0]) if len(up_times[pid])>0 else numpy.nan,
         'Number of peaks': len(up_times[pid]),
@@ -269,6 +269,65 @@ def getWarning(pid):
 </div>
 """
     }
+    return ret
+
+def get_warning(pid):
+    DATE_START             = up_dates[pid][0] if len(up_dates[pid])>0 else None
+    DATE_END               = down_dates[pid][-1] if len(down_dates[pid])>0 else None
+    DATE_PEAK_START        = peak_up_dates[pid][0] if len(peak_up_dates[pid])>0 else None
+    DATE_PEAK_END          = peak_down_dates[pid][-1] if len(peak_down_dates[pid])>0 else None
+    DATE_LOW_START         = DATE_PEAK_END
+    DATE_LOW_END           = DATE_END
+    #
+    PRE_SEASON_ALERT       = DATE_START + datetime.timedelta(days=int(-14)) if DATE_START is not None else None
+    START_OF_SEASON_ALERT  = DATE_START
+    PEAK_ACTIVITY_REMINDER = DATE_PEAK_START
+    LOW_ACTIVITY_REMINDER  = DATE_LOW_START
+    END_OF_SEASON_ALERT    = DATE_END
+    #
+    ret = {
+        'Area code': pid,
+        'Dates': {
+            'DATE_START': DATE_START.strftime("%d/%m/%Y") if DATE_START is not None else '',
+            'DATE_END': DATE_END.strftime("%d/%m/%Y") if DATE_END is not None else '',
+            'DATE_PEAK_START': DATE_PEAK_START.strftime("%d/%m/%Y") if DATE_PEAK_START is not None else '',
+            'DATE_PEAK_END': DATE_PEAK_END.strftime("%d/%m/%Y") if DATE_PEAK_END is not None else '',
+            'DATE_LOW_START': DATE_LOW_START.strftime("%d/%m/%Y") if DATE_LOW_START is not None else '',
+            'DATE_LOW_END': DATE_LOW_END.strftime("%d/%m/%Y") if DATE_LOW_END is not None else '',
+        },
+        'Notifications': {}
+    }
+    if (PRE_SEASON_ALERT is not None) and (DATE_START is not None) and (DATE_END is not None):
+        ret['Notifications']['PRE_SEASON_ALERT'] = {
+            'Send': PRE_SEASON_ALERT.strftime("%d/%m/%Y"),
+            'Subject': "Sand fly season starts soon. Protect your dog!",
+            'Message': "Our Early Warning and Response System predicts that sand flies will become active in your area on %s." %(DATE_START.strftime("%d/%m/%Y"))
+        }
+    if (START_OF_SEASON_ALERT is not None) and (DATE_START is not None) and (DATE_END is not None):
+        ret['Notifications']['START_OF_SEASON_ALERT'] = {
+            'Send': START_OF_SEASON_ALERT.strftime("%d/%m/%Y"),
+            'Subject': "Sand fly season is now active. Act today!",
+            'Message': "Sand flies are now active in your area (%s, %s)." %(DATE_START.strftime("%d/%m/%Y"), DATE_END.strftime("%d/%m/%Y"))
+        }
+    if (PEAK_ACTIVITY_REMINDER is not None) and (DATE_PEAK_START is not None) and (DATE_PEAK_END is not None):
+        ret['Notifications']['PEAK_ACTIVITY_REMINDER'] = {
+            'Send': PEAK_ACTIVITY_REMINDER.strftime("%d/%m/%Y"),
+            'Subject': "Peak sand fly activity expected between %s and %s." %(DATE_PEAK_START.strftime("%d/%m/%Y"), DATE_PEAK_END.strftime("%d/%m/%Y")),
+            'Message': "This is the highest-risk period for transmission. Please strictly follow all preventive measures."
+        }
+    if (LOW_ACTIVITY_REMINDER is not None) and (DATE_LOW_START is not None) and (DATE_LOW_END is not None):
+        ret['Notifications']['LOW_ACTIVITY_REMINDER'] = {
+            'Send': LOW_ACTIVITY_REMINDER.strftime("%d/%m/%Y"),
+            'Subject': "Reduced sand fly activity expected between %s and %s." %(DATE_LOW_START.strftime("%d/%m/%Y"), DATE_LOW_END.strftime("%d/%m/%Y")),
+            'Message': "Sand fly activity is expected to be low during this period. However, transmission is still possible. Please continue using repellents and keeping your dog indoors at night."
+        }
+    if (END_OF_SEASON_ALERT is not None) and (DATE_END is not None):
+        ret['Notifications']['END_OF_SEASON_ALERT'] = {
+            'Send': END_OF_SEASON_ALERT.strftime("%d/%m/%Y"),
+            'Subject': "Sand fly season is over. Time for post-season testing!",
+            'Message': "Sand fly infection risk is expected to decrease by %s. Please book a post-season Leishmaniasis test if your veterinarian recommends it. Thank you for protecting animal and public health." %(DATE_END.strftime("%d/%m/%Y"))
+        }
+    #
     return ret
 
 class dbPortugal:

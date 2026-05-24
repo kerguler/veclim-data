@@ -228,35 +228,75 @@ Example:
 
 Customised communication panel for ISMED-CLIM's Zoonotic Living Lab (LL4)
 
-| field | description |
-| ---- | ----------- |
-| `Season length (days)` | Duration of the active season in days |
-| `Number of peaks` | Number of high-risk periods |
-| `Season start(s) (S0->S1)` | Date(s) when the active season starts |
-| `Season end(s) (S1->S0)` | Date(s) when the active season ends |
-| `Peak start(s) (S1->S2)` | Date(s) when the peak season starts |
-| `Peak end(s) (S2->S1)` | Date(s) when the peak season ends. |
-| `Pre-season alert` | Notification before the first active season starts |
-| `Start-of-season alert` | Notification before the peak season starts |
-| `Low activity alert` | Notification when the peak activity ends |
-| `End-of-season alert` | Notification after the final active season ends |
-| `Legend` | Brief description of the notifications |
+| Field | Description |
+| ----- | ----------- |
+| `Area code` | Area or municipality code |
+| `Dates` | Key dates defining the active and peak sand fly season |
+| `Notifications` | Notification dates and message content |
+
+| `Dates` | Description |
+| ------- | ----------- |
+| `DATE_START` | Date when the active season starts |
+| `DATE_END` | Date when the active season ends |
+| `DATE_PEAK_START` | Date when the peak season starts |
+| `DATE_PEAK_END` | Date when the peak season ends |
+| `DATE_LOW_START` | Date when the low-activity period starts |
+| `DATE_LOW_END` | Date when the low-activity period ends |
+
+| `Notifications` | Description |
+| --------------- | ----------- |
+| `PRE_SEASON_ALERT` | Notification before the active season starts |
+| `START_OF_SEASON_ALERT` | Notification when the active season starts |
+| `PEAK_ACTIVITY_REMINDER`| Reminder when the peak activity period starts |
+| `LOW_ACTIVITY_REMINDER` | Reminder when activity decreases after the peak period |
+| `END_OF_SEASON_ALERT` | Notification when the active season ends |
+
+| Messages | Description |
+| -------- | ----------- |
+| `Send` | Date when the notification should be issued |
+| `Subject` | Notification subject line |
+| `Message` | Notification message text |
 
 Example:
 
 ```json
 "alert-ts": {
-  'Season length (days)': 192, 
-  'Number of peaks': 1, 
-  'Season start(s) (S0->S1)': '19/05/2026', 
-  'Season end(s) (S1->S0)': '27/11/2026', 
-  'Peak start(s) (S1->S2)': '08/07/2026', 
-  'Peak end(s) (S2->S1)': '22/10/2026', 
-  'Pre-season alert': '05/05/2026', 
-  'Start-of-season alert': '24/06/2026', 
-  'Low activity alert': '22/10/2026', 
-  'End-of-season alert': '11/12/2026',
-  'Legend': "\n<div class=\"legend\">\n  <h3>Legend</h3>\n\n  <p>\n    This output summarises the..."
+	"Area code": "1106",
+	"Dates": {
+		"DATE_START": "19/05/2026",
+		"DATE_END": "27/11/2026",
+		"DATE_PEAK_START": "08/07/2026",
+		"DATE_PEAK_END": "22/10/2026",
+		"DATE_LOW_START": "22/10/2026",
+		"DATE_LOW_END": "27/11/2026"
+	},
+	"Notifications": {
+		"PRE_SEASON_ALERT": {
+			"Send": "05/05/2026",
+			"Subject": "Sand fly season starts soon. Protect your dog!",
+			"Message": "Our Early Warning and Response System predicts that sand flies will become active in your area on 19/05/2026."
+		},
+		"START_OF_SEASON_ALERT": {
+			"Send": "19/05/2026",
+			"Subject": "Sand fly season is now active. Act today!",
+			"Message": "Sand flies are now active in your area (19/05/2026, 27/11/2026)."
+		},
+		"PEAK_ACTIVITY_REMINDER": {
+			"Send": "08/07/2026",
+			"Subject": "Peak sand fly activity expected between 08/07/2026 and 22/10/2026.",
+			"Message": "This is the highest-risk period for transmission. Please strictly follow all preventive measures."
+		},
+		"LOW_ACTIVITY_REMINDER": {
+			"Send": "22/10/2026",
+			"Subject": "Reduced sand fly activity expected between 22/10/2026 and 27/11/2026.",
+			"Message": "Sand fly activity is expected to be low during this period. However, transmission is still possible. Please continue using repellents and keeping your dog indoors at night."
+		},
+		"END_OF_SEASON_ALERT": {
+			"Send": "27/11/2026",
+			"Subject": "Sand fly season is over. Time for post-season testing!",
+			"Message": "Sand fly infection risk is expected to decrease by 27/11/2026. Please book a post-season Leishmaniasis test if your veterinarian recommends it. Thank you for protecting animal and public health."
+		}
+	}
 }
 ```
 

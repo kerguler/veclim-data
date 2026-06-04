@@ -331,72 +331,23 @@ def getWarning(pid):
     return ret
 
 class dbPortugal:
-    def __init__(self,var,filename="",nc=None,shapefile="",verbose=False):
+    def __init__(self,var,filename,shapefile,verbose=False):
         self.var = var
         self.filename = filename        
-        self.nc = nc
         self.shapefile = shapefile
-        if (self.filename == "") and (self.nc is None):
-                raise ValueError(f"Please supply either the simulation matrix or the panelCube file.")
         #
         self.polys = gpd.read_file(self.shapefile)
         self.polys = self.polys.to_crs("EPSG:4326")
         self.poly_ids = self.polys['Official_Co']
         #
-        if self.filename == "":
-            self.mat, self.encoding = panelCube(self.nc,self.poly_ids)
-            means, grids = self.setmat(verbose=verbose)
-        else:
-            self.mat = xr_open_lazy(self.filename)
-            self.encoding = self.mat[var].encoding
-            means = self.mat[var].mean("time", skipna=True)
+        self.mat = xr_open_lazy(self.filename)
+        self.encoding = self.mat[var].encoding
+        means = self.mat[var].mean("time", skipna=True)
         #
         self.polys['Means'] = means
-        #
-    def setmat(self,verbose=False):
-        lon2d = (((self.nc["longitude"].values + 180) % 360) - 180)
-        lat2d = self.nc["latitude"].values
-        #
-        grids = {}
-        means = []
-        for i in range(len(self.polys)):
-            if verbose:
-                print("Processing %d of %d..." %(i+1,len(self.polys)))
-            #
-            poly = self.polys.geometry.iloc[i]
-            label = self.polys['Official_Co'].iloc[i,0]
-            P = prep(poly)
-            #
-            # fast bbox filter first
-            minx, miny, maxx, maxy = poly.bounds
-            cand = (lon2d >= minx) & (lon2d <= maxx) & (lat2d >= miny) & (lat2d <= maxy)
-            #
-            if not numpy.any(cand):
-                means.append(numpy.nan)
-                continue
-            #
-            yy, xx = numpy.where(cand)
-            pts = points(lon2d[yy, xx], lat2d[yy, xx])      # vectorized
-            #
-            inside_cand = numpy.array([P.contains(p) for p in pts])
-            #
-            yx = numpy.column_stack([yy[inside_cand], xx[inside_cand]])
-            grids[label] = yx
-            #
-            tmp = [
-                self.nc[self.var].isel(y=y, x=x).load().values 
-                for y,x in yx
-                ]
-            if len(tmp) == 0 or numpy.all(numpy.isnan(tmp)):
-                means.append(numpy.nan)
-            else:
-                means.append(numpy.nanmean(tmp))
-                self.mat[self.var].loc[dict(poly=label)] = numpy.nanmean(tmp,axis=0)
-            #
-        return means, grids
 
 db = dbPortugal("newegg",
-                filename="%s/sims/ISMED-CLIM/V2511A_PRT/sims_model_V2511A_Portugal_newegg_mean_poly.nc" %DIR_DATA,
+                filename="%s/sims/ISMED-CLIM/V2511A_PRT/sims_model_V2511A_Portugal_newegg_mean_poly_weighted.nc" %DIR_DATA,
                 shapefile="%s/sims/ISMED-CLIM/V2511A_PRT/georef-portugal-concelho-millesime.shp" %DIR_DATA,
                 verbose=False)
 

@@ -119,7 +119,7 @@ def calc_cut(vec,lim,lab):
         return pandas.cut(vec, bins=lim, include_lowest=False, right=False, labels=lab).tolist()
     return lab[numpy.where(numpy.array(lim) > vec)[0][0] - 1]
 
-def remove_feb29(vec, days, isFeb29, fill=0.0, mean=True):
+def remove_feb29(vec, days, isFeb29, fill=0.0, mean=True, tolist=True):
     vec = numpy.asarray(vec, dtype=float)
     days = numpy.asarray(days, dtype=int)
     isFeb29 = numpy.asarray(isFeb29, dtype=int)
@@ -138,11 +138,13 @@ def remove_feb29(vec, days, isFeb29, fill=0.0, mean=True):
             tmp[..., isFeb29] = 0.5 * (feb28_vals + mar01_vals)
             #
     if fill is not None:
-        return numpy.nan_to_num(tmp, nan=fill).tolist()
+        rv = numpy.nan_to_num(tmp, nan=fill)
+        return rv.tolist() if tolist else rv
         #
     flat = tmp.reshape(-1)
     flat = pandas.Series(flat).where(~numpy.isnan(flat), None).to_numpy()
-    return flat.reshape(tmp.shape).tolist()
+    rv = flat.reshape(tmp.shape)
+    return rv.tolist() if tolist else rv
 
 def calc_list(clms):
     return {

@@ -250,7 +250,7 @@ def clean_json(obj):
         return [clean_json(x) for x in obj]
     if isinstance(obj, dict):
         return {k: clean_json(v) for k, v in obj.items()}
-    return obj
+    return json.dumps(obj)
 
 def _getSurv(vb, lon, lat, win=14):
     if lon > 180.0:

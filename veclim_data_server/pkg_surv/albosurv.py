@@ -264,18 +264,13 @@ def _getSurv(vb, lon, lat, win=14):
     daily_values = interp1d((ss.index-1)*7, 
                             ss["samples"].values, 
                             kind='linear', 
-                            fill_value=numpy.nan, 
+                            fill_value=0.0,# numpy.nan, 
                             bounds_error=False)(numpy.arange(365))
-    daily_values[:((ss.index[0]-1)*7)] = numpy.nan
-    daily_values[((ss.index[-1]+1)*7):] = numpy.nan
+    daily_values[:((ss.index[0]-1)*7)] = 0.0, # numpy.nan
+    daily_values[((ss.index[-1]+1)*7):] = 0.0, # numpy.nan
     smo = numpy.convolve(daily_values, numpy.ones(win)/win, mode='same')
     #
-    print("Cleaning",flush=True)
-    print(smo,flush=True)
-    print("to",flush=True)
-    print(json.dumps(clean_json(smo.tolist())),flush=True)
-    #
-    return json.dumps(clean_json(smo.tolist()))
+    return smo
 
 def _getShp(obj, res=[0.125,0.125]):
     try:

@@ -250,7 +250,7 @@ def clean_json(obj):
         return [clean_json(x) for x in obj]
     if isinstance(obj, dict):
         return {k: clean_json(v) for k, v in obj.items()}
-    return json.dumps(obj)
+    return obj
 
 def _getSurv(vb, lon, lat, win=14):
     if lon > 180.0:
@@ -273,9 +273,9 @@ def _getSurv(vb, lon, lat, win=14):
     print("Cleaning",flush=True)
     print(smo,flush=True)
     print("to",flush=True)
-    print(clean_json(smo.tolist()),flush=True)
+    print(json.dumps(clean_json(smo.tolist())),flush=True)
     #
-    return clean_json(smo.tolist())
+    return json.dumps(clean_json(smo.tolist()))
 
 def _getShp(obj, res=[0.125,0.125]):
     try:

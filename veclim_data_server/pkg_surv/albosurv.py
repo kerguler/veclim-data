@@ -270,10 +270,10 @@ def _getSurv(vb, lon, lat, win=14):
     daily_values[((ss.index[-1]+1)*7):] = numpy.nan
     smo = numpy.convolve(daily_values, numpy.ones(win)/win, mode='same')
     #
-    print("Cleaning")
-    print(smo)
-    print("to")
-    print(clean_json(smo.tolist()))
+    print("Cleaning",flush=True)
+    print(smo,flush=True)
+    print("to",flush=True)
+    print(clean_json(smo.tolist()),flush=True)
     #
     return clean_json(smo.tolist())
 

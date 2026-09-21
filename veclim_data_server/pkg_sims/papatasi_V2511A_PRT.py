@@ -354,6 +354,11 @@ db = dbPortugal("newegg",
 up_times, down_times = getCrossings(db.mat["newegg"], 
                                     thresh=1.0, 
                                     sep=14.0)
+# 2026/07/27 - Kamil
+# In response to a feedback from LL4 from Viseu, 
+# up_times, down_times = getCrossings(db.mat["newegg"], 
+#                                     thresh=1.0, 
+#                                     sep=7.0)
 up_dates = times_to_dates(up_times)
 down_dates = times_to_dates(down_times)
 

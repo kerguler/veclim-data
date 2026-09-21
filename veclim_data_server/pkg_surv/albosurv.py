@@ -241,6 +241,17 @@ vabun = VectAbundance()
 aimsurv = AIMsurv()
 vbase = VectorBase()
 
+import math
+
+def clean_json(obj):
+    if isinstance(obj, float):
+        return obj if math.isfinite(obj) else None
+    if isinstance(obj, list):
+        return [clean_json(x) for x in obj]
+    if isinstance(obj, dict):
+        return {k: clean_json(v) for k, v in obj.items()}
+    return obj
+
 def _getSurv(vb, lon, lat, win=14):
     if lon > 180.0:
         lon -= 360.0
@@ -259,7 +270,7 @@ def _getSurv(vb, lon, lat, win=14):
     daily_values[((ss.index[-1]+1)*7):] = numpy.nan
     smo = numpy.convolve(daily_values, numpy.ones(win)/win, mode='same')
     #
-    return smo
+    return clean_json(smo.tolist())
 
 def _getShp(obj, res=[0.125,0.125]):
     try:

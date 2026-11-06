@@ -87,6 +87,7 @@ def parse_request(parameters):
     else:
         lat = None
     #
+    opr = ''
     timeseries = False
     meteo_key = 'meteo-mean'
     sim_key = 'sim-mean'
@@ -100,8 +101,6 @@ def parse_request(parameters):
             sim_key = 'sim-ts'
             fcast_key = 'fcast-ts'
             risk_key = 'risk-ts'
-        else:
-            opr = ''
     #
     kw = {
         'vector'            : vector,

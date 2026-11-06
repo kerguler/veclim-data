@@ -122,7 +122,6 @@ def parse_request(parameters):
 def application(environ, start_response):
     # Receive the request from the client (method = GET)
     # ---------------------------------------------------
-
     parameters = parse_qs(environ.get('QUERY_STRING', ''))
     #
     kw = parse_request(parameters)
@@ -156,12 +155,13 @@ def application(environ, start_response):
     #
     return response.returnResponse(start_response, response.empty_response)
 
-# Instantiate the server (add certfile and keyfile for SSL)
-httpd = wsgiserver.WSGIServer(application,
-                              host="0.0.0.0",
-                              port=80)
-#
-print("Preparing the datasets...",flush=True)
-set_fcast_time()
-print("Ready to receive a request...",flush=True)
-httpd.start()
+if __name__ == "__main__":
+    # Instantiate the server (add certfile and keyfile for SSL)
+    httpd = wsgiserver.WSGIServer(application,
+                                  host="0.0.0.0",
+                                  port=80)
+    #
+    print("Preparing the datasets...",flush=True)
+    set_fcast_time()
+    print("Ready to receive a request...",flush=True)
+    httpd.start()

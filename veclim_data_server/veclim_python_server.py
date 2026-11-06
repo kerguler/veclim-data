@@ -23,12 +23,7 @@ def set_fcast_time():
         fcast_time = now
         print("Forecast updated",now)
 
-def application(environ, start_response):
-    # Receive the request from the client (method = GET)
-    # ---------------------------------------------------
-
-    parameters = parse_qs(environ.get('QUERY_STRING', ''))
-    #
+def parse_request(parameters):
     if 'v' in parameters:
         pr_v = escape(parameters.get('v', [''])[0])
     else:
@@ -74,14 +69,12 @@ def application(environ, start_response):
             'pr_z'          : pr_z,
             'pr_v'          : pr_v
         }
-        return response.respondTiles(start_response, kw)
+        return kw
     #
     if 'vec' in parameters:
         vector = escape(parameters.get('vec', [''])[0])
     else:
         vector = 'albopictus'
-    if not (vector in pkg_models.modules):
-        return response.returnResponse(start_response, response.empty_response)
     #
     if 'lon' in parameters:
         lon = escape(parameters.get('lon', [''])[0])
@@ -94,11 +87,6 @@ def application(environ, start_response):
         lat = float(lat)
     else:
         lat = None
-    #
-    if ((lon == None) or 
-        (lat == None) or
-        ((date0 == None) and (date1 == None) and (dates == None))):
-        return response.returnResponse(start_response, response.empty_response)
     #
     timeseries = False
     meteo_key = 'meteo-mean'
@@ -116,44 +104,67 @@ def application(environ, start_response):
         else:
             opr = ''
     #
+    kw = {
+        'vector'            : vector,
+        'lon'               : lon,
+        'lat'               : lat,
+        'date0'             : date0,
+        'date1'             : date1,
+        'dates'             : dates,
+        'timeseries'        : timeseries,
+        'meteo_key'         : meteo_key,
+        'sim_key'           : sim_key,
+        'fcast_key'         : fcast_key,
+        'risk_key'          : risk_key,
+        'opr'               : opr,
+    }
+    #
+    return kw
+
+def application(environ, start_response):
+    # Receive the request from the client (method = GET)
+    # ---------------------------------------------------
+
+    parameters = parse_qs(environ.get('QUERY_STRING', ''))
+    #
+    kw = parse_request(parameters)
+    #
+    if 'pr_v' in kw and kw['pr_v'] != None:
+        return response.respondTiles(start_response, kw)
+    #
+    if not 'vector' in kw or not (kw['vector'] in pkg_models.modules):
+        return response.returnResponse(start_response, response.empty_response)
+    #
+    if ((not 'lon' in kw) or (kw['lon'] == None) or 
+        (not 'lat' in kw) or (kw['lat'] == None) or
+        ((not 'date0' in kw) or (kw['date0'] == None)) and
+        ((not 'date1' in kw) or (kw['date1'] == None)) and
+        ((not 'dates' in kw) or (kw['dates'] == None))):
+        return response.returnResponse(start_response, response.empty_response)
+    #
     # Check if forecast should be refreshed
     # ------------------------------------
-
     set_fcast_time()
-
     #
     # Process request and respond properly
     # ------------------------------------
-
-    kw = {
-        'date0'         : date0,
-        'date1'         : date1,
-        'lon'           : lon,
-        'lat'           : lat,
-        'timeseries'    : timeseries,
-        'meteo_key'     : meteo_key,
-        'sim_key'       : sim_key,
-        'fcast_key'     : fcast_key,
-        'risk_key'      : risk_key
-    }
-
-    if vector in pkg_models.modules:
+    if 'vector' in kw and kw['vector'] in pkg_models.modules:
         try:
-            return pkg_models.modules[vector].respond(start_response, kw)
+            return pkg_models.modules[kw['vector']].respond(start_response, kw)
         except Exception as e:
             print(e, flush=True)
-            print("ERROR: Problem encountered with request to %s:" %vector, flush=True)
+            print("ERROR: Problem encountered with request to %s:" %kw['vector'], flush=True)
             print(kw, flush=True)
-
+    #
     return response.returnResponse(start_response, response.empty_response)
 
-
-# Instantiate the server (add certfile and keyfile for SSL)
-httpd = wsgiserver.WSGIServer(application,
-                              host="0.0.0.0",
-                              port=80)
-#
-print("Preparing the datasets...",flush=True)
-set_fcast_time()
-print("Ready to receive a request...",flush=True)
-httpd.start()
+if __name__ == '__main__':
+    # Instantiate the server (add certfile and keyfile for SSL)
+    httpd = wsgiserver.WSGIServer(application,
+                                  host="0.0.0.0",
+                                  port=80)
+    #
+    print("Preparing the datasets...",flush=True)
+    set_fcast_time()
+    print("Ready to receive a request...",flush=True)
+    httpd.start()

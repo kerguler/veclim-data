@@ -64,23 +64,22 @@ def xr_open_lazy(path, engine=None, chunks="auto"):
         kw["engine"] = engine
     return xarray.open_dataset(path, **kw)
 
-def isel(nc,lon=None,lat=None,x=None,y=None,ret_df=False):
+def isel(nc, lon=None, lat=None, x=None, y=None, time=None, ret_df=False):
     kw = {}
-    if type(lon) != type(None):
-        kw['lon'] = lon
-    if type(lat) != type(None):
-        kw['lat'] = lat
-    if type(x) != type(None):
-        kw['x'] = x
-    if type(y) != type(None):
-        kw['y'] = y
+    for key, val in [('lon', lon), ('lat', lat), ('x', x), ('y', y)]:
+        if val is not None:
+            kw[key] = val
+    #
     try:
-        tmp = nc.isel(**kw).load()
-        return tmp if ret_df else tmp.values
+        tmp = nc.isel(**kw)
     except:
-        kw['method'] = "nearest"
-        tmp = nc.sel(**kw).load()
-        return tmp if ret_df else tmp.values
+        tmp = nc.sel(**kw, method="nearest")
+    #
+    if time is not None:
+        tmp = tmp.isel(time=time)
+    #
+    tmp = tmp.load()
+    return tmp if ret_df else tmp.values
 
 def stdwarn(msg):
     print("ERROR",msg,flush=True)
@@ -154,7 +153,9 @@ def calc_list(clms):
 
 def calc_mean(clms):
     return {
-        key: float(numpy.nanmean(numpy.hstack([clm[key] for clm in clms])))
+        key: float(numpy.nanmean(
+            numpy.hstack([clm[key] for clm in clms])
+            ))
         for key in clms[0] if not key in not_clim_keys
     }
 
@@ -164,7 +165,7 @@ def get_clim(get_days, loni, lati, pr0, pr1, ts=False):
     else:
         calc_fun = calc_mean
     #
-    ret = calc_fun([get_days(loni,lati,pr0,pr1)])
+    ret = calc_fun([get_days(loni, lati, pr0, pr1)])
     #
     return ret
 

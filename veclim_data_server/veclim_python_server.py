@@ -47,6 +47,9 @@ def parse_request(parameters):
     else:
         pr_y = None
     #
+    date0 = None
+    date1 = None
+    dates = None
     if 'date' in parameters:
         date0 = escape(parameters.get('date', [''])[0])
         date0 = datetime.strptime(date0, "%Y-%m-%d")
@@ -55,10 +58,6 @@ def parse_request(parameters):
         dates = escape(parameters.get('dates', [''])[0]).split(':')
         date0 = datetime.strptime(dates[0], "%Y-%m-%d")
         date1 = datetime.strptime(dates[1], "%Y-%m-%d")
-    else:
-        date0 = None
-        date1 = None
-        dates = None
     #
     if pr_v != None:
         kw = {

@@ -2,7 +2,7 @@ import json
 import numpy
 
 from ..response import empty_response, returnResponse
-from ..functions import remove_feb29, calc_cut, isel, getIndex, get_dates, get_clim
+from ..functions import remove_feb29, calc_cut, isel, isel_feb29, getIndex, get_dates, get_clim
 import veclim_data_server.pkg_surv as pkg_surv
 import veclim_data_server.pkg_sims as pkg_sims
 
@@ -33,12 +33,12 @@ def get_meteo_days(loni, lati, idates, isFeb29):
     popdens = pkg_sims.modules['popdens']
     return {
         "photo": remove_feb29(annualERA5.photo[lati,:],idates,isFeb29),
-        "atemp": remove_feb29(isel(annualERA5.atemp,lat=lati,lon=loni),idates,isFeb29),
-        "atmin": remove_feb29(isel(annualERA5.atmin,lat=lati,lon=loni),idates,isFeb29),
-        "atmax": remove_feb29(isel(annualERA5.atmax,lat=lati,lon=loni),idates,isFeb29),
-        "rehum": remove_feb29(isel(annualERA5.rehum,lat=lati,lon=loni),idates,isFeb29),
-        "precp": remove_feb29(isel(annualERA5.precp,lat=lati,lon=loni),idates,isFeb29),
-        "soilw": remove_feb29(isel(annualERA5.soilw,lat=lati,lon=loni),idates,isFeb29),
+        "atemp": isel_feb29(annualERA5.atemp,lat=lati,lon=loni,idates=idates,isFeb29=isFeb29),
+        "atmin": isel_feb29(annualERA5.atmin,lat=lati,lon=loni,idates=idates,isFeb29=isFeb29),
+        "atmax": isel_feb29(annualERA5.atmax,lat=lati,lon=loni,idates=idates,isFeb29=isFeb29),
+        "rehum": isel_feb29(annualERA5.rehum,lat=lati,lon=loni,idates=idates,isFeb29=isFeb29),
+        "precp": isel_feb29(annualERA5.precp,lat=lati,lon=loni,idates=idates,isFeb29=isFeb29),
+        "soilw": isel_feb29(annualERA5.soilw,lat=lati,lon=loni,idates=idates,isFeb29=isFeb29),
         "pdens": popdens.pop[lati,loni]
     }
 
@@ -58,23 +58,23 @@ def get_risk(ret):
 def get_sim_days(loni, lati, idates, isFeb29):
     annualVectorA = pkg_sims.modules['annualVectorA']
     return {
-        "colegg": remove_feb29(isel(annualVectorA.colegg,lat=lati,lon=loni),idates,isFeb29),
-        "colK": remove_feb29(isel(annualVectorA.colK,lat=lati,lon=loni),idates,isFeb29),
-        "coln2": remove_feb29(isel(annualVectorA.coln2,lat=lati,lon=loni),idates,isFeb29),
-        "coln4f": remove_feb29(isel(annualVectorA.coln4f,lat=lati,lon=loni),idates,isFeb29),
-        "pouts": [a*100.0 for a in remove_feb29(isel(annualVectorA.pouts,lat=lati,lon=loni),idates,isFeb29)],
-        "iouts": [a*4000.0 for a in remove_feb29(isel(annualVectorA.iouts,lat=lati,lon=loni),idates,isFeb29)]
+        "colegg": isel_feb29(annualVectorA.colegg,lat=lati,lon=loni,idates=idates,isFeb29=isFeb29),
+        "colK": isel_feb29(annualVectorA.colK,lat=lati,lon=loni,idates=idates,isFeb29=isFeb29),
+        "coln2": isel_feb29(annualVectorA.coln2,lat=lati,lon=loni,idates=idates,isFeb29=isFeb29),
+        "coln4f": isel_feb29(annualVectorA.coln4f,lat=lati,lon=loni,idates=idates,isFeb29=isFeb29),
+        "pouts": [a*100.0 for a in isel_feb29(annualVectorA.pouts,lat=lati,lon=loni,idates=idates,isFeb29=isFeb29)],
+        "iouts": [a*4000.0 for a in isel_feb29(annualVectorA.iouts,lat=lati,lon=loni,idates=idates,isFeb29=isFeb29)]
     }
 
 def get_sim1980_days(loni, lati, idates, isFeb29):
     annualVectorA_1980 = pkg_sims.modules['annualVectorA_1980']
     return {
-        "colegg": remove_feb29(isel(annualVectorA_1980.colegg,lat=lati,lon=loni),idates,isFeb29),
-        "colK": remove_feb29(isel(annualVectorA_1980.colK,lat=lati,lon=loni),idates,isFeb29),
-        "coln2": remove_feb29(isel(annualVectorA_1980.coln2,lat=lati,lon=loni),idates,isFeb29),
-        "coln4f": remove_feb29(isel(annualVectorA_1980.coln4f,lat=lati,lon=loni),idates,isFeb29),
-        "pouts": [a*100.0 for a in remove_feb29(isel(annualVectorA_1980.pouts,lat=lati,lon=loni),idates,isFeb29)],
-        "iouts": [a*4000.0 for a in remove_feb29(isel(annualVectorA_1980.iouts,lat=lati,lon=loni),idates,isFeb29)]
+        "colegg": isel_feb29(annualVectorA_1980.colegg,lat=lati,lon=loni,idates=idates,isFeb29=isFeb29),
+        "colK": isel_feb29(annualVectorA_1980.colK,lat=lati,lon=loni,idates=idates,isFeb29=isFeb29),
+        "coln2": isel_feb29(annualVectorA_1980.coln2,lat=lati,lon=loni,idates=idates,isFeb29=isFeb29),
+        "coln4f": isel_feb29(annualVectorA_1980.coln4f,lat=lati,lon=loni,idates=idates,isFeb29=isFeb29),
+        "pouts": [a*100.0 for a in isel_feb29(annualVectorA_1980.pouts,lat=lati,lon=loni,idates=idates,isFeb29=isFeb29)],
+        "iouts": [a*4000.0 for a in isel_feb29(annualVectorA_1980.iouts,lat=lati,lon=loni,idates=idates,isFeb29=isFeb29)]
     }
 
 def get_nasa_ssp245_days(loni, lati, idates, isFeb29):
@@ -101,12 +101,12 @@ def get_fcast_days(loni, lati, date0, date1):
     if not any(xr):
         return {}
     return {
-        "colegg": numpy.nan_to_num(isel(forecastECMWF.colegg,lat=lati,lon=loni)[xr],nan=0.0),
-        "colK": numpy.nan_to_num(isel(forecastECMWF.colK,lat=lati,lon=loni)[xr],nan=0.0),
-        "coln2": numpy.nan_to_num(isel(forecastECMWF.coln2,lat=lati,lon=loni)[xr],nan=0.0),
-        "coln4f": numpy.nan_to_num(isel(forecastECMWF.coln4f,lat=lati,lon=loni)[xr],nan=0.0),
-        "pouts": numpy.nan_to_num(isel(forecastECMWF.pouts,lat=lati,lon=loni)[xr[:-60]],nan=0.0)*100.0,
-        "iouts": numpy.nan_to_num(isel(forecastECMWF.iouts,lat=lati,lon=loni)[xr[:-60]],nan=0.0)*4000.0
+        "colegg": numpy.nan_to_num(isel(forecastECMWF.colegg,lat=lati,lon=loni,time=xr),nan=0.0),
+        "colK": numpy.nan_to_num(isel(forecastECMWF.colK,lat=lati,lon=loni,time=xr),nan=0.0),
+        "coln2": numpy.nan_to_num(isel(forecastECMWF.coln2,lat=lati,lon=loni,time=xr),nan=0.0),
+        "coln4f": numpy.nan_to_num(isel(forecastECMWF.coln4f,lat=lati,lon=loni,time=xr),nan=0.0),
+        "pouts": numpy.nan_to_num(isel(forecastECMWF.pouts,lat=lati,lon=loni,time=xr[:-60]),nan=0.0)*100.0,
+        "iouts": numpy.nan_to_num(isel(forecastECMWF.iouts,lat=lati,lon=loni,time=xr[:-60]),nan=0.0)*4000.0
     }
 
 def get_surv(lon, lat, idates, isFeb29):

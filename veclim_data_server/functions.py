@@ -145,6 +145,38 @@ def remove_feb29(vec, days, isFeb29, fill=0.0, mean=True, tolist=True):
     rv = flat.reshape(tmp.shape)
     return rv.tolist() if tolist else rv
 
+def isel_feb29(nc, idates=[], isFeb29=[], lon=None, lat=None, x=None, y=None,
+               fill=0.0, mean=True, tolist=True):
+    #
+    days = numpy.asarray(idates, dtype=int)
+    isFeb29 = numpy.asarray(isFeb29, dtype=int)
+    #
+    # Include the next day for interpolation
+    indices = days.copy()
+    if mean and isFeb29.size:
+        indices = numpy.unique(
+            numpy.concatenate((days, days[isFeb29] + 1))
+        )
+    #
+    vec = isel(nc, lon=lon, lat=lat, x=x, y=y, time=indices)
+    #
+    # Translate original indices to positions in selected data
+    positions = numpy.searchsorted(indices, days)
+    tmp = numpy.take(vec, positions, axis=-1)
+    #
+    if mean and isFeb29.size:
+        next_positions = numpy.searchsorted(indices, days[isFeb29] + 1)
+        #
+        tmp[..., isFeb29] = 0.5 * (
+            tmp[..., isFeb29] +
+            numpy.take(vec, next_positions, axis=-1)
+        )
+        #
+    if fill is not None:
+        tmp = numpy.nan_to_num(tmp, nan=fill)
+        #
+    return tmp.tolist() if tolist else tmp
+
 def calc_list(clms):
     return {
         key: numpy.hstack([clm[key] for clm in clms]).tolist()

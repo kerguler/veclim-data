@@ -151,21 +151,27 @@ def isel_feb29(nc, idates=[], isFeb29=[], lon=None, lat=None, x=None, y=None,
     days = numpy.asarray(idates, dtype=int)
     isFeb29 = numpy.asarray(isFeb29, dtype=int)
     #
-    # Include the next day for interpolation
-    indices = days.copy()
-    if mean and isFeb29.size:
-        indices = numpy.unique(
-            numpy.concatenate((days, days[isFeb29] + 1))
-        )
+    # Preserve original order, removing duplicates
+    indices = list(dict.fromkeys(days))
     #
+    # Include additional days needed for interpolation
+    if mean and isFeb29.size:
+        indices = list(dict.fromkeys(
+            indices + list(days[isFeb29] + 1)
+        ))
+    #
+    # Load selected time steps
     vec = isel(nc, lon=lon, lat=lat, x=x, y=y, time=indices)
     #
-    # Translate original indices to positions in selected data
-    positions = numpy.searchsorted(indices, days)
+    # Map original indices to selected positions
+    lookup = {idx: pos for pos, idx in enumerate(indices)}
+    positions = [lookup[d] for d in days]
+    #
     tmp = numpy.take(vec, positions, axis=-1)
     #
+    # Interpolate February 29
     if mean and isFeb29.size:
-        next_positions = numpy.searchsorted(indices, days[isFeb29] + 1)
+        next_positions = [lookup[d + 1] for d in days[isFeb29]]
         #
         tmp[..., isFeb29] = 0.5 * (
             tmp[..., isFeb29] +
@@ -174,8 +180,13 @@ def isel_feb29(nc, idates=[], isFeb29=[], lon=None, lat=None, x=None, y=None,
         #
     if fill is not None:
         tmp = numpy.nan_to_num(tmp, nan=fill)
+        return tmp.tolist() if tolist else tmp
         #
-    return tmp.tolist() if tolist else tmp
+    flat = tmp.reshape(-1)
+    flat = pandas.Series(flat).where(~numpy.isnan(flat), None).to_numpy()
+    rv = flat.reshape(tmp.shape)
+    #
+    return rv.tolist() if tolist else rv
 
 def calc_list(clms):
     return {

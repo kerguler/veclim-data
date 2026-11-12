@@ -14,7 +14,7 @@ from ..pkg_surv import papatasi_EDENext_PRT as surv_PRT
 
 def calc_dat():
     dat = gpd.read_file("%s/sims/ISMED-CLIM/Portugal/georef-portugal-concelho-millesime.shp" %DIR_DATA)
-    dat = gpd.polys.to_crs("EPSG:4326")
+    dat = dat.to_crs("EPSG:4326")
     srv = surv_PRT.surv
     dat['mean'] = 0
     for key in srv:

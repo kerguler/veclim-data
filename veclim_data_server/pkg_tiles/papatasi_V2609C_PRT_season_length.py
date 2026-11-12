@@ -2,6 +2,7 @@ label = "papatasi_V2609C_PRT_season_length"
 print("Loading tiles: %s..." %label, flush=True)
 
 import numpy
+import pandas
 import datetime
 import matplotlib as mpl
 
@@ -13,7 +14,7 @@ def calc_dat():
     dat = papatasi_V2609C_PRT.db.polys.copy()
     up_times = papatasi_V2609C_PRT.up_times
     down_times = papatasi_V2609C_PRT.down_times
-    dat['mean'] = [(down_times[a][-1]-up_times[a][0])/7.0 if len(up_times[a])>0 else numpy.nan for a in up_times]
+    dat['mean'] = [(down_times[a][-1]-up_times[a][0])/pandas.Timedelta(days=7) if len(up_times[a])>0 else numpy.nan for a in up_times]
     return dat.to_crs(proj1)
 
 dat = cache_npy("tile_dat_%s.npy" %label, calc_dat)

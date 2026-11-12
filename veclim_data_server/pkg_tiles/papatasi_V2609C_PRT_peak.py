@@ -13,7 +13,7 @@ from ..pkg_sims import papatasi_V2609C_PRT
 def calc_dat():
     dat = papatasi_V2609C_PRT.db.polys.copy()
     tms = papatasi_V2609C_PRT.peak_up_times
-    dat['mean'] = [numpy.floor(tms[a][0] / pandas.Timedelta(days=7)) if len(tms[a]) else numpy.nan for a in tms]
+    dat['mean'] = [numpy.floor((tms[a][0].dayofyear - 1) / 7.0) if len(tms[a]) else numpy.nan for a in tms]
     return dat.to_crs(proj1)
 
 dat = cache_npy("tile_dat_%s.npy" %label, calc_dat)

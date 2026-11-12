@@ -8,9 +8,32 @@ from ..functions import get_dates, cache_npy, remove_feb29
 from ..fun_tiles import getTiles
 from ..pkg_sims import annualVectorA
 
-clscl = ['#00000000', '#fbe590', '#fcc65a', '#f7a034', '#f47b2c', '#e85229', '#d82929', '#931b1f']
-clbins = [-4,-3,-2,-1,0,1,2,3,4]
-cllbl = ["1/16","1/8","1/4","1/2","1","2","4","8","16"]
+clscl = ['#00000000', # 1/16
+         '#fbe590', # 1/8
+         '#fcc65a', # 1/4
+         '#f7a034', # 1/2
+         '#f47b2c', # 1
+         '#e85229', # 2
+         '#d82929', # 4
+         '#931b1f'] # 8
+clbins = [-4,
+          -3,
+          -2,
+          -1,
+          0,
+          1,
+          2,
+          3,
+          4]
+cllbl = ["1/16",
+         "1/8",
+         "1/4",
+         "1/2",
+         "1",
+         "2",
+         "4",
+         "8",
+         "16"]
 
 cmap = mpl.colors.ListedColormap([mpl.colors.to_rgba(c) for c in clscl])
 norm = mpl.colors.BoundaryNorm(clbins, cmap.N, clip=True, extend='neither')

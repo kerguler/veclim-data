@@ -202,54 +202,94 @@ def panelCube(base_nc, poly_ids):
     # ds_out.to_netcdf(out_path, encoding=encoding)
     return ds_out, encoding
 
-def _in_interval(day: int, start: int, end: int, ndays: int = 365) -> bool:
-    """
-    Inclusive interval membership on a circular day-of-year axis.
-    Assumes day/start/end are in [1, ndays].
-    """
+def _in_interval(day, start, end, ndays=365):
+    """Inclusive interval membership for dates or numerical days."""
+    if isinstance(start, (pandas.Timestamp, datetime.datetime, numpy.datetime64)):
+        day = pandas.Timestamp(day)
+        start = pandas.Timestamp(start)
+        end = pandas.Timestamp(end)
+        return start <= day <= end
+
+    # Original circular day-of-year logic.
     if start <= end:
         return start <= day <= end
-    # wrap-around case, e.g. 350..365 and 1..40
     return day >= start or day <= end
 
-def _in_any_interval(day: int, ups: Sequence[int], downs: Sequence[int], ndays: int = 365) -> bool:
+def _in_any_interval(day, ups, downs, ndays=365):
     if len(ups) != len(downs):
-        raise ValueError("ups and downs must have the same length (paired intervals).")
-    return any(_in_interval(day, u, d, ndays=ndays) for u, d in zip(ups, downs))
+        raise ValueError("ups and downs must have the same length.")
+    return any(
+        _in_interval(day, u, d, ndays=ndays)
+        for u, d in zip(ups, downs)
+    )
 
 def classify_days(
-    days: Iterable[int],
-    up: Sequence[int],
-    down: Sequence[int],
-    peak_up: Sequence[int],
-    peak_down: Sequence[int],
-    ndays: int = 365,
-    ) -> List[int]:
+    days,
+    up,
+    down,
+    peak_up,
+    peak_down,
+    ndays=365,
+):
     """
-    Return a list of {0,1,2} labels for each input day-of-year (1..365).
+    Return a list of {0, 1, 2} labels for each input day.
+
+    Classification:
+        0 = inactive
+        1 = active
+        2 = peak activity
+
     Priority: peak (2) > active (1) > none (0).
 
-    --- example usage ---
+    Supports two representations:
+        - Numerical day-of-year values (1..ndays), with circular
+          intervals that may wrap around the end of the year.
+        - Datetime values (Timestamp, datetime, numpy.datetime64),
+          with intervals defined by actual start and end dates.
+
+    Parameters:
+        days      : Days or dates to classify.
+        up        : Start of each active interval.
+        down      : End of each active interval.
+        peak_up   : Start of each peak activity interval.
+        peak_down : End of each peak activity interval.
+        ndays     : Number of days in the circular year (default 365).
+                    Only applicable to numerical day-of-year values.
+
+    Each start/end pair defines an inclusive interval.
+    Multiple intervals are supported, and a day is classified as
+    active or peak if it belongs to any corresponding interval.
+
+    --- example usage (numerical days) ---
     days = [10, 40, 120, 200, 355]
     up = [30, 180]
     down = [150, 260]
     peak_up = [60, 210]
     peak_down = [90, 230]
     labels = classify_days(days, up, down, peak_up, peak_down)
+
+    --- example usage (timestamps) ---
+    days = pandas.date_range("2026-03-01", "2026-06-30")
+    up = [pandas.Timestamp("2026-03-15")]
+    down = [pandas.Timestamp("2026-06-15")]
+    peak_up = [pandas.Timestamp("2026-04-15")]
+    peak_down = [pandas.Timestamp("2026-05-15")]
+    labels = classify_days(days, up, down, peak_up, peak_down)
     """
-    out: List[int] = []
+    out = []
+
     for day in days:
-        if not (1 <= day <= ndays):
-            raise ValueError(f"Day {day} outside 1..{ndays}")
-            #
-        in_peak = _in_any_interval(day, peak_up, peak_down, ndays=ndays)
-        if in_peak:
+        if isinstance(day, (int, numpy.integer)):
+            if not (1 <= day <= ndays):
+                raise ValueError(f"Day {day} outside 1..{ndays}")
+
+        if _in_any_interval(day, peak_up, peak_down, ndays=ndays):
             out.append(2)
-            continue
-            #
-        in_active = _in_any_interval(day, up, down, ndays=ndays)
-        out.append(1 if in_active else 0)
-        #
+        elif _in_any_interval(day, up, down, ndays=ndays):
+            out.append(1)
+        else:
+            out.append(0)
+
     return out
 
 def times_to_dates(dict_times):

@@ -1,5 +1,6 @@
 import json
 import numpy
+import pandas
 
 from ..response import returnResponse
 from ..functions import get_dates, remove_feb29
@@ -44,7 +45,7 @@ def get_sandfly(lon, lat, date0, date1=False, ts=False):
     peak_up = papatasi.peak_up_times[pid]
     peak_down = papatasi.peak_down_times[pid]
     #
-    risk = papatasi.classify_days(dats['days']+1, 
+    risk = papatasi.classify_days(pandas.to_datetime(dats['dates']), 
                                   up, 
                                   down, 
                                   peak_up, 
@@ -64,10 +65,10 @@ def get_sandfly(lon, lat, date0, date1=False, ts=False):
     #
     ret['risk'] = {
         'V2609C_PRT': {
-            'up': up,
-            'down': down,
-            'peak_up': peak_up,
-            'peak_down': peak_down,
+            'up': [t.strftime('%Y-%m-%d') for t in up],
+            'down': [t.strftime('%Y-%m-%d') for t in down],
+            'peak_up': [t.strftime('%Y-%m-%d') for t in peak_up],
+            'peak_down': [t.strftime('%Y-%m-%d') for t in peak_down],
             'risk': risk
         }
     }

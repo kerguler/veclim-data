@@ -31,7 +31,8 @@ def get_papatasi_days(loni, lati, idates, isFeb29, ts=True):
     papatasi = pkg_sims.modules['papatasi_V2609C']
     #
     return {
-        "newegg": isel_feb29(papatasi.newegg,loni=loni,lati=lati,idates=idates,isFeb29=isFeb29)
+        "newegg": isel_feb29(papatasi.newegg['newegg'],loni=loni,lati=lati,idates=idates,isFeb29=isFeb29),
+        "newegg_ssp585": isel_feb29(papatasi.newegg_ssp585['newegg'],loni=loni,lati=lati,idates=idates,isFeb29=isFeb29)
     }
 
 def get_sandfly(lon, lat, date0, date1=False, ts=False):

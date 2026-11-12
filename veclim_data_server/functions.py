@@ -70,15 +70,23 @@ def isel(nc, lon=None, lat=None, x=None, y=None, time=None,
     kw_isel = {}
     kw_sel = {}
 
+    # Detect coordinate/dimension names
+    lon_name = next(
+        (k for k in ('lon', 'longitude') if k in nc.dims), None
+    )
+    lat_name = next(
+        (k for k in ('lat', 'latitude') if k in nc.dims), None
+    )
+
     if loni is not None:
-        kw_isel['lon'] = loni
+        kw_isel[lon_name] = loni
     elif lon is not None:
-        kw_sel['lon'] = lon
+        kw_sel[lon_name] = lon
 
     if lati is not None:
-        kw_isel['lat'] = lati
+        kw_isel[lat_name] = lati
     elif lat is not None:
-        kw_sel['lat'] = lat
+        kw_sel[lat_name] = lat
 
     for key, val in [('x', x), ('y', y), ('time', time)]:
         if val is not None:
@@ -155,6 +163,7 @@ def remove_feb29(vec, days, isFeb29, fill=0.0, mean=True, tolist=True):
     rv = flat.reshape(tmp.shape)
     return rv.tolist() if tolist else rv
 
+
 def isel_feb29(nc, idates=[], isFeb29=[], lon=None, lat=None, x=None, y=None,
                fill=0.0, mean=True, tolist=True, loni=None, lati=None):
     #
@@ -173,8 +182,23 @@ def isel_feb29(nc, idates=[], isFeb29=[], lon=None, lat=None, x=None, y=None,
     # Load selected time steps
     vec = isel(
         nc, lon=lon, lat=lat, x=x, y=y,
-        loni=loni, lati=lati, time=indices
+        loni=loni, lati=lati, time=indices,
+        ret_df=True
     )
+    #
+    # Convert Dataset to DataArray if necessary
+    if isinstance(vec, xarray.Dataset):
+        if len(vec.data_vars) != 1:
+            raise ValueError(
+                "Expected a Dataset containing one data variable."
+            )
+        vec = next(iter(vec.data_vars.values()))
+    #
+    # Ensure time is the last dimension
+    vec = vec.transpose(
+        *[d for d in vec.dims if d != 'time'],
+        'time'
+    ).values
     #
     # Map original indices to selected positions
     lookup = {idx: pos for pos, idx in enumerate(indices)}

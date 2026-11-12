@@ -348,7 +348,7 @@ class dbPortugal:
 
 db = dbPortugal("newegg",
                 filename="%s/sims/ISMED-CLIM/V2511A_PRT/sims_model_V2511A_Portugal_newegg_mean_poly_weighted.nc" %DIR_DATA,
-                shapefile="%s/sims/ISMED-CLIM/V2511A_PRT/georef-portugal-concelho-millesime.shp" %DIR_DATA,
+                shapefile="%s/sims/ISMED-CLIM/Portugal/georef-portugal-concelho-millesime.shp" %DIR_DATA,
                 verbose=False)
 
 up_times, down_times = getCrossings(db.mat["newegg"], 

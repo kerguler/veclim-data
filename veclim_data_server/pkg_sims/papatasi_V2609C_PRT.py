@@ -309,7 +309,7 @@ class dbPortugal:
         self.polys['Means'] = means
 
 db = dbPortugal("newegg",
-                filename="%s/sims/ISMED-CLIM/V2609C_PRT/sims_model_V2609C_Portugal_newegg_mean_poly_weighted.nc" %DIR_DATA,
+                filename="%s/sims/ISMED-CLIM/V2609C_PRT/sims_model_V2609C_Portugal_2010_2014_newegg_mean_poly_weighted.nc" %DIR_DATA,
                 shapefile="%s/sims/ISMED-CLIM/Portugal/georef-portugal-concelho-millesime.shp" %DIR_DATA,
                 verbose=False)
 

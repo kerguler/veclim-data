@@ -18,9 +18,15 @@ from shapely import points
 import datetime
 import calendar
 
+def duration_days(dt):
+    if isinstance(dt, (datetime.timedelta, numpy.timedelta64, pandas.Timedelta)):
+        return dt / pandas.Timedelta(days=1)
+    return dt
+
 def mergeClose(up_times, down_times, sep):
     new_up_times = {}
     new_down_times = {}
+    sep = pandas.to_timedelta(7.0, unit="D")
     #
     for poly in up_times.keys():
         ups = list(up_times.get(poly, []))
@@ -36,7 +42,7 @@ def mergeClose(up_times, down_times, sep):
         cur_down = downs[0]
         #
         for u, d in zip(ups[1:], downs[1:]):
-            if u - cur_down < sep:
+            if duration_days(u - cur_down) < duration_days(sep):
                 cur_down = max(cur_down, d)
             else:
                 merged_down.append(cur_down)
@@ -46,7 +52,8 @@ def mergeClose(up_times, down_times, sep):
         merged_down.append(cur_down)
         #
         # remove peaks with width < sep
-        keep = [(u, d) for u, d in zip(merged_up, merged_down) if (d - u) >= sep]
+        # keep = [(u, d) for u, d in zip(merged_up, merged_down) if (d - u) >= sep]
+        keep = [(u, d) for u, d in zip(merged_up, merged_down) if duration_days(d - u) >= duration_days(sep)]
         #
         new_up_times[poly] = [u for u, d in keep]
         new_down_times[poly] = [d for u, d in keep]
@@ -71,23 +78,64 @@ def crossings_to_dict(cross_bool):
     #
     return out
 
-def getCrossings(da,thresh=1.0,sep=0.0):
-    above = da > thresh                       # (poly,time) bool
-    prev  = above.shift(time=1)               # previous timestep (has NaN at first)
-    #
-    up_cross   = above & (prev == False)      # False -> True  (upward breach)
-    down_cross = (~above) & (prev == True)    # True  -> False (downward breach)
-    #
+def getCrossings(da, thresh=1.0, sep=0.0):
+    """
+    Identify upward and downward threshold crossings in a time series.
+
+    Parameters
+    ----------
+    da : xarray.DataArray
+        Time series with dimensions ``(poly, time)``.
+    thresh : float, optional
+        Threshold used to classify values as above or below. Values equal to
+        the threshold are treated as below it. Default is 1.0.
+    sep : float, optional
+        Minimum separation between consecutive crossing periods. When greater
+        than zero, nearby periods are merged using ``mergeClose``. Default is
+        0.0.
+
+    Returns
+    -------
+    up_times, down_times : dict
+        Dictionaries containing the upward and downward crossing times for
+        each polygon. When ``sep > 0``, the merged output from ``mergeClose``
+        is returned.
+
+    Raises
+    ------
+    ValueError
+        If a polygon has unequal numbers of upward and downward crossings.
+    """
+
+    # Classify each value as above or below the threshold.
+    above = da > thresh
+
+    # Shift by one time step to compare each state with its previous state.
+    # The first time step has no previous value and therefore cannot be
+    # identified as a crossing.
+    prev = above.shift(time=1)
+
+    # Detect transitions across the threshold.
+    up_cross = above & (prev == False)       # Below -> above
+    down_cross = (~above) & (prev == True)   # Above -> below
+
+    # Convert the Boolean crossing arrays into dictionaries of crossing times.
     up_times = crossings_to_dict(up_cross)
     down_times = crossings_to_dict(down_cross)
-    #
+
+    # Check that every upward crossing has a corresponding downward crossing.
     ids = sorted(set(up_times) | set(down_times))
     bad = [p for p in ids if len(up_times[p]) != len(down_times[p])]
     if bad:
-        raise ValueError(f"Unpaired crossings for polygons: {bad[:10]}{'...' if len(bad)>10 else ''}")
-    #
+        suffix = "..." if len(bad) > 10 else ""
+        raise ValueError(
+            f"Unpaired crossings for polygons: {bad[:10]}{suffix}"
+        )
+
+    # Optionally merge crossing periods separated by less than `sep`.
     if sep > 0.0:
         return mergeClose(up_times, down_times, sep)
+
     return up_times, down_times
 
 def getPolyProp(polys,lon,lat):

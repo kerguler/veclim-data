@@ -64,21 +64,31 @@ def xr_open_lazy(path, engine=None, chunks="auto"):
         kw["engine"] = engine
     return xarray.open_dataset(path, **kw)
 
-def isel(nc, lon=None, lat=None, x=None, y=None, time=None, ret_df=False):
-    kw = {}
-    for key, val in [('lon', lon), ('lat', lat), ('x', x), ('y', y)]:
+def isel(nc, lon=None, lat=None, x=None, y=None, time=None,
+         ret_df=False, loni=None, lati=None):
+
+    kw_isel = {}
+    kw_sel = {}
+
+    if loni is not None:
+        kw_isel['lon'] = loni
+    elif lon is not None:
+        kw_sel['lon'] = lon
+
+    if lati is not None:
+        kw_isel['lat'] = lati
+    elif lat is not None:
+        kw_sel['lat'] = lat
+
+    for key, val in [('x', x), ('y', y), ('time', time)]:
         if val is not None:
-            kw[key] = val
-    #
-    try:
-        tmp = nc.isel(**kw)
-    except:
-        tmp = nc.sel(**kw, method="nearest")
-    #
-    if time is not None:
-        tmp = tmp.isel(time=time)
-    #
-    tmp = tmp.load()
+            kw_isel[key] = val
+
+    if kw_sel:
+        nc = nc.sel(**kw_sel, method='nearest')
+
+    tmp = nc.isel(**kw_isel).load()
+
     return tmp if ret_df else tmp.values
 
 def stdwarn(msg):
@@ -146,7 +156,7 @@ def remove_feb29(vec, days, isFeb29, fill=0.0, mean=True, tolist=True):
     return rv.tolist() if tolist else rv
 
 def isel_feb29(nc, idates=[], isFeb29=[], lon=None, lat=None, x=None, y=None,
-               fill=0.0, mean=True, tolist=True):
+               fill=0.0, mean=True, tolist=True, loni=None, lati=None):
     #
     days = numpy.asarray(idates, dtype=int)
     isFeb29 = numpy.asarray(isFeb29, dtype=int)
@@ -161,7 +171,10 @@ def isel_feb29(nc, idates=[], isFeb29=[], lon=None, lat=None, x=None, y=None,
         ))
     #
     # Load selected time steps
-    vec = isel(nc, lon=lon, lat=lat, x=x, y=y, time=indices)
+    vec = isel(
+        nc, lon=lon, lat=lat, x=x, y=y,
+        loni=loni, lati=lati, time=indices
+    )
     #
     # Map original indices to selected positions
     lookup = {idx: pos for pos, idx in enumerate(indices)}
@@ -177,11 +190,11 @@ def isel_feb29(nc, idates=[], isFeb29=[], lon=None, lat=None, x=None, y=None,
             tmp[..., isFeb29] +
             numpy.take(vec, next_positions, axis=-1)
         )
-        #
+    #
     if fill is not None:
         tmp = numpy.nan_to_num(tmp, nan=fill)
         return tmp.tolist() if tolist else tmp
-        #
+    #
     flat = tmp.reshape(-1)
     flat = pandas.Series(flat).where(~numpy.isnan(flat), None).to_numpy()
     rv = flat.reshape(tmp.shape)

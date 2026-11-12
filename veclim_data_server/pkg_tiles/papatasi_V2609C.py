@@ -25,11 +25,10 @@ cllbl = ["0",
          "2",
          "3",
          "4",
-         "5",
-         "6"]
+         "5"]
 
-cmap = mpl.colormaps["YlOrRd"].resampled(len(clbins) - 1)
-norm = mpl.colors.BoundaryNorm(clbins, cmap.N)
+cmap = mpl.colors.ListedColormap([mpl.colors.to_rgba(c) for c in clscl])
+norm = mpl.colors.BoundaryNorm(clbins, cmap.N, clip=True, extend='neither')
 
 def calc_dat():
     x2 = papatasi_V2609C.newegg.mean(dim='time',skipna=True)

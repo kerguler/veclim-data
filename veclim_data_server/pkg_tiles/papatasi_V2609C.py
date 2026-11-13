@@ -33,7 +33,7 @@ norm = mpl.colors.BoundaryNorm(clbins, cmap.N, clip=True, extend='neither')
 def calc_dat():
     x2 = (
         papatasi_V2609C.newegg
-        .isel(lat=slice(None, -1))
+        .isel(latitude=slice(None, -1))
         .mean(dim='time',skipna=True)
     )
     return x2

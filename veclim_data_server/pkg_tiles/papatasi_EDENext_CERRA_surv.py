@@ -9,14 +9,14 @@ import matplotlib as mpl
 import geopandas as gpd
 
 from ..functions import cache_npy
-from ..fun_tiles import getShpTiles
+from ..fun_tiles import getShpTiles, proj1
 from ..pkg_surv import sandfly_EDENext as surv
 
 def calc_dat():
     srv = surv.surv
     dat = surv.getMatrixCERRA(srv)
     dat['mean'] = 1.0
-    return dat
+    return dat.to_crs(proj1)
 
 dat = cache_npy("tile_dat_%s.npy" %label, calc_dat)
 

@@ -1,4 +1,4 @@
-label = "papatasi_V2511A"
+label = "papatasi_V2609C_CERRA_newegg"
 print("Loading tiles: %s..." %label, flush=True)
 
 import numpy

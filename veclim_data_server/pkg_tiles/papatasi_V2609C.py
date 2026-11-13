@@ -7,7 +7,7 @@ import matplotlib as mpl
 
 from ..functions import cache_ncdf
 from ..fun_tiles import getTiles
-from ..pkg_sims import papatasi_V2609C
+from ..pkg_sims import papatasi_V2609C as sim_sand
 
 clscl = ['#00000000', 
          '#fbe590', 
@@ -32,7 +32,7 @@ norm = mpl.colors.BoundaryNorm(clbins, cmap.N, clip=True, extend='neither')
 
 def calc_dat():
     x2 = (
-        papatasi_V2609C.newegg
+        sim_sand.newegg
         .isel(latitude=slice(None, -1))
         .mean(dim='time',skipna=True)
     )

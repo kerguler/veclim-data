@@ -31,7 +31,11 @@ cmap = mpl.colors.ListedColormap([mpl.colors.to_rgba(c) for c in clscl])
 norm = mpl.colors.BoundaryNorm(clbins, cmap.N, clip=True, extend='neither')
 
 def calc_dat():
-    x2 = papatasi_V2609C.newegg.mean(dim='time',skipna=True)
+    x2 = (
+        papatasi_V2609C.newegg
+        .isel(lat=slice(None, -1))
+        .mean(dim='time',skipna=True)
+    )
     return x2
 
 dat = cache_ncdf("tile_dat_%s.nc" %label, calc_dat)

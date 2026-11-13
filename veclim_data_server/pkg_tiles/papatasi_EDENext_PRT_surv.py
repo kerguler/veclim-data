@@ -10,12 +10,12 @@ import geopandas as gpd
 
 from ..functions import cache_npy
 from ..fun_tiles import getShpTiles, proj1
-from ..pkg_surv import papatasi_EDENext_PRT as surv_PRT
+from ..pkg_surv import sandfly_EDENext as surv_PRT
 
 def calc_dat():
     dat = gpd.read_file("%s/sims/ISMED-CLIM/Portugal/georef-portugal-concelho-millesime.shp" %DIR_DATA)
     dat = dat.to_crs("EPSG:4326")
-    srv = surv_PRT.surv
+    srv = surv_PRT.survPRT
     dat['mean'] = 0
     for key in srv:
         dat.loc[dat['Official_Co']==key,'mean'] = 1

@@ -107,7 +107,7 @@ def get_sandfly_CERRA(loni, lati, idates, isFeb29, ts=True):
     papatasi = pkg_sims.modules['papatasi_V2609C']
     #
     return {
-        "newegg": isel_feb29(papatasi.newegg_CERRA['newegg'],loni=loni,lati=lati,idates=idates,isFeb29=isFeb29),
+        "newegg": isel_feb29(papatasi.newegg_CERRA['newegg'],x=loni,y=lati,idates=idates,isFeb29=isFeb29),
     }
 
 def get_sandfly_SHP(pid, dates):
@@ -190,7 +190,7 @@ def respond(start_response, kw):
     risk_key = kw['risk_key']
     #
     rawdates = get_dates(date0, date1=date1, ts=timeseries)
-    dates =  {key:rawdates[key].copy() for key in ['date0','date1','days','valid']}
+    dates =  {key:rawdates[key] for key in ['date0','date1','days','valid']}
     dates['days'] = dates['days'][[0,-1]].tolist()
     if not dates['valid']:
         return returnResponse(start_response, empty_response)

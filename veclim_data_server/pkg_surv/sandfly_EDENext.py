@@ -15,8 +15,8 @@ survPRT = json.load(open("%s/surveillance/EDENext/surv_papatasi_EDENext_PRT.json
 
 surv = json.load(open("%s/surveillance/EDENext/surv_EDENext_CERRA.json" %(DIR_DATA), "r"))
 
-lonERA = pkg_sims.modules['lwMaskERA5'].lwMaskERA5.longitude
-latERA = pkg_sims.modules['lwMaskERA5'].lwMaskERA5.latitude
+lonERA = pkg_sims.modules['lwMaskERA5'].longitude
+latERA = pkg_sims.modules['lwMaskERA5'].latitude
 
 survERA = {}
 for key, data in surv.items():

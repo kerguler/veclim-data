@@ -189,49 +189,49 @@ def respond(start_response, kw):
         return returnResponse(start_response, 'Missing argument: risk_key')
     risk_key = kw['risk_key']
     #
-    dates = get_dates(date0, date1=date1, ts=timeseries)
-    dates =  {key:dates[key] for key in ['date0','date1','days','valid']}
+    rawdates = get_dates(date0, date1=date1, ts=timeseries)
+    dates =  {key:rawdates[key].copy() for key in ['date0','date1','days','valid']}
     dates['days'] = dates['days'][[0,-1]].tolist()
     if not dates['valid']:
         return returnResponse(start_response, empty_response)
     #
     locSHP = get_location_SHP(lon, lat)
     simSHP = get_sandfly_SHP(locSHP['pid'], 
-                             dates)
+                             rawdates)
     riskSHP = get_sandfly_risk_SHP(locSHP['pid'], 
-                                   dates)
+                                   rawdates)
     alertSHP = get_sandfly_alert_SHP(locSHP['pid'])
     survSHP = get_surv_SHP(locSHP['pid'], 
-                           dates)
+                           rawdates)
     #
     locERA = get_location_ERA(lon, lat)
     simERA = {
         'V2609C': get_clim(get_sandfly_ERA,
                            locERA['loni'], 
                            locERA['lati'], 
-                           dates['days'], 
-                           dates['isFeb29'],
+                           rawdates['days'], 
+                           rawdates['isFeb29'],
                            ts=timeseries)
     }
     survERA = get_surv_ERA(locERA['loni'], 
                            locERA['lati'], 
-                           dates)
+                           rawdates)
     #
     locCERRA = get_location_CERRA(lon, lat)
     simCERRA = {
         'V2609C': get_clim(get_sandfly_CERRA,
                            locCERRA['loni'], 
                            locCERRA['lati'], 
-                           dates['days'], 
-                           dates['isFeb29'],
+                           rawdates['days'], 
+                           rawdates['isFeb29'],
                            ts=timeseries)
     }
     survCERRA = get_surv_CERRA(locCERRA['lon'], 
                                locCERRA['lat'], 
-                               dates)
+                               rawdates)
     #
     ret = {
-        'date': dates['date'],
+        'date': dates,
         'SHP': {
             'location': locSHP,
         },

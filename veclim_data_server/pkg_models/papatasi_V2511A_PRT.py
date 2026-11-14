@@ -8,7 +8,7 @@ import veclim_data_server.pkg_surv as pkg_surv
 
 def get_sandfly(lon, lat, date0, date1=False, ts=False):
     papatasi = pkg_sims.modules['papatasi_V2511A_PRT']
-    surv = pkg_surv.modules['papatasi_EDENext_PRT']
+    surv = pkg_surv.modules['sandfly_EDENext']
     ret = {
         'location': {
             'lon': lon,
@@ -53,8 +53,8 @@ def get_sandfly(lon, lat, date0, date1=False, ts=False):
     notify = papatasi.getWarning(pid)
     #
     srv = []
-    if pid in surv.surv:
-        srv = [surv.surv[pid][doy] for doy in dats['days']]
+    if pid in surv.survPRT:
+        srv = [surv.survPRT[pid][doy] for doy in dats['days']]
     #
     ret['sim'] = {
         'V2511A_PRT': {

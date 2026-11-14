@@ -4,6 +4,9 @@ import numpy
 import geopandas as gpd
 from shapely.geometry import box
 
+from ..functions import getIndex
+from veclim_data_server import pkg_sims
+
 from ..environ import DIR_DATA
 
 print("Loading surv_sandfly_EDENext...",flush=True)
@@ -11,6 +14,24 @@ print("Loading surv_sandfly_EDENext...",flush=True)
 survPRT = json.load(open("%s/surveillance/EDENext/surv_papatasi_EDENext_PRT.json" %(DIR_DATA), "r"))
 
 surv = json.load(open("%s/surveillance/EDENext/surv_EDENext_CERRA.json" %(DIR_DATA), "r"))
+
+lonERA = pkg_sims.modules['lwMaskERA5'].lwMaskERA5.longitude
+latERA = pkg_sims.modules['lwMaskERA5'].lwMaskERA5.latitude
+
+survERA = {}
+for key, data in surv.items():
+    x, y = surv.parse_key(key)
+    if x < 0.0:
+        x += 360.0
+    xi = getIndex(x, lonERA)
+    yi = getIndex(y, latERA)
+    survERA.setdefault((xi, yi), []).append(data)
+
+# Average observations within each ERA5 cell
+survERA = {
+    key: numpy.nanmean(values, axis=0).tolist()
+    for key, values in survERA.items()
+}
 
 def make_key(lon, lat):
     return f"{lon:.6f},{lat:.6f}"

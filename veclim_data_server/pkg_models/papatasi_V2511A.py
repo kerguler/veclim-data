@@ -6,11 +6,11 @@ from ..functions import get_dates, get_clim, isel_feb29
 import veclim_data_server.pkg_sims as pkg_sims
 
 def get_location(lon, lat):
-    papatasi = pkg_sims.modules['papatasi_V2511A']
+    grid = pkg_sims.modules['gridCERRA'].grid
     #
-    grd = papatasi.grid.geti(lon,lat)
+    grd = grid.geti(lon,lat)
     #
-    island = papatasi.grid.ds.lsm[grd['y'],grd['x']]
+    island = grid.ds.lsm[grd['y'],grd['x']]
     #
     return {
         'lon': grd['lon'],

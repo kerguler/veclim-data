@@ -223,69 +223,42 @@ def _in_any_interval(day, ups, downs, ndays=365):
         for u, d in zip(ups, downs)
     )
 
-def classify_days(
-    days,
-    up,
-    down,
-    peak_up,
-    peak_down,
-    ndays=365,
-):
-    """
-    Return a list of {0, 1, 2} labels for each input day.
+def classify_days(days, up, down, peak_up, peak_down, ndays=365):
 
-    Classification:
-        0 = inactive
-        1 = active
-        2 = peak activity
+    def to_doy(value):
+        if isinstance(value, (int, float, numpy.integer, numpy.floating)):
+            return int(value)
+        return pandas.Timestamp(value).dayofyear
 
-    Priority: peak (2) > active (1) > none (0).
+    def convert(values):
+        return [to_doy(v) for v in values]
 
-    Supports two representations:
-        - Numerical day-of-year values (1..ndays), with circular
-          intervals that may wrap around the end of the year.
-        - Datetime values (Timestamp, datetime, numpy.datetime64),
-          with intervals defined by actual start and end dates.
+    days = convert(days)
+    up = convert(up)
+    down = convert(down)
+    peak_up = convert(peak_up)
+    peak_down = convert(peak_down)
 
-    Parameters:
-        days      : Days or dates to classify.
-        up        : Start of each active interval.
-        down      : End of each active interval.
-        peak_up   : Start of each peak activity interval.
-        peak_down : End of each peak activity interval.
-        ndays     : Number of days in the circular year (default 365).
-                    Only applicable to numerical day-of-year values.
+    def in_intervals(day, starts, ends):
+        for start, end in zip(starts, ends):
+            if start <= end:
+                if start <= day <= end:
+                    return True
+            else:
+                # Circular interval crossing the year boundary
+                if day >= start or day <= end:
+                    return True
+        return False
 
-    Each start/end pair defines an inclusive interval.
-    Multiple intervals are supported, and a day is classified as
-    active or peak if it belongs to any corresponding interval.
-
-    --- example usage (numerical days) ---
-    days = [10, 40, 120, 200, 355]
-    up = [30, 180]
-    down = [150, 260]
-    peak_up = [60, 210]
-    peak_down = [90, 230]
-    labels = classify_days(days, up, down, peak_up, peak_down)
-
-    --- example usage (timestamps) ---
-    days = pandas.date_range("2026-03-01", "2026-06-30")
-    up = [pandas.Timestamp("2026-03-15")]
-    down = [pandas.Timestamp("2026-06-15")]
-    peak_up = [pandas.Timestamp("2026-04-15")]
-    peak_down = [pandas.Timestamp("2026-05-15")]
-    labels = classify_days(days, up, down, peak_up, peak_down)
-    """
     out = []
 
     for day in days:
-        if isinstance(day, (int, numpy.integer)):
-            if not (1 <= day <= ndays):
-                raise ValueError(f"Day {day} outside 1..{ndays}")
+        if not (1 <= day <= ndays):
+            raise ValueError(f"DOY {day} outside 1..{ndays}")
 
-        if _in_any_interval(day, peak_up, peak_down, ndays=ndays):
+        if in_intervals(day, peak_up, peak_down):
             out.append(2)
-        elif _in_any_interval(day, up, down, ndays=ndays):
+        elif in_intervals(day, up, down):
             out.append(1)
         else:
             out.append(0)

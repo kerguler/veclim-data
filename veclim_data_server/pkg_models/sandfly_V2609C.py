@@ -150,10 +150,10 @@ def get_sandfly_risk_SHP(pid, dates):
     #
     rsk = {
         'V2609C_PRT': {
-            'up': [t.strftime('%Y-%m-%d') for t in up],
-            'down': [t.strftime('%Y-%m-%d') for t in down],
-            'peak_up': [t.strftime('%Y-%m-%d') for t in peak_up],
-            'peak_down': [t.strftime('%Y-%m-%d') for t in peak_down],
+            'up': [t.replace(year=papatasi.year).strftime('%Y-%m-%d') for t in up],
+            'down': [t.replace(year=papatasi.year).strftime('%Y-%m-%d') for t in down],
+            'peak_up': [t.replace(year=papatasi.year).strftime('%Y-%m-%d') for t in peak_up],
+            'peak_down': [t.replace(year=papatasi.year).strftime('%Y-%m-%d') for t in peak_down],
             'risk': risk
         }
     }

@@ -54,7 +54,7 @@ def get_location_SHP(lon, lat):
         'lat': lat,
         'pid': None,
         'name': None,
-       'island': 0
+        'island': 0
     }
     #
     prop = papatasi.getPolyProp(papatasi.db.polys,lon,lat)
@@ -206,15 +206,26 @@ def respond(start_response, kw):
         return returnResponse(start_response, empty_response)
     #
     locSHP = get_location_SHP(lon, lat)
-    simSHP = get_sandfly_SHP(locSHP['pid'], 
-                             rawdates)
-    riskSHP = get_sandfly_risk_SHP(locSHP['pid'], 
-                                   rawdates)
-    alertSHP = get_sandfly_alert_SHP(locSHP['pid'])
-    survSHP = get_surv_SHP(locSHP['pid'], 
-                           rawdates)
-    #
     locERA = get_location_ERA(lon, lat)
+    locCERRA = get_location_CERRA(lon, lat)
+    #
+    if (not locERA['island'] and 
+        not locCERRA['island']):
+        return returnResponse(start_response, json.dumps(ret))
+    #
+    simSHP = {}
+    riskSHP = {}
+    alertSHP = {}
+    survSHP = {}
+    if not locSHP['pid'] is None:
+        simSHP = get_sandfly_SHP(locSHP['pid'], 
+                                 rawdates)
+        riskSHP = get_sandfly_risk_SHP(locSHP['pid'], 
+                                       rawdates)
+        alertSHP = get_sandfly_alert_SHP(locSHP['pid'])
+        survSHP = get_surv_SHP(locSHP['pid'], 
+                               rawdates)
+    #
     simERA = {
         'V2609C': get_clim(get_sandfly_ERA,
                            locERA['loni'], 
@@ -227,7 +238,6 @@ def respond(start_response, kw):
                            locERA['lati'], 
                            rawdates)
     #
-    locCERRA = get_location_CERRA(lon, lat)
     simCERRA = {
         'V2609C': get_clim(get_sandfly_CERRA,
                            locCERRA['loni'], 
@@ -252,9 +262,6 @@ def respond(start_response, kw):
             'location': locCERRA,
         }
     }
-    #
-    if not locSHP['island'] and not locERA['island'] and not locCERRA['island']:
-        return returnResponse(start_response, json.dumps(ret))
     #
     if simSHP:
         ret['SHP'][sim_key] = simSHP

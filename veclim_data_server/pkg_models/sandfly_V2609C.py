@@ -14,7 +14,9 @@ def get_surv_SHP(pid, dates):
     if pid in surv:
         srv = [surv[pid][doy] for doy in dates['days']]
     #
-    return srv
+    return {
+        'adult_norm': srv
+    }
 
 def get_surv_ERA(loni, lati, dates):
     surv = pkg_surv.modules['sandfly_EDENext'].survERA
@@ -24,7 +26,11 @@ def get_surv_ERA(loni, lati, dates):
     if data is None:
         return [numpy.nan] * len(dates['days'])
     #
-    return [data[doy] for doy in dates['days']]
+    srv = [data[doy] for doy in dates['days']]
+    #
+    return {
+        'adult_norm': srv
+    }
 
 def get_surv_CERRA(lon, lat, dates):
     surv = pkg_surv.modules['sandfly_EDENext']
@@ -34,7 +40,11 @@ def get_surv_CERRA(lon, lat, dates):
     if data is None:
         return [numpy.nan] * len(dates['days'])
     #
-    return [data[doy] for doy in dates['days']]
+    srv = [data[doy] for doy in dates['days']]
+    #
+    return {
+        'adult_norm': srv
+    }
 
 def get_location_SHP(lon, lat):
     papatasi = pkg_sims.modules['papatasi_V2609C_PRT']

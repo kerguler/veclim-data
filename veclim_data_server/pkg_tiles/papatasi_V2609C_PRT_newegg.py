@@ -16,15 +16,26 @@ def calc_dat():
 
 dat = cache_npy("tile_dat_%s.npy" %label, calc_dat)
 
-clbins = numpy.linspace(int(dat['mean'].min()),
-                        int(dat['mean'].max()),
-                        6)
-cllbl = [f"{b:.2g}" for b in clbins[:-1]]
+clscl = ['#00000000', 
+         '#fbe590', 
+         '#f7a034', 
+         '#e85229', 
+         '#931b1f']
+clbins = [0,
+          0.5,
+          1,
+          1.5,
+          2,
+          2.5]
+cllbl = ["0",
+         "0.5",
+         "1",
+         "1.5",
+         "2",
+         "2.5"]
 
-cmap = mpl.colormaps["YlOrRd"].resampled(len(clbins) - 1)
-norm = mpl.colors.BoundaryNorm(clbins, cmap.N)
-
-clscl = [mpl.colors.to_hex(c) for c in cmap(norm((clbins[:-1] + clbins[1:]) / 2))]
+cmap = mpl.colors.ListedColormap([mpl.colors.to_rgba(c) for c in clscl])
+norm = mpl.colors.BoundaryNorm(clbins, cmap.N, clip=True, extend='neither')
 
 tile_dat = {
     'label': label,

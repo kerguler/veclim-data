@@ -15,17 +15,17 @@ clscl = ['#00000000',
          '#e85229', 
          '#931b1f']
 clbins = [0,
+          0.5,
           1,
+          1.5,
           2,
-          3,
-          4,
-          5]
+          2.5]
 cllbl = ["0",
+         "0.5",
          "1",
+         "1.5",
          "2",
-         "3",
-         "4",
-         "5"]
+         "2.5"]
 
 cmap = mpl.colors.ListedColormap([mpl.colors.to_rgba(c) for c in clscl])
 norm = mpl.colors.BoundaryNorm(clbins, cmap.N, clip=True, extend='neither')

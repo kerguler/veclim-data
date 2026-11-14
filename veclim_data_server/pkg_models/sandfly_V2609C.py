@@ -136,9 +136,6 @@ def get_sandfly_SHP(pid, dates):
 def get_sandfly_risk_SHP(pid, dates):
     papatasi = pkg_sims.modules['papatasi_V2609C_PRT']
     #
-    ret = {
-    }
-    #
     # times: 0..364
     up = papatasi.up_times[pid]
     down = papatasi.down_times[pid]
@@ -209,6 +206,19 @@ def respond(start_response, kw):
     locERA = get_location_ERA(lon, lat)
     locCERRA = get_location_CERRA(lon, lat)
     #
+    ret = {
+        'date': dates,
+        'SHP': {
+            'location': locSHP,
+        },
+        'ERA': {
+            'location': locERA,
+        },
+        'CERRA': {
+            'location': locCERRA,
+        }
+    }
+    #
     if (not locERA['island'] and 
         not locCERRA['island']):
         return returnResponse(start_response, json.dumps(ret))
@@ -249,19 +259,6 @@ def respond(start_response, kw):
     survCERRA = get_surv_CERRA(locCERRA['lon'], 
                                locCERRA['lat'], 
                                rawdates)
-    #
-    ret = {
-        'date': dates,
-        'SHP': {
-            'location': locSHP,
-        },
-        'ERA': {
-            'location': locERA,
-        },
-        'CERRA': {
-            'location': locCERRA,
-        }
-    }
     #
     if simSHP:
         ret['SHP'][sim_key] = simSHP

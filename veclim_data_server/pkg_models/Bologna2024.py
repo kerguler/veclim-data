@@ -21,6 +21,8 @@ def respond(start_response, kw):
         model: isel(sims.ncs[model].eggs,lon=lon,lat=lat).tolist()
         for model in sims.models
     }
+    for model in sims.ensembles:
+        simclm[model] = isel(sims.ncs[model].eggs,lon=lon,lat=lat).tolist()
     #
     if not simclm:
         return returnResponse(start_response, empty_response)

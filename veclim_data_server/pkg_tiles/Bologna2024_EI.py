@@ -10,12 +10,13 @@ from ..fun_tiles import getBologna2024Tiles
 model = "Ensemble I"
 mlbl = "emblI"
 
-clscl = ['#00000000', '#fbe590', '#fcc65a', '#f7a034', '#f47b2c', '#e85229', '#d82929', '#931b1f']
-clbins = [-4,-3,-2,-1,0,1,2,3,4]
-cllbl = ["1/16","1/8","1/4","1/2","1","2","4","8","16"]
+clbins = numpy.arange(28,38)
+cllbl = [str(w) for w in clbins]
 
-cmap = mpl.colors.ListedColormap([mpl.colors.to_rgba(c) for c in clscl])
-norm = mpl.colors.BoundaryNorm(clbins, cmap.N, clip=True, extend='neither')
+cmap = mpl.colormaps["YlOrRd_r"].resampled(len(clbins) - 1)
+norm = mpl.colors.BoundaryNorm(clbins, cmap.N)
+
+clscl = [mpl.colors.to_hex(c) for c in cmap(norm((clbins[:-1] + clbins[1:]) / 2))]
 
 dat = numpy.load("%s/sims/Bologna2024/tile_dat_Bologna2024_%s.npy" %(DIR_DATA,mlbl),mmap_mode='r')
 

@@ -208,6 +208,10 @@ def respond(start_response, kw):
     #
     ret = {
         'date': dates,
+        'location': {
+            'lon': lon,
+            'lat': lat,
+        },
         'SHP': {
             'location': locSHP,
         },

@@ -1,5 +1,5 @@
 import json
-from datetime import date
+import numpy
 
 from ..response import empty_response, returnResponse
 from ..functions import isel
@@ -36,15 +36,16 @@ def respond(start_response, kw):
     if not survclm:
         return returnResponse(start_response, empty_response)
     #
-    dates = {
-        "date0": f"{date.today().year}-01-01",
-        "date1": f"{date.today().year}-12-31",
-        "days": [
-            0,
-            51
-        ],
-        "valid": 1
-    },
+    #dates = {
+    #    "date0": f"{date.today().year}-01-01",
+    #    "date1": f"{date.today().year}-12-31",
+    #    "days": [
+    #        0,
+    #        51
+    #    ],
+    #    "valid": 1
+    #}
+    dates = numpy.arange(52).tolist()
     #
     ret = {
         'location': {'lon': float(tmp.lon), 'lat': float(tmp.lat)},

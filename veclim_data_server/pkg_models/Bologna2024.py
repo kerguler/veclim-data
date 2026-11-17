@@ -1,7 +1,8 @@
 import json
+from datetime import date
 
 from ..response import empty_response, returnResponse
-from ..functions import isel, datetime
+from ..functions import isel
 import veclim_data_server.pkg_sims as pkg_sims
 import veclim_data_server.pkg_surv as pkg_surv
 
@@ -36,8 +37,8 @@ def respond(start_response, kw):
         return returnResponse(start_response, empty_response)
     #
     dates = {
-        "date0": f"{datetime.date.today().year}-01-01",
-        "date1": f"{datetime.date.today().year}-12-31",
+        "date0": f"{date.today().year}-01-01",
+        "date1": f"{date.today().year}-12-31",
         "days": [
             0,
             51

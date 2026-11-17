@@ -1,5 +1,6 @@
 import json
 import numpy
+from datetime import date
 
 from ..response import empty_response, returnResponse
 from ..functions import isel
@@ -45,7 +46,7 @@ def respond(start_response, kw):
     #    ],
     #    "valid": 1
     #}
-    dates = numpy.arange(52).tolist()
+    dates = [f"{date.today().year}-{w:02d}" for w in numpy.arange(1, 53)] 
     #
     ret = {
         'location': {'lon': float(tmp.lon), 'lat': float(tmp.lat)},

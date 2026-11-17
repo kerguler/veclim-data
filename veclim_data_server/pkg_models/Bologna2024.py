@@ -1,7 +1,7 @@
 import json
 
 from ..response import empty_response, returnResponse
-from ..functions import isel
+from ..functions import isel, datetime
 import veclim_data_server.pkg_sims as pkg_sims
 import veclim_data_server.pkg_surv as pkg_surv
 
@@ -35,9 +35,19 @@ def respond(start_response, kw):
     if not survclm:
         return returnResponse(start_response, empty_response)
     #
+    dates = {
+        "date0": f"{datetime.date.today().year}-01-01",
+        "date1": f"{datetime.date.today().year}-12-31",
+        "days": [
+            0,
+            51
+        ],
+        "valid": 1
+    },
+    #
     ret = {
         'location': {'lon': float(tmp.lon), 'lat': float(tmp.lat)},
-        'date': sims.dates.tolist(),
+        'date': dates,
         'models': simclm,
         'surv': survclm
     }

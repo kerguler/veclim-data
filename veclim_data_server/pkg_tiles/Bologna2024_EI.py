@@ -18,7 +18,7 @@ norm = mpl.colors.BoundaryNorm(clbins, cmap.N)
 
 clscl = [mpl.colors.to_hex(c) for c in cmap(norm((clbins[:-1] + clbins[1:]) / 2))]
 
-dat = numpy.load("%s/sims/Bologna2024/tile_dat_Bologna2024_%s.npy" %(DIR_DATA,mlbl),mmap_mode='r')
+dat = numpy.load("%s/sims/Bologna2024/tile_dat_Bologna2024_annual_%s.npy" %(DIR_DATA,mlbl),mmap_mode='r')
 
 tile_dat = {
     'label': label,

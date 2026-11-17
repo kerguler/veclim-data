@@ -27,7 +27,7 @@ def respond(start_response, kw):
     if not simclm:
         return returnResponse(start_response, empty_response)
     #
-    tmp = isel(surv.surv.eggs,lon=lon,lat=lat,ret_df=True)
+    tmp = isel(surv.surv_annual.eggs,lon=lon,lat=lat,ret_df=True)
     survclm = {
         'eggs': tmp.values.tolist()
     }

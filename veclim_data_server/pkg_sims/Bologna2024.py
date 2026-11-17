@@ -18,13 +18,13 @@ ensembles = {
 }
 
 ncs = {
-    model: xr_open_lazy("%s/sims/Bologna2024/sims_Bologna2024_%d_%s.nc" %(DIR_DATA,id,model))
+    model: xr_open_lazy("%s/sims/Bologna2024/sims_Bologna2024_annual_%d_%s.nc" %(DIR_DATA,id,model))
     for id, model in enumerate(models)
 }
 
 for model, flbl in ensembles.items():
-    ncs[model] = xr_open_lazy("%s/sims/Bologna2024/sims_Bologna2024_%s.nc" %(DIR_DATA,flbl))
+    ncs[model] = xr_open_lazy("%s/sims/Bologna2024/sims_Bologna2024_annual_%s.nc" %(DIR_DATA,flbl))
 
 lons = ncs[models[0]].lon.load().values
 lats = ncs[models[0]].lat.load().values
-dates = ncs[models[0]].yrwk.load().values
+dates = ncs[models[0]].week.load().values
